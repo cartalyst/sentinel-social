@@ -1,0 +1,50 @@
+<?php
+/**
+ * Part of the Sentinel Social package.
+ *
+ * NOTICE OF LICENSE
+ *
+ * Licensed under the Cartalyst PSL License.
+ *
+ * This source file is subject to the Cartalyst PSL License that is
+ * bundled with this package in the license.txt file.
+ *
+ * @package    Sentinel Social
+ * @version    1.0.0
+ * @author     Cartalyst LLC
+ * @license    Cartalyst PSL
+ * @copyright  (c) 2011-2014, Cartalyst LLC
+ * @link       http://cartalyst.com
+ */
+
+use Illuminate\Database\Migrations\Migration;
+
+class MigrationCartalystSentinelSocialAddAccessTokenSecret extends Migration {
+
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+		Schema::table('social', function($table)
+		{
+			$table->string('access_token_secret')->nullable();
+		});
+	}
+
+	/**
+	 * Reverse the migrations.
+	 *
+	 * @return void
+	 */
+	public function down()
+	{
+		Schema::table('social', function($table)
+		{
+			$table->dropColumn('access_token_secret');
+		});
+	}
+
+}

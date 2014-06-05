@@ -1,0 +1,63 @@
+{
+	"name": "cartalyst/sentinel-social",
+	"description": "Social network logins for Sentinel using Oauth and Oauth2, including custom services",
+	"keywords": [
+		"php",
+		"cartalyst",
+		"laravel",
+		"auth",
+		"security",
+		"oauth"
+	],
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Cartalyst LLC",
+			"email": "help@cartalyst.com"
+		},
+		{
+			"name": "Ben Corlett",
+			"email": "ben.corlett@cartalyst.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Bruno Gaspar",
+			"email": "bruno.gaspar@cartalyst.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Dan Syme",
+			"email": "dan.syme@cartalyst.com",
+			"role": "Creator & Designer"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"cartalyst/sentinel": "dev-master",
+		"league/oauth1-client": "~1.0",
+		"league/oauth2-client": "dev-master"
+	},
+	"require-dev": {
+		"illuminate/database": "~4.1",
+		"illuminate/http": "~4.1",
+		"mockery/mockery": "~0.9",
+		"phpunit/phpunit": "~4.0"
+	},
+	"autoload": {
+		"classmap": [
+			"src/Exceptions.php",
+			"src/controllers",
+			"src/migrations"
+		],
+		"psr-4": {
+			"Cartalyst\\SentinelSocial\\": "src/"
+		}
+	},
+	"extra": {
+		"component": "package",
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	},
+	"minimum-stability": "dev"
+}
