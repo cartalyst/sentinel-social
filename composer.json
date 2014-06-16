@@ -35,7 +35,7 @@
 		"php": ">=5.4.0",
 		"cartalyst/sentinel": "dev-master",
 		"league/oauth1-client": "~1.0",
-		"league/oauth2-client": "dev-master"
+		"league/oauth2-client": "0.3.*@dev"
 	},
 	"require-dev": {
 		"illuminate/database": "~4.1",
