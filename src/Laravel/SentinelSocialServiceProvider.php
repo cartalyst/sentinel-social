@@ -19,7 +19,7 @@
 
 use Cartalyst\SentinelSocial\Manager;
 use Cartalyst\Sentinel\Sessions\IlluminateSession;
-use Cartalyst\SentinelSocial\Socials\IlluminateSocialRepository;
+use Cartalyst\SentinelSocial\Repositories\LinkRepository;
 use Cartalyst\SentinelSocial\RequestProviders\IlluminateRequestProvider;
 
 class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider {
@@ -42,17 +42,17 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 	 */
 	public function register()
 	{
-		$this->registerSocialProvider();
+		$this->registerLinkRepository();
 		$this->registerRequestProvider();
 		$this->registerSession();
 		$this->registerSentinelSocial();
 	}
 
-	protected function registerSocialProvider()
+	protected function registerLinkRepository()
 	{
 		$this->app['sentinel.social.repository'] = $this->app->share(function($app)
 		{
-			$model = $app['config']['cartalyst/sentinel-social::social'];
+			$model = $app['config']['cartalyst/sentinel-social::link'];
 
 			$users = $app['config']['cartalyst/sentinel::users.model'];
 
@@ -61,7 +61,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 				forward_static_call_array(array($model, 'setUsersModel'), array($users));
 			}
 
-			return new IlluminateSocialRepository($model);
+			return new LinkRepository($model);
 		});
 	}
 

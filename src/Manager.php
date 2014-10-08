@@ -492,7 +492,7 @@ class Manager {
 	 */
 	protected function createLinksRepository()
 	{
-		$model = 'Cartalyst\SentinelSocial\Links\EloquentLink';
+		$model = 'Cartalyst\SentinelSocial\Models\Link';
 
 		$users = $this->getUserRepository();
 
