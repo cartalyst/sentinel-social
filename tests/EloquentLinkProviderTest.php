@@ -18,7 +18,7 @@
  */
 
 use Mockery as m;
-use Cartalyst\SentinelSocial\Links\Eloquent\Provider;
+use Cartalyst\SentinelSocial\Repositories\LinkRepository;
 use PHPUnit_Framework_TestCase;
 
 class EloquentLinkProviderTest extends PHPUnit_Framework_TestCase {
@@ -35,41 +35,45 @@ class EloquentLinkProviderTest extends PHPUnit_Framework_TestCase {
 
 	public function testFindingExistingLink()
 	{
-		$linkProvider = m::mock('Cartalyst\SentinelSocial\Links\Eloquent\Provider[createModel]');
-		$linkProvider->shouldReceive('createModel')->once()->andReturn($query = m::mock('stdClass'));
+		$linkRepository = m::mock('Cartalyst\SentinelSocial\Repositories\LinkRepository[createModel]');
+		$linkRepository->shouldReceive('createModel')->once()->andReturn($query = m::mock('StdClass'));
+
 		$query->shouldReceive('newQuery')->once()->andReturn($query);
+		$query->shouldReceive('with')->with('user')->once()->andReturn($query);
 		$query->shouldReceive('where')->with('provider', '=', 'slug')->once()->andReturn($query);
 		$query->shouldReceive('where')->with('uid', '=', 789)->once()->andReturn($query);
 		$query->shouldReceive('first')->once()->andReturn('success');
 
-		$this->assertEquals('success', $linkProvider->findLink('slug', 789));
+		$this->assertEquals('success', $linkRepository->findLink('slug', 789));
 	}
 
 	public function testFindingNonExistentLink()
 	{
-		$linkProvider = m::mock('Cartalyst\SentinelSocial\Links\Eloquent\Provider[createModel]');
+		$linkRepository = m::mock('Cartalyst\SentinelSocial\Repositories\LinkRepository[createModel]');
 
-		$linkProvider->shouldReceive('createModel')->ordered()->once()->andReturn($query = m::mock('stdClass'));
+		$linkRepository->shouldReceive('createModel')->ordered()->once()->andReturn($query = m::mock('StdClass'));
 		$query->shouldReceive('newQuery')->once()->andReturn($query);
+		$query->shouldReceive('with')->with('user')->once()->andReturn($query);
 		$query->shouldReceive('where')->with('provider', '=', 'slug')->once()->andReturn($query);
 		$query->shouldReceive('where')->with('uid', '=', 789)->once()->andReturn($query);
 		$query->shouldReceive('first')->once()->andReturn(null);
 
-		$linkProvider->shouldReceive('createModel')->ordered()->once()->andReturn($model = m::mock('stdClass')); // Can't mock model, get "BadMethodCallException: Method Cartalyst\SentinelSocial\Links\Eloquent\Link::hasGetMutator() does not exist on this mock object"
+		$linkRepository->shouldReceive('createModel')->ordered()->once()->andReturn($model = m::mock('StdClass')); // Can't mock model, get "BadMethodCallException: Method Cartalyst\SentinelSocial\Links\EloquentLink::hasGetMutator() does not exist on this mock object"
 		$model->shouldReceive('fill')->with(array(
 			'provider' => 'slug',
 			'uid'      => 789,
 		))->once();
 		$model->shouldReceive('save')->once();
 
-		$this->assertEquals($model, $linkProvider->findLink('slug', 789));
+		$this->assertEquals($model, $linkRepository->findLink('slug', 789));
 	}
 
 	public function testCreateModel()
 	{
-		$provider = new Provider;
+		$provider = new LinkRepository;
 		$model = $provider->createModel();
-		$this->assertInstanceOf('Cartalyst\SentinelSocial\Links\Eloquent\Link', $model);
+
+		$this->assertInstanceOf('Cartalyst\SentinelSocial\Models\Link', $model);
 	}
 
 }

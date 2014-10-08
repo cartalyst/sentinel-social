@@ -17,20 +17,20 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\SentinelSocial\Links\IlluminateLinkRepository;
-use Cartalyst\SentinelSocial\Links\LinkInterface;
-use Cartalyst\SentinelSocial\Links\LinkRepositoryInterface;
-use Cartalyst\SentinelSocial\RequestProviders\NativeRequestProvider;
-use Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface;
+use Closure;
 use Cartalyst\Sentinel\Sentinel;
+use Illuminate\Events\Dispatcher;
+use Cartalyst\Sentinel\Users\UserInterface;
 use Cartalyst\Sentinel\Sessions\NativeSession;
 use Cartalyst\Sentinel\Sessions\SessionInterface;
-use Cartalyst\Sentinel\Users\UserInterface;
+use Cartalyst\SentinelSocial\Models\LinkInterface;
 use Cartalyst\Sentinel\Users\UserNotFoundException;
-use Closure;
-use Illuminate\Events\Dispatcher;
+use Cartalyst\SentinelSocial\Repositories\LinkRepository;
 use League\OAuth1\Client\Server\Server as OAuth1Provider;
+use Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface;
+use Cartalyst\SentinelSocial\RequestProviders\NativeRequestProvider;
 use League\OAuth2\Client\Provider\AbstractProvider as OAuth2Provider;
+use Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface;
 
 class Manager {
 
@@ -45,7 +45,7 @@ class Manager {
 	 * The link provider, used for associating users
 	 * with OAuth providers.
 	 *
-	 * @var \Cartalyst\SentinelSocial\Links\LinkRepositoryInterface
+	 * @var \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface
 	 */
 	protected $links;
 
@@ -88,7 +88,7 @@ class Manager {
 	 * Create a new Sentinel Social Manager instance.
 	 *
 	 * @param  \Cartalyst\Sentinel\Sentinel  $sentinel
-	 * @param  \Cartalyst\SentinelSocial\Links\LinkRepositoryInterface  $links
+	 * @param  \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface  $links
 	 * @param  \Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface  $request
 	 * @param  \Cartalyst\Sentinel\Sessions\SessionInterface  $session
 	 * @param  \Illuminate\Events\Dispatcher  $dispatcher
@@ -246,7 +246,7 @@ class Manager {
 	 * @param  string $slug
 	 * @param  string  $uid
 	 * @param  mixed   $token
-	 * @return \Cartalyst\SentinelSocial\Links\LinkInterface
+	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
 	 */
 	protected function retrieveLink($slug, $uid, $token)
 	{
@@ -262,7 +262,7 @@ class Manager {
 	 * @param  string  $slug
 	 * @param  mixed   $provider
 	 * @param  mixed   $token
-	 * @return \Cartalyst\SentinelSocial\Links\LinkInterface
+	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
 	 */
 	protected function linkLoggedIn($slug, $provider, $token, UserInterface $user)
 	{
@@ -284,7 +284,7 @@ class Manager {
 	 * @param  string  $slug
 	 * @param  mixed   $provider
 	 * @param  mixed   $token
-	 * @return \Cartalyst\SentinelSocial\Links\LinkInterface
+	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
 	 */
 	protected function linkLoggedOut($slug, $provider, $token)
 	{
@@ -462,7 +462,7 @@ class Manager {
 	/**
 	 * Get the links repository.
 	 *
-	 * @return \Cartalyst\SentinelSocial\Links\LinkRepositoryInterface
+	 * @return \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface
 	 */
 	public function getLinksRepository()
 	{
@@ -477,7 +477,7 @@ class Manager {
 	/**
 	 * Set the links repository.
 	 *
-	 * @param  \Cartalyst\SentinelSocial\Links\LinkRepositoryInterface  $links
+	 * @param  \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface  $links
 	 * @return void
 	 */
 	public function setLinksRepository(LinkRepositoryInterface $links)
@@ -488,7 +488,7 @@ class Manager {
 	/**
 	 * Creates a default links repository if none has been specified.
 	 *
-	 * @return \Cartalyst\SentinelSocial\Links\IlluminateLinkRepository
+	 * @return \Cartalyst\SentinelSocial\Repositories\LinkRepository
 	 */
 	protected function createLinksRepository()
 	{
@@ -496,7 +496,7 @@ class Manager {
 
 		$users = $this->getUserRepository();
 
-		return new IlluminateLinkRepository($users, $model);
+		return new LinkRepository($users, $model);
 	}
 
 	/**
@@ -734,7 +734,7 @@ class Manager {
 	 * Fires an event for Sentinel Social.
 	 *
 	 * @param  string  $name
-	 * @param  \Cartalyst\SentinelSocial\Links\LinkInterface  $link
+	 * @param  \Cartalyst\SentinelSocial\Models\LinkInterface  $link
 	 * @param  mixed   $provider
 	 * @param  mixed   $token
 	 * @param  string  $slug

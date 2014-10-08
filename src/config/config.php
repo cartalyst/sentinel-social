@@ -48,14 +48,18 @@ return [
 			'driver'     => 'Facebook',
 			'identifier' => '',
 			'secret'     => '',
-			'scopes'     => ['email'],
+			'scopes'     => [
+				'email',
+			],
 		],
 
 		'github' => [
 			'driver'     => 'GitHub',
 			'identifier' => '',
 			'secret'     => '',
-			'scopes'     => ['user'],
+			'scopes'     => [
+				'user',
+			],
 		],
 
 		'google' => [
@@ -68,18 +72,33 @@ return [
 			],
 		],
 
+		'instagram' => [
+			'driver'     => 'Instagram',
+			'identifier' => '',
+			'secret'     => '',
+			'scopes'     => [
+				'basic',
+			],
+		],
+
 		'linkedin' => [
 			'driver'     => 'LinkedIn',
 			'identifier' => '',
 			'secret'     => '',
-			'scopes'     => ['r_fullprofile', 'r_emailaddress'],
+			'scopes'     => [
+				'r_fullprofile',
+				'r_emailaddress',
+			],
 		],
 
 		'microsoft' => [
 			'driver'     => 'Microsoft',
 			'identifier' => '',
 			'secret'     => '',
-			'scopes'     => ['wl.basic', 'wl.emails'],
+			'scopes'     => [
+				'wl.basic',
+				'wl.emails'
+			],
 		],
 
 		'twitter' => [
@@ -105,7 +124,7 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Social Link Model
+	| Social Model
 	|--------------------------------------------------------------------------
 	|
 	| When users are registered, a "social link provider" will map the social
@@ -114,6 +133,6 @@ return [
 	|
 	*/
 
-	'link' => 'Cartalyst\SentinelSocial\Links\EloquentLink',
+	'link' => 'Cartalyst\SentinelSocial\Models\Social',
 
 ];

@@ -29,19 +29,25 @@
 			"name": "Dan Syme",
 			"email": "dan.syme@cartalyst.com",
 			"role": "Creator & Designer"
+		},
+		{
+			"name": "Suhayb Wardany",
+			"email": "su.wardany@cartalyst.com",
+			"role": "Developer"
 		}
 	],
 	"repositories": [
 		{
 			"type": "composer",
-			"url": "http://packages.cartalyst.com"
+			"url": "https://packages.cartalyst.com"
 		}
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"cartalyst/sentinel": "dev-master",
-		"league/oauth1-client": "~1.0",
-		"league/oauth2-client": "~0.3"
+		"cartalyst/sentinel": "~1.0",
+		"cartalyst/support": "~1.0",
+		"league/oauth1-client": "1.0.*",
+		"league/oauth2-client": "0.3.*"
 	},
 	"require-dev": {
 		"illuminate/database": "~4.1",
@@ -52,7 +58,6 @@
 	"autoload": {
 		"classmap": [
 			"src/Exceptions.php",
-			"src/controllers",
 			"src/migrations"
 		],
 		"psr-4": {

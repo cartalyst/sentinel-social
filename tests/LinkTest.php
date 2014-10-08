@@ -18,12 +18,12 @@
  */
 
 use Mockery as m;
-use Cartalyst\SentinelSocial\Links\Eloquent\Link;
-use League\OAuth1\Client\Credentials\TokenCredentials as OAuth1TokenCredentials;
-use League\OAuth2\Client\Token\AccessToken as OAuth2AccessToken;
 use PHPUnit_Framework_TestCase;
+use Cartalyst\SentinelSocial\Models\Link;
+use League\OAuth2\Client\Token\AccessToken as OAuth2AccessToken;
+use League\OAuth1\Client\Credentials\TokenCredentials as OAuth1TokenCredentials;
 
-class EloquentLinkTest extends PHPUnit_Framework_TestCase {
+class LinkTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Close mockery.
@@ -47,7 +47,7 @@ class EloquentLinkTest extends PHPUnit_Framework_TestCase {
 
 	public function testStoringOAuth1Token()
 	{
-		$link = m::mock('Cartalyst\SentinelSocial\Links\Eloquent\Link[save]');
+		$link = m::mock('Cartalyst\SentinelSocial\Models\Link[save]');
 		$tokenCredentials = new OAuth1TokenCredentials;
 		$tokenCredentials->setIdentifier('foo');
 		$tokenCredentials->setSecret('bar');
@@ -61,7 +61,7 @@ class EloquentLinkTest extends PHPUnit_Framework_TestCase {
 
 	public function testStoringOAuth2Token()
 	{
-		$link = m::mock('Cartalyst\SentinelSocial\Links\Eloquent\Link[save]');
+		$link = m::mock('Cartalyst\SentinelSocial\Models\Link[save]');
 		$this->addMockConnection($link);
 		$link->getConnection()->getQueryGrammar()->shouldReceive('getDateFormat')->andReturn('Y-m-d H:i:s');
 		$accessToken = new OAuth2AccessToken(array(

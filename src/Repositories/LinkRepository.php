@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Links;
+<?php namespace Cartalyst\SentinelSocial\Repositories;
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,21 +17,24 @@
  * @link       http://cartalyst.com
  */
 
+use Cartalyst\Support\Traits\RepositoryTrait;
 use Cartalyst\SentinelSocial\Services\ServiceInterface;
 use League\OAuth1\Client\Server\Server as OAuth1Server;
 use League\OAuth2\Client\Provider\AbstractProvider as OAuth2Provider;
 
-class IlluminateLinkRepository implements LinkRepositoryInterface {
+class LinkRepository implements LinkRepositoryInterface {
+
+	use RepositoryTrait;
 
 	/**
-	 * The Eloquent social model.
+	 * The eloquent link model.
 	 *
 	 * @var string
 	 */
-	protected $model = 'Cartalyst\SentinelSocial\Links\EloquentLink';
+	protected $model = 'Cartalyst\SentinelSocial\Models\Link';
 
 	/**
-	 * Create a new Eloquent Social Link provider.
+	 * Create a new eloquent link provider.
 	 *
 	 * @param  string  $model
 	 * @return void
@@ -49,7 +52,7 @@ class IlluminateLinkRepository implements LinkRepositoryInterface {
 	 *
 	 * @param  string  $slug
 	 * @param  mixed   $uid
-	 * @return \Cartalyst\SentinelSocial\Links\LinkInterface
+	 * @return \Cartalyst\SentinelSocial\Socials\SocialInterface
 	 */
 	public function findLink($slug, $uid)
 	{
@@ -72,18 +75,6 @@ class IlluminateLinkRepository implements LinkRepositoryInterface {
 		}
 
 		return $link;
-	}
-
-	/**
-	 * Create a new instance of the model.
-	 *
-	 * @return \Illuminate\Database\Eloquent\Model
-	 */
-	public function createModel()
-	{
-		$class = '\\'.ltrim($this->model, '\\');
-
-		return new $class;
 	}
 
 }

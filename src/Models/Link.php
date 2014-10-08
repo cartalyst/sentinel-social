@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Links;
+<?php namespace Cartalyst\SentinelSocial\Models;
 /**
  * Part of the Sentinel Social package.
  *
@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Model;
 use League\OAuth1\Client\Credentials\TokenCredentials as OAuth1TokenCredentials;
 use League\OAuth2\Client\Token\AccessToken as OAuth2AccessToken;
 
-class EloquentLink extends Model implements LinkInterface {
+class Link extends Model implements LinkInterface {
 
 	/**
 	 * The table associated with the model.

@@ -19,7 +19,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class MigrationCartalystSentinelSocialAddAccessTokenSecret extends Migration {
+class MigrationCartalystSentinelSocial extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -28,9 +28,24 @@ class MigrationCartalystSentinelSocialAddAccessTokenSecret extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('social', function($table)
+		Schema::create('social', function($table)
 		{
-			$table->string('access_token_secret')->nullable();
+			$table->increments('id');
+			$table->integer('user_id')->unsigned()->nullable();
+			$table->string('uid', 127);
+			$table->string('provider')->default('');
+
+			$table->string('oauth1_token_identifier')->nullable();
+			$table->string('oauth1_token_secret')->nullable();
+
+			$table->string('oauth2_access_token')->nullable();
+			$table->string('oauth2_refresh_token')->nullable();
+			$table->timestamp('oauth2_expires')->nullable();
+
+			$table->timestamps();
+
+			$table->engine = 'InnoDB';
+			$table->unique(array('provider', 'user_id'));
 		});
 	}
 
@@ -41,10 +56,7 @@ class MigrationCartalystSentinelSocialAddAccessTokenSecret extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('social', function($table)
-		{
-			$table->dropColumn('access_token_secret');
-		});
+		Schema::drop('social');
 	}
 
 }

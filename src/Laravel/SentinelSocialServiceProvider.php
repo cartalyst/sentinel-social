@@ -17,10 +17,10 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\SentinelSocial\Links\IlluminateLinkRepository;
 use Cartalyst\SentinelSocial\Manager;
-use Cartalyst\SentinelSocial\RequestProviders\IlluminateRequestProvider;
 use Cartalyst\Sentinel\Sessions\IlluminateSession;
+use Cartalyst\SentinelSocial\Socials\IlluminateSocialRepository;
+use Cartalyst\SentinelSocial\RequestProviders\IlluminateRequestProvider;
 
 class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider {
 
@@ -42,17 +42,17 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 	 */
 	public function register()
 	{
-		$this->registerLinkProvider();
+		$this->registerSocialProvider();
 		$this->registerRequestProvider();
 		$this->registerSession();
 		$this->registerSentinelSocial();
 	}
 
-	protected function registerLinkProvider()
+	protected function registerSocialProvider()
 	{
-		$this->app['sentinel.social.links'] = $this->app->share(function($app)
+		$this->app['sentinel.social.repository'] = $this->app->share(function($app)
 		{
-			$model = $app['config']['cartalyst/sentinel-social::link'];
+			$model = $app['config']['cartalyst/sentinel-social::social'];
 
 			$users = $app['config']['cartalyst/sentinel::users.model'];
 
@@ -61,7 +61,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 				forward_static_call_array(array($model, 'setUsersModel'), array($users));
 			}
 
-			return new IlluminateLinkRepository($model);
+			return new IlluminateSocialRepository($model);
 		});
 	}
 
@@ -94,7 +94,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 		{
 			$manager = new Manager(
 				$app['sentinel'],
-				$app['sentinel.social.links'],
+				$app['sentinel.social.repository'],
 				$app['sentinel.social.request'],
 				$app['sentinel.social.session'],
 				$app['events']
@@ -114,7 +114,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 	public function provides()
 	{
 		return array(
-			'sentinel.social.links',
+			'sentinel.social.repository',
 			'sentinel.social.request',
 			'sentinel.social.session',
 			'sentinel.social',
