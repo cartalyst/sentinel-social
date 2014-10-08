@@ -106,6 +106,8 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 
 			return $manager;
 		});
+
+		$this->app->alias('sentinel.social', 'Cartalyst\SentinelSocial\Manager');
 	}
 
 	/**
