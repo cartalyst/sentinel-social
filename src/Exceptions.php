@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial;
+<?php namespace Cartalyst\Sentinel\Addons\Social;
 /**
  * Part of the Sentinel Social package.
  *

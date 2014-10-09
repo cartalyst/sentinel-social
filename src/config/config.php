@@ -133,6 +133,6 @@ return [
 	|
 	*/
 
-	'link' => 'Cartalyst\SentinelSocial\Models\Link',
+	'link' => 'Cartalyst\Sentinel\Addons\Social\Models\Link',
 
 ];

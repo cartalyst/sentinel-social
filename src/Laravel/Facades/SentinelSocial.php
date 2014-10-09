@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Laravel\Facades;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Laravel\Facades;
 /**
  * Part of the Sentinel Social package.
  *

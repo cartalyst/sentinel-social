@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\RequestProviders;
+<?php namespace Cartalyst\Sentinel\Addons\Social\RequestProviders;
 /**
  * Part of the Sentinel Social package.
  *

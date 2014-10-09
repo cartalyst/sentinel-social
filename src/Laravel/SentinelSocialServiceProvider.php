@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Laravel;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Laravel;
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,10 +17,10 @@
  * @link       http://cartalyst.com
  */
 
-use Cartalyst\SentinelSocial\Manager;
+use Cartalyst\Sentinel\Addons\Social\Manager;
 use Cartalyst\Sentinel\Sessions\IlluminateSession;
-use Cartalyst\SentinelSocial\Repositories\LinkRepository;
-use Cartalyst\SentinelSocial\RequestProviders\IlluminateRequestProvider;
+use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
+use Cartalyst\Sentinel\Addons\Social\RequestProviders\IlluminateRequestProvider;
 
 class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider {
 
@@ -107,7 +107,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 			return $manager;
 		});
 
-		$this->app->alias('sentinel.social', 'Cartalyst\SentinelSocial\Manager');
+		$this->app->alias('sentinel.social', 'Cartalyst\Sentinel\Addons\Social\Manager');
 	}
 
 	/**

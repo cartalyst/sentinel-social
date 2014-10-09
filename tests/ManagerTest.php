@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Tests;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Tests;
 /**
  * Part of the Sentinel Social package.
  *
@@ -19,7 +19,7 @@
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Cartalyst\SentinelSocial\Manager;
+use Cartalyst\Sentinel\Addons\Social\Manager;
 use Illuminate\Events\Dispatcher;
 
 class ManagerTest extends PHPUnit_Framework_TestCase {
@@ -27,7 +27,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Sentinel social manager instance.
 	 *
-	 * @var \Cartalyst\SentinelSocial\Manager
+	 * @var \Cartalyst\Sentinel\Addons\Social\Manager
 	 */
 	protected $manager;
 
@@ -41,7 +41,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Request provider instance.
 	 *
-	 * @var \Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface
+	 * @var \Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface
 	 */
 	protected $requestProvider;
 
@@ -62,7 +62,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Link repository instance.
 	 *
-	 * @var \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface
+	 * @var \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface
 	 */
 	protected $linkRepository;
 
@@ -87,8 +87,8 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 	{
 		$this->manager = new Manager(
 			$this->sentinel        = m::mock('Cartalyst\Sentinel\Sentinel'),
-			$this->linkRepository  = m::mock('Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface'),
-			$this->requestProvider = m::mock('Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface'),
+			$this->linkRepository  = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface'),
+			$this->requestProvider = m::mock('Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface'),
 			$this->session         = m::mock('Cartalyst\Sentinel\Sessions\SessionInterface'),
 			$this->dispatcher      = new Dispatcher
 		);
@@ -317,7 +317,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @test
-	 * @expectedException Cartalyst\SentinelSocial\AccessMissingException
+	 * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
 	 * @expectedExceptionMessage Missing [oauth_token] parameter
 	 */
 	public function it_throws_an_exception_on_authentication_if_temporary_identitifer_is_missing()
@@ -337,7 +337,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @test
-	 * @expectedException Cartalyst\SentinelSocial\AccessMissingException
+	 * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
 	 * @expectedExceptionMessage Missing [verifier] parameter
 	 */
 	public function it_throws_an_exception_on_authentication_if_verifier_is_missing()
@@ -361,7 +361,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * @test
-	 * @expectedException Cartalyst\SentinelSocial\AccessMissingException
+	 * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
 	 * @expectedExceptionMessage Missing [code] parameter
 	 */
 	public function it_throws_an_exception_on_oauth2_authentication_when_code_is_missing()
@@ -387,13 +387,13 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->sentinel->shouldReceive('getUserRepository')
 			->once();
 
-		$this->assertInstanceOf('Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface', $manager->getLinksRepository());
+		$this->assertInstanceOf('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface', $manager->getLinksRepository());
 	}
 
 	/** @test */
 	public function it_can_set_and_retrieve_the_link_repository()
 	{
-		$linkRepository = m::mock('Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface');
+		$linkRepository = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface');
 
 		$this->manager->setLinksRepository($linkRepository);
 
@@ -435,7 +435,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->linkRepository->shouldReceive('findLink')
 			->with('foo', 789)
 			->once()
-			->andReturn($link = m::mock('Cartalyst\SentinelSocial\Models\LinkInterface'));
+			->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
 
 		$link->shouldReceive('storeToken')
 			->with($tokenCredentials)
@@ -518,7 +518,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->linkRepository->shouldReceive('findLink')
 			->with('foo', 789)
 			->once()
-			->andReturn($link = m::mock('Cartalyst\SentinelSocial\Models\LinkInterface'));
+			->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
 
 		$link->shouldReceive('storeToken')
 			->with($tokenCredentials)
@@ -620,7 +620,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->linkRepository->shouldReceive('findLink')
 			->with('foo', 789)
 			->once()
-			->andReturn($link = m::mock('Cartalyst\SentinelSocial\Models\LinkInterface'));
+			->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
 
 		$link->shouldReceive('storeToken')
 			->with($tokenCredentials)
@@ -697,7 +697,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->linkRepository->shouldReceive('findLink')
 			->with('foo', 789)
 			->once()
-			->andReturn($link = m::mock('Cartalyst\SentinelSocial\Models\LinkInterface'));
+			->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
 
 		$link->shouldReceive('storeToken')
 			->with($accessToken)
@@ -774,7 +774,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
         $this->linkRepository->shouldReceive('findLink')
         	->with('foo', 789)
         	->once()
-        	->andReturn($link = m::mock('Cartalyst\SentinelSocial\Models\LinkInterface'));
+        	->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
 
         $link->shouldReceive('storeToken')
         	->with($accessToken)
@@ -860,7 +860,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->linkRepository->shouldReceive('findLink')
 			->with('foo', 789)
 			->once()
-			->andReturn($link = m::mock('Cartalyst\SentinelSocial\Models\LinkInterface'));
+			->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
 
 		$link->shouldReceive('storeToken')
 			->with($tokenCredentials)
@@ -945,7 +945,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 	 */
 	protected function mockManager($methods)
 	{
-		$manager = m::mock("Cartalyst\SentinelSocial\Manager[{$methods}]", [
+		$manager = m::mock("Cartalyst\Sentinel\Addons\Social\Manager[{$methods}]", [
 			$this->sentinel,
 			$this->linkRepository,
 			$this->requestProvider,

@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial;
+<?php namespace Cartalyst\Sentinel\Addons\Social;
 /**
  * Part of the Sentinel Social package.
  *
@@ -24,14 +24,14 @@ use Cartalyst\Support\Traits\EventTrait;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Cartalyst\Sentinel\Sessions\NativeSession;
 use Cartalyst\Sentinel\Sessions\SessionInterface;
-use Cartalyst\SentinelSocial\Models\LinkInterface;
+use Cartalyst\Sentinel\Addons\Social\Models\LinkInterface;
 use Cartalyst\Sentinel\Users\UserNotFoundException;
-use Cartalyst\SentinelSocial\Repositories\LinkRepository;
+use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 use League\OAuth1\Client\Server\Server as OAuth1Provider;
-use Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface;
-use Cartalyst\SentinelSocial\RequestProviders\NativeRequestProvider;
+use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface;
+use Cartalyst\Sentinel\Addons\Social\RequestProviders\NativeRequestProvider;
 use League\OAuth2\Client\Provider\AbstractProvider as OAuth2Provider;
-use Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface;
+use Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface;
 
 class Manager {
 
@@ -48,14 +48,14 @@ class Manager {
 	 * The link provider, used for associating users
 	 * with OAuth providers.
 	 *
-	 * @var \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface
+	 * @var \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface
 	 */
 	protected $links;
 
 	/**
 	 * The request provider.
 	 *
-	 * @var \Cartalyst\SentinelSocial\RequestProviders\ProviderInterface
+	 * @var \Cartalyst\Sentinel\Addons\Social\RequestProviders\ProviderInterface
 	 */
 	protected $request;
 
@@ -84,8 +84,8 @@ class Manager {
 	 * Create a new Sentinel Social Manager instance.
 	 *
 	 * @param  \Cartalyst\Sentinel\Sentinel  $sentinel
-	 * @param  \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface  $links
-	 * @param  \Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface  $request
+	 * @param  \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface  $links
+	 * @param  \Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface  $request
 	 * @param  \Cartalyst\Sentinel\Sessions\SessionInterface  $session
 	 * @param  \Illuminate\Events\Dispatcher  $dispatcher
 	 * @return void
@@ -242,7 +242,7 @@ class Manager {
 	 * @param  string  $slug
 	 * @param  string  $uid
 	 * @param  mixed  $token
-	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
+	 * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
 	 */
 	protected function retrieveLink($slug, $uid, $token)
 	{
@@ -258,7 +258,7 @@ class Manager {
 	 * @param  string  $slug
 	 * @param  mixed  $provider
 	 * @param  mixed  $token
-	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
+	 * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
 	 */
 	protected function linkLoggedIn($slug, $provider, $token, UserInterface $user)
 	{
@@ -280,7 +280,7 @@ class Manager {
 	 * @param  string  $slug
 	 * @param  mixed  $provider
 	 * @param  mixed  $token
-	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
+	 * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
 	 */
 	protected function linkLoggedOut($slug, $provider, $token)
 	{
@@ -363,7 +363,7 @@ class Manager {
 	 *
 	 * @param  mixed  $provider
 	 * @return mixed
-	 * @throws \Cartalyst\SentinelSocial\AccessMissingException
+	 * @throws \Cartalyst\Sentinel\Addons\Social\AccessMissingException
 	 */
 	protected function retrieveToken($provider)
 	{
@@ -458,7 +458,7 @@ class Manager {
 	/**
 	 * Get the links repository.
 	 *
-	 * @return \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface
+	 * @return \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface
 	 */
 	public function getLinksRepository()
 	{
@@ -473,7 +473,7 @@ class Manager {
 	/**
 	 * Set the links repository.
 	 *
-	 * @param  \Cartalyst\SentinelSocial\Repositories\LinkRepositoryInterface  $links
+	 * @param  \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface  $links
 	 * @return void
 	 */
 	public function setLinksRepository(LinkRepositoryInterface $links)
@@ -484,11 +484,11 @@ class Manager {
 	/**
 	 * Creates a default links repository if none has been specified.
 	 *
-	 * @return \Cartalyst\SentinelSocial\Repositories\LinkRepository
+	 * @return \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository
 	 */
 	protected function createLinksRepository()
 	{
-		$model = 'Cartalyst\SentinelSocial\Models\Link';
+		$model = 'Cartalyst\Sentinel\Addons\Social\Models\Link';
 
 		$users = $this->sentinel->getUserRepository();
 

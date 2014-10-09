@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Repositories;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Repositories;
 /**
  * Part of the Sentinel Social package.
  *
@@ -24,7 +24,7 @@ interface LinkRepositoryInterface {
 	 *
 	 * @param  string  $slug
 	 * @param  mixed   $uid
-	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
+	 * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
 	 */
 	public function findLink($slug, $uid);
 

@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Repositories;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Repositories;
 /**
  * Part of the Sentinel Social package.
  *
@@ -18,7 +18,7 @@
  */
 
 use Cartalyst\Support\Traits\RepositoryTrait;
-use Cartalyst\SentinelSocial\Services\ServiceInterface;
+use Cartalyst\Sentinel\Addons\Social\Services\ServiceInterface;
 use League\OAuth1\Client\Server\Server as OAuth1Server;
 use League\OAuth2\Client\Provider\AbstractProvider as OAuth2Provider;
 
@@ -31,14 +31,14 @@ class LinkRepository implements LinkRepositoryInterface {
 	 *
 	 * @var string
 	 */
-	protected $model = 'Cartalyst\SentinelSocial\Models\Link';
+	protected $model = 'Cartalyst\Sentinel\Addons\Social\Models\Link';
 
 	/**
 	 * Finds a link (or creates one) for the given provider slug and uid.
 	 *
 	 * @param  string  $slug
 	 * @param  mixed   $uid
-	 * @return \Cartalyst\SentinelSocial\Socials\SocialInterface
+	 * @return \Cartalyst\Sentinel\Addons\Social\Socials\SocialInterface
 	 */
 	public function findLink($slug, $uid)
 	{

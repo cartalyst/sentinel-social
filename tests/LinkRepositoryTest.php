@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Tests;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Tests;
 /**
  * Part of the Sentinel Social package.
  *
@@ -18,7 +18,7 @@
  */
 
 use Mockery as m;
-use Cartalyst\SentinelSocial\Repositories\LinkRepository;
+use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 use PHPUnit_Framework_TestCase;
 
 class LinkRepositoryTest extends PHPUnit_Framework_TestCase {
@@ -36,11 +36,11 @@ class LinkRepositoryTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_find_existing_links()
 	{
-		$linkRepository = m::mock('Cartalyst\SentinelSocial\Repositories\LinkRepository[createModel]');
+		$linkRepository = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository[createModel]');
 
 		$linkRepository->shouldReceive('createModel')
 			->once()
-			->andReturn($model = m::mock('Cartalyst\SentinelSocial\Models\Link'));
+			->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'));
 
 		$model->shouldReceive('newQuery')
 			->once()
@@ -71,11 +71,11 @@ class LinkRepositoryTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_will_create_a_link_if_non_existent_found()
 	{
-		$linkRepository = m::mock('Cartalyst\SentinelSocial\Repositories\LinkRepository[createModel]');
+		$linkRepository = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository[createModel]');
 
 		$linkRepository->shouldReceive('createModel')
 			->twice()
-			->andReturn($model = m::mock('Cartalyst\SentinelSocial\Models\Link'));
+			->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'));
 
 		$model->shouldReceive('newQuery')
 			->once()
@@ -118,7 +118,7 @@ class LinkRepositoryTest extends PHPUnit_Framework_TestCase {
 
 		$model = $provider->createModel();
 
-		$this->assertInstanceOf('Cartalyst\SentinelSocial\Models\Link', $model);
+		$this->assertInstanceOf('Cartalyst\Sentinel\Addons\Social\Models\Link', $model);
 	}
 
 }

@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Tests;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Tests;
 /**
  * Part of the Sentinel Social package.
  *
@@ -19,7 +19,7 @@
 
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
-use Cartalyst\SentinelSocial\Models\Link;
+use Cartalyst\Sentinel\Addons\Social\Models\Link;
 use League\OAuth2\Client\Token\AccessToken as OAuth2AccessToken;
 use League\OAuth1\Client\Credentials\TokenCredentials as OAuth1TokenCredentials;
 
@@ -63,7 +63,7 @@ class LinkTest extends PHPUnit_Framework_TestCase {
 	{
 		$user = m::mock('Cartalyst\Sentinel\Users\EloquentUser');
 
-		$link = m::mock('Cartalyst\SentinelSocial\Models\Link[user]');
+		$link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[user]');
 
 		$link->getConnection()
 			->getQueryGrammar()
@@ -102,7 +102,7 @@ class LinkTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_store_oauth1_tokens()
 	{
-		$link = m::mock('Cartalyst\SentinelSocial\Models\Link[save]');
+		$link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[save]');
 
 		$tokenCredentials = new OAuth1TokenCredentials;
 		$tokenCredentials->setIdentifier('foo');
@@ -120,7 +120,7 @@ class LinkTest extends PHPUnit_Framework_TestCase {
 	/** @test */
 	public function it_can_store_oauth2_tokens()
 	{
-		$link = m::mock('Cartalyst\SentinelSocial\Models\Link[save]');
+		$link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[save]');
 
 		$this->addMockConnection($link);
 

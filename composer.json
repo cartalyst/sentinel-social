@@ -60,7 +60,7 @@
 			"src/migrations"
 		],
 		"psr-4": {
-			"Cartalyst\\SentinelSocial\\": "src/"
+			"Cartalyst\\Sentinel\\Addons\\Social\\": "src/"
 		}
 	},
 	"extra": {

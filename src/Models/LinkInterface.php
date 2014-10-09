@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Models;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Models;
 /**
  * Part of the Sentinel Social package.
  *

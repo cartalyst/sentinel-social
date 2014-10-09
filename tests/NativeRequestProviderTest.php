@@ -1,4 +1,4 @@
-<?php namespace Cartalyst\SentinelSocial\Tests;
+<?php namespace Cartalyst\Sentinel\Addons\Social\Tests;
 /**
  * Part of the Sentinel Social package.
  *
@@ -18,7 +18,7 @@
  */
 
 use Mockery as m;
-use Cartalyst\SentinelSocial\RequestProviders\NativeRequestProvider as Provider;
+use Cartalyst\Sentinel\Addons\Social\RequestProviders\NativeRequestProvider as Provider;
 use PHPUnit_Framework_TestCase;
 
 class NativeRequestProviderTest extends PHPUnit_Framework_TestCase {
