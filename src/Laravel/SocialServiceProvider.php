@@ -22,7 +22,7 @@ use Cartalyst\Sentinel\Sessions\IlluminateSession;
 use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 use Cartalyst\Sentinel\Addons\Social\RequestProviders\IlluminateRequestProvider;
 
-class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider {
+class SocialServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 	/**
 	 * {@inheritDoc}
@@ -50,7 +50,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 
 	protected function registerLinkRepository()
 	{
-		$this->app['sentinel.social.repository'] = $this->app->share(function($app)
+		$this->app['sentinel.addons.social.repository'] = $this->app->share(function($app)
 		{
 			$model = $app['config']['cartalyst/sentinel-social::link'];
 
@@ -67,7 +67,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 
 	protected function registerRequestProvider()
 	{
-		$this->app['sentinel.social.request'] = $this->app->share(function($app)
+		$this->app['sentinel.addons.social.request'] = $this->app->share(function($app)
 		{
 			return new IlluminateRequestProvider($app['request']);
 		});
@@ -75,7 +75,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 
 	protected function registerSession()
 	{
-		$this->app['sentinel.social.session'] = $this->app->share(function($app)
+		$this->app['sentinel.addons.social.session'] = $this->app->share(function($app)
 		{
 			$key = $app['config']['cartalyst/sentinel::cookie.key'].'_social';
 
@@ -90,13 +90,13 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 	 */
 	protected function registerSentinelSocial()
 	{
-		$this->app['sentinel.social'] = $this->app->share(function($app)
+		$this->app['sentinel.addons.social'] = $this->app->share(function($app)
 		{
 			$manager = new Manager(
 				$app['sentinel'],
-				$app['sentinel.social.repository'],
-				$app['sentinel.social.request'],
-				$app['sentinel.social.session'],
+				$app['sentinel.addons.social.repository'],
+				$app['sentinel.addons.social.request'],
+				$app['sentinel.addons.social.session'],
 				$app['events']
 			);
 
@@ -107,7 +107,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 			return $manager;
 		});
 
-		$this->app->alias('sentinel.social', 'Cartalyst\Sentinel\Addons\Social\Manager');
+		$this->app->alias('sentinel.addons.social', 'Cartalyst\Sentinel\Addons\Social\Manager');
 	}
 
 	/**
@@ -116,10 +116,10 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 	public function provides()
 	{
 		return [
-			'sentinel.social.repository',
-			'sentinel.social.request',
-			'sentinel.social.session',
-			'sentinel.social',
+			'sentinel.addons.social.repository',
+			'sentinel.addons.social.request',
+			'sentinel.addons.social.session',
+			'sentinel.addons.social',
 		];
 	}
 

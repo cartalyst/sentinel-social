@@ -19,7 +19,7 @@
 
 use Illuminate\Support\Facades\Facade;
 
-class SentinelSocial extends Facade {
+class Social extends Facade {
 
 	/**
 	 * Get the registered name of the component.
@@ -28,7 +28,7 @@ class SentinelSocial extends Facade {
 	 */
 	protected static function getFacadeAccessor()
 	{
-		return 'sentinel.social';
+		return 'sentinel.addons.social';
 	}
 
 }
