@@ -1,5 +1,7 @@
 # Sentinel Social
 
+[![Build Status](http://ci.cartalyst.com/build-status/svg/31)](http://ci.cartalyst.com/build-status/view/31)
+
 Sentinel Social makes authenticating your users through social networks & third-party OAuth providers in Sentinel an absolute breeze.
 
 The package requires PHP 5.4+ and comes bundled with a Laravel 4 Facade and a Service Provider to simplify the optional framework integration and follows the FIG standard PSR-4 to ensure a high level of interoperability between shared PHP code and is fully unit-tested.
@@ -8,25 +10,21 @@ Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](license.txt). Code well
 
 ## Package Story
 
-History and future capabilities.
+Package history and capabilities.
 
 ...
 
-## Requirements
-
-- PHP >=5.4
-
 ## Installation
 
-Attributes is installable with Composer. Read further information on how to install.
+Sentinel Social is installable with Composer. Read further information on how to install.
 
-[Installation Guide](http://cartalyst.com/manual/sentinel-social/introduction/installation)
+[Installation Guide](https://cartalyst.com/manual/sentinel-social/1.0#installation)
 
 ## Documentation
 
-Refer to the following guide on how to use the Attributes package.
+Refer to the following guide on how to use the Sentinel Social extension.
 
-[Documentation](http://cartalyst.com/manual/sentinel-social)
+[Documentation](https://cartalyst.com/manual/sentinel-social/1.0)
 
 ## Versioning
 
