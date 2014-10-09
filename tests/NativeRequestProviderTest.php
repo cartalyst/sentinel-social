@@ -33,24 +33,33 @@ class NativeRequestProviderTest extends PHPUnit_Framework_TestCase {
 		m::close();
 	}
 
-	public function testOAuth1TemporaryCredentialsIdentifier()
+	/** @test */
+	public function it_can_retrieve_oauth1_temporary_credentials_identifier()
 	{
 		$provider = new Provider;
+
 		$_GET['oauth_token'] = 'oauth_token_value';
+
 		$this->assertEquals('oauth_token_value', $provider->getOAuth1TemporaryCredentialsIdentifier());
 	}
 
-	public function testOAuth1Verifier()
+	/** @test */
+	public function it_can_retrieve_oauth1_verifier()
 	{
 		$provider = new Provider;
+
 		$_GET['oauth_verifier'] = 'verifier_value';
+
 		$this->assertEquals('verifier_value', $provider->getOAuth1Verifier());
 	}
 
-	public function testOAuth2Code()
+	/** @test */
+	public function it_can_retrieve_oauth2_code()
 	{
 		$provider = new Provider;
+
 		$_GET['code'] = 'code_value';
+
 		$this->assertEquals('code_value', $provider->getOAuth2Code());
 	}
 

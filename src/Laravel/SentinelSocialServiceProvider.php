@@ -58,7 +58,7 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 
 			if (class_exists($model) and method_exists($model, 'setUsersModel'))
 			{
-				forward_static_call_array(array($model, 'setUsersModel'), array($users));
+				forward_static_call_array([$model, 'setUsersModel'], [$users]);
 			}
 
 			return new LinkRepository($model);
@@ -115,12 +115,12 @@ class SentinelSocialServiceProvider extends \Illuminate\Support\ServiceProvider 
 	 */
 	public function provides()
 	{
-		return array(
+		return [
 			'sentinel.social.repository',
 			'sentinel.social.request',
 			'sentinel.social.session',
 			'sentinel.social',
-		);
+		];
 	}
 
 }

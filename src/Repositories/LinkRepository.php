@@ -34,20 +34,6 @@ class LinkRepository implements LinkRepositoryInterface {
 	protected $model = 'Cartalyst\SentinelSocial\Models\Link';
 
 	/**
-	 * Create a new eloquent link provider.
-	 *
-	 * @param  string  $model
-	 * @return void
-	 */
-	public function __construct($model = null)
-	{
-		if (isset($model))
-		{
-			$this->model = $model;
-		}
-	}
-
-	/**
 	 * Finds a link (or creates one) for the given provider slug and uid.
 	 *
 	 * @param  string  $slug
@@ -67,10 +53,10 @@ class LinkRepository implements LinkRepositoryInterface {
 		if ($link === null)
 		{
 			$link = $this->createModel();
-			$link->fill(array(
+			$link->fill([
 				'provider' => $slug,
 				'uid'      => $uid,
-			));
+			]);
 			$link->save();
 		}
 

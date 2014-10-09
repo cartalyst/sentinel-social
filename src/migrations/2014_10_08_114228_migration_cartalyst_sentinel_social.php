@@ -45,7 +45,7 @@ class MigrationCartalystSentinelSocial extends Migration {
 			$table->timestamps();
 
 			$table->engine = 'InnoDB';
-			$table->unique(array('provider', 'user_id'));
+			$table->unique(['provider', 'user_id']);
 		});
 	}
 

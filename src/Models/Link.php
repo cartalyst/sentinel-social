@@ -34,7 +34,7 @@ class Link extends Model implements LinkInterface {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $fillable = array(
+	protected $fillable = [
 		'provider',
 		'uid',
 		'oauth1_token_identifier',
@@ -42,7 +42,7 @@ class Link extends Model implements LinkInterface {
 		'oauth2_access_token',
 		'oauth2_refresh_token',
 		'oauth2_expires',
-	);
+	];
 
 	/**
 	 * The users model name.
@@ -68,7 +68,7 @@ class Link extends Model implements LinkInterface {
 	 */
 	public function getDates()
 	{
-		return array_merge(parent::getDates(), array('oauth2_expires'));
+		return array_merge(parent::getDates(), ['oauth2_expires']);
 	}
 
 	/**

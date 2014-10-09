@@ -20,6 +20,7 @@
 use Closure;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Events\Dispatcher;
+use Cartalyst\Support\Traits\EventTrait;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Cartalyst\Sentinel\Sessions\NativeSession;
 use Cartalyst\Sentinel\Sessions\SessionInterface;
@@ -33,6 +34,8 @@ use League\OAuth2\Client\Provider\AbstractProvider as OAuth2Provider;
 use Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface;
 
 class Manager {
+
+	use EventTrait;
 
 	/**
 	 * The shared Sentinel instance.
@@ -64,25 +67,18 @@ class Manager {
 	protected $session;
 
 	/**
-	 * The event dispatcher instance.
-	 *
-	 * @var Illuminate\Events\Dispatcher
-	 */
-	protected $dispatcher;
-
-	/**
 	 * Array of connections (credentials for creating provider instances).
 	 *
 	 * @var array
 	 */
-	protected $connections = array();
+	protected $connections = [];
 
 	/**
 	 * Array of initialized providers.
 	 *
 	 * @var array
 	 */
-	protected $providers = array();
+	protected $providers = [];
 
 	/**
 	 * Create a new Sentinel Social Manager instance.
@@ -172,8 +168,8 @@ class Manager {
 	 *
 	 * @param  string  $slug
 	 * @param  string  $callbackUri
-	 * @param  Closure $callback
-	 * @param  bool    $remmber
+	 * @param  Closure  $callback
+	 * @param  bool  $remember
 	 * @return \Cartalyst\Sentinel\Users\UserInterface
 	 */
 	public function authenticate($slug, $callbackUri, Closure $callback = null, $remember = false)
@@ -207,7 +203,7 @@ class Manager {
 	 * Register a callback for when a new user is registered
 	 * through an OAuth provider.
 	 *
-	 * @param  \Closure $callback
+	 * @param  \Closure  $callback
 	 * @return void
 	 */
 	public function registering(Closure $callback)
@@ -219,7 +215,7 @@ class Manager {
 	 * Register a callback for when an existing user is
 	 * linked with an OAuth provider.
 	 *
-	 * @param  \Closure $callback
+	 * @param  \Closure  $callback
 	 * @return void
 	 */
 	public function existing(Closure $callback)
@@ -231,7 +227,7 @@ class Manager {
 	 * Register a callback for when a user of any type is
 	 * linked with an OAuth provider.
 	 *
-	 * @param  \Closure $callback
+	 * @param  \Closure  $callback
 	 * @return void
 	 */
 	public function linking(Closure $callback)
@@ -243,9 +239,9 @@ class Manager {
 	 * Retrieves a link for the given slug, unique ID
 	 * and token.
 	 *
-	 * @param  string $slug
+	 * @param  string  $slug
 	 * @param  string  $uid
-	 * @param  mixed   $token
+	 * @param  mixed  $token
 	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
 	 */
 	protected function retrieveLink($slug, $uid, $token)
@@ -260,8 +256,8 @@ class Manager {
 	 * create one) for the given slug, provider and token.
 	 *
 	 * @param  string  $slug
-	 * @param  mixed   $provider
-	 * @param  mixed   $token
+	 * @param  mixed  $provider
+	 * @param  mixed  $token
 	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
 	 */
 	protected function linkLoggedIn($slug, $provider, $token, UserInterface $user)
@@ -269,10 +265,10 @@ class Manager {
 		$uid  = $provider->getUserUid($token);
 		$link = $this->retrieveLink($slug, $uid, $token);
 
-
 		$link->setUser($user);
-		$this->fireEvent('existing', $link, $provider, $token, $slug);
-		$this->fireEvent('linking', $link, $provider, $token, $slug);
+
+		$this->fireEvent('sentinel.social.existing', [$link, $provider, $token, $slug]);
+		$this->fireEvent('sentinel.social.linking', [$link, $provider, $token, $slug]);
 
 		return $link;
 	}
@@ -282,8 +278,8 @@ class Manager {
 	 * create one) for the given slug, provider and token.
 	 *
 	 * @param  string  $slug
-	 * @param  mixed   $provider
-	 * @param  mixed   $token
+	 * @param  mixed  $provider
+	 * @param  mixed  $token
 	 * @return \Cartalyst\SentinelSocial\Models\LinkInterface
 	 */
 	protected function linkLoggedOut($slug, $provider, $token)
@@ -296,11 +292,11 @@ class Manager {
 			$login = $provider->getUserEmail($token) ?: $uid.'@'.$slug;
 			$user = $this->sentinel->findByCredentials(compact('login'));
 
-			if ($user !== null)
+			if ($user)
 			{
 				$link->setUser($user);
 
-				$this->fireEvent('existing', $link, $provider, $token, $slug);
+				$this->fireEvent('sentinel.social.existing', [$link, $provider, $token, $slug]);
 			}
 			else
 			{
@@ -310,14 +306,14 @@ class Manager {
 					->createModel();
 
 				// Create a dummy password for the user
-				$password = array($slug, $login, time(), mt_rand());
+				$password = [$slug, $login, time(), mt_rand()];
 				shuffle($password);
 				$password = implode('', $password);
 
-				$credentials = array(
+				$credentials = [
 					'login'    => $login,
 					'password' => $password,
-				);
+				];
 
 				// Some providers give a first / last name, some don't.
 				// If we only have one name, we'll just put it in the
@@ -335,15 +331,15 @@ class Manager {
 				$user = $this->sentinel->registerAndActivate($credentials);
 				$link->setUser($user);
 
-				$this->fireEvent('registering', $link, $provider, $token, $slug);
+				$this->fireEvent('sentinel.social.registering', [$link, $provider, $token, $slug]);
 			}
 		}
 		else
 		{
-			$this->fireEvent('existing', $link, $provider, $token, $slug);
+			$this->fireEvent('sentinel.social.existing', [$link, $provider, $token, $slug]);
 		}
 
-		$this->fireEvent('linking', $link, $provider, $token, $slug);
+		$this->fireEvent('sentinel.social.linking', [$link, $provider, $token, $slug]);
 
 		return $link;
 	}
@@ -466,7 +462,7 @@ class Manager {
 	 */
 	public function getLinksRepository()
 	{
-		if ($this->links === null)
+		if ( ! $this->links)
 		{
 			$this->links = $this->createLinksRepository();
 		}
@@ -494,45 +490,9 @@ class Manager {
 	{
 		$model = 'Cartalyst\SentinelSocial\Models\Link';
 
-		$users = $this->getUserRepository();
+		$users = $this->sentinel->getUserRepository();
 
 		return new LinkRepository($users, $model);
-	}
-
-	/**
-	 * Get the event dispatcher.
-	 *
-	 * @return \Illuminate\Events\Dispatcher
-	 */
-	public function getEventDispatcher()
-	{
-		if ($this->dispatcher === null)
-		{
-			$this->dispatcher = $this->createEventDispatcher();
-		}
-
-		return $this->dispatcher;
-	}
-
-	/**
-	 * Set the event dispatcher.
-	 *
-	 * @param  \Illuminate\Events\Dispatcher  $dispatcher
-	 * @return void
-	 */
-	public function setEventDispatcher(Dispatcher $dispatcher)
-	{
-		$this->dispatcher = $dispatcher;
-	}
-
-	/**
-	 * Creates a default event dispatcher if none has been specified.
-	 *
-	 * @return \Cartalyst\Sentinel\Users\IlluminateEventDispatcher
-	 */
-	protected function createEventDispatcher()
-	{
-		return new Dispatcher;
 	}
 
 	/**
@@ -597,8 +557,6 @@ class Manager {
 		{
 			return 2;
 		}
-
-		throw new \RuntimeException('['.get_class($provider).'] does not inherit from a compatible OAuth provider class.');
 	}
 
 	/**
@@ -616,13 +574,13 @@ class Manager {
 		// Built-in OAuth1 server
 		if (class_exists($class = 'League\\OAuth1\\Client\\Server\\'.$driver))
 		{
-			return array(1, $class);
+			return [1, $class];
 		}
 
 		// Built-in OAuth2 provider
 		if (class_exists($class = 'League\\OAuth2\\Client\\Provider\\'.$driver))
 		{
-			return array(2, $class);
+			return [2, $class];
 		}
 
 		// If the driver is a custom class which doesn't exist
@@ -635,12 +593,12 @@ class Manager {
 
 		if ($parent == 'League\\OAuth1\\Client\\Server\\Server')
 		{
-			return array(1, $driver);
+			return [1, $driver];
 		}
 
 		if ($parent == 'League\\OAuth2\\Client\\Provider\\AbstractProvider')
 		{
-			return array(2, $driver);
+			return [2, $driver];
 		}
 
 		throw new \RuntimeException("[$driver] does not inherit from a compatible OAuth provider class.");
@@ -682,11 +640,11 @@ class Manager {
 	 */
 	protected function createOAuth1Provider($driver, $connection, $callbackUri)
 	{
-		$credentials = array(
+		$credentials = [
 			'identifier'   => $connection['identifier'],
 			'secret'       => $connection['secret'],
 			'callback_uri' => $callbackUri,
-		);
+		];
 
 		return new $driver($credentials);
 	}
@@ -702,12 +660,12 @@ class Manager {
 	 */
 	protected function createOAuth2Provider($driver, $connection, $callbackUri)
 	{
-		$options = array(
+		$options = [
 			'clientId'     => $connection['identifier'],
 			'clientSecret' => $connection['secret'],
 			'redirectUri'  => $callbackUri,
-			'scopes'       => isset($connection['scopes']) ? $connection['scopes'] : array(),
-		);
+			'scopes'       => isset($connection['scopes']) ? $connection['scopes'] : [],
+		];
 
 		return new $driver($options);
 	}
@@ -716,35 +674,13 @@ class Manager {
 	 * Register an event with Sentinel Social.
 	 *
 	 * @param  string   $name
-	 * @param  \Closure $callback
+	 * @param  \Closure  $callback
 	 * @return void
 	 * @throws \RuntimeException
 	 */
 	protected function registerEvent($name, Closure $callback)
 	{
-		if ( ! isset($this->dispatcher))
-		{
-			throw new \RuntimeException("Events dispatcher has not been set.");
-		}
-
 		$this->dispatcher->listen("sentinel.social.{$name}", $callback);
-	}
-
-	/**
-	 * Fires an event for Sentinel Social.
-	 *
-	 * @param  string  $name
-	 * @param  \Cartalyst\SentinelSocial\Models\LinkInterface  $link
-	 * @param  mixed   $provider
-	 * @param  mixed   $token
-	 * @param  string  $slug
-	 * @return mixed
-	 */
-	protected function fireEvent($name, LinkInterface $link, $provider, $token, $slug)
-	{
-		if ( ! isset($this->dispatcher)) return;
-
-		return $this->dispatcher->fire("sentinel.social.{$name}", array($link, $provider, $token, $slug));
 	}
 
 }

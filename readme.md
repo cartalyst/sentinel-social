@@ -1,8 +1,8 @@
-# Sentinel Social
+# Sentinel Social Addon
 
 [![Build Status](http://ci.cartalyst.com/build-status/svg/31)](http://ci.cartalyst.com/build-status/view/31)
 
-Sentinel Social makes authenticating your users through social networks & third-party OAuth providers in Sentinel an absolute breeze.
+Sentinel Social is a `Sentinel` addon that makes authenticating your users through social networks & third-party OAuth providers in Sentinel an absolute breeze.
 
 The package requires PHP 5.4+ and comes bundled with a Laravel 4 Facade and a Service Provider to simplify the optional framework integration and follows the FIG standard PSR-4 to ensure a high level of interoperability between shared PHP code and is fully unit-tested.
 
@@ -12,7 +12,9 @@ Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](license.txt). Code well
 
 Package history and capabilities.
 
-...
+#### 9-Oct-14 - v1.0.0
+
+- Authentication trhough social networks and third-party OAuth providers.
 
 ## Installation
 
