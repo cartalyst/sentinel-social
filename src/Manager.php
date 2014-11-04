@@ -200,7 +200,7 @@ class Manager {
 	}
 
 	/**
-	 * Register a callback for when a new user is registered
+	 * Register a callback for when a new user is registering
 	 * through an OAuth provider.
 	 *
 	 * @param  \Closure  $callback
@@ -209,6 +209,18 @@ class Manager {
 	public function registering(Closure $callback)
 	{
 		$this->registerEvent('registering', $callback);
+	}
+
+	/**
+	 * Register a callback for when a new user is registered
+	 * through an OAuth provider.
+	 *
+	 * @param  \Closure $callback
+	 * @return void
+	 */
+	public function registered(Closure $callback)
+	{
+		$this->registerEvent('registered', $callback);
 	}
 
 	/**
@@ -328,10 +340,12 @@ class Manager {
 					$credentials['first_name'] = $name;
 				}
 
+				$this->fireEvent('sentinel.social.registering', [$link, $provider, $token, $slug]);
+
 				$user = $this->sentinel->registerAndActivate($credentials);
 				$link->setUser($user);
 
-				$this->fireEvent('sentinel.social.registering', [$link, $provider, $token, $slug]);
+				$this->fireEvent('sentinel.social.registered', [$link, $provider, $token, $slug]);
 			}
 		}
 		else

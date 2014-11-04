@@ -914,17 +914,24 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 			$_SERVER['__sentinel_social_registering'] = true;
 		});
 
+		$manager->registered(function($link, $provider, $token, $slug)
+		{
+			$_SERVER['__sentinel_social_registered'] = true;
+		});
+
 		$user = $manager->authenticate('foo', 'http://example.com/callback', function()
 		{
 			$_SERVER['__sentinel_social_linking'] = func_get_args();
 		}, true);
 
 		$this->assertTrue(isset($_SERVER['__sentinel_social_registering']));
+		$this->assertTrue(isset($_SERVER['__sentinel_social_registered']));
 		$this->assertTrue(isset($_SERVER['__sentinel_social_linking']));
 
 		$eventArgs = $_SERVER['__sentinel_social_linking'];
 
 		unset($_SERVER['__sentinel_social_registering']);
+		unset($_SERVER['__sentinel_social_registered']);
 		unset($_SERVER['__sentinel_social_linking']);
 
 		$this->assertCount(4, $eventArgs);
