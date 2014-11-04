@@ -57,9 +57,9 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 	public function setUp()
 	{
 		$this->manager = new Manager(
-			$this->sentinel          = m::mock('Cartalyst\Sentinel\Sentinel'),
-			$this->linkProvider    = m::mock('Cartalyst\SentinelSocial\Links\ProviderInterface'),
-			$this->requestProvider = m::mock('Cartalyst\SentinelSocial\RequestProviders\ProviderInterface'),
+			$this->sentinel        = m::mock('Cartalyst\Sentinel\Sentinel'),
+			$this->linkProvider    = m::mock('Cartalyst\SentinelSocial\Links\LinkRepositoryInterface'),
+			$this->requestProvider = m::mock('Cartalyst\SentinelSocial\RequestProviders\RequestProviderInterface'),
 			$this->session         = m::mock('Cartalyst\Sentinel\Sessions\SessionInterface'),
 			$this->dispatcher      = new Dispatcher
 		);
@@ -289,22 +289,11 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 
 		// Retrieving a user from the link
 		$link->shouldReceive('getUser')->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
-		$user->shouldReceive('getId')->once()->andReturn(123);
-
-		// Sentinel's jobs
-		$this->sentinel->shouldReceive('getThrottleProvider')->once()->andReturn($throttleProvider = m::mock('Cartalyst\Sentinel\Throtting\ThrottleProvider'));
-		$this->sentinel->shouldReceive('getIpAddress')->once()->andReturn('127.0.0.1');
-
-		// Checking throttle status
-		$throttleProvider->shouldReceive('isEnabled')->once()->andReturn(true);
-		$throttleProvider->shouldReceive('findByUserId')->with(123, '127.0.0.1')->once()->andReturn($throttle = m::mock('Cartalyst\Sentinel\Throtting\ThrottleInterface'));
-		$throttle->shouldReceive('check')->once();
 
 		// And finally, logging a user in
-		$this->sentinel->shouldReceive('login')->with($user, true)->once();
+		$this->sentinel->shouldReceive('authenticate')->with($user, true)->once();
 
-		$me = $this;
-		$manager->existing(function($link, $provider, $token, $slug) use ($me)
+		$manager->existing(function($link, $provider, $token, $slug)
 		{
 			$_SERVER['__sentinel_social_existing'] = true;
 		});
@@ -355,30 +344,12 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->sentinel->shouldReceive('getUser')->once()->andReturn(null);
 
 		// Retrieving a user from the link
-		$link->shouldReceive('getUser')->ordered()->once()->andReturn(null);
-
-		// Retrieving an existing user
-		$this->sentinel->shouldReceive('getUserProvider')->once()->andReturn($userProvider = m::mock('Cartalyst\Sentinel\Users\ProviderInterface'));
-		$provider->shouldReceive('getUserEmail')->once()->andReturn('a@b.c');
-		$userProvider->shouldReceive('findByLogin')->with('a@b.c')->once()->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
-		$user->shouldReceive('getId')->once()->andReturn(123);
-		$link->shouldReceive('setUser')->with($user)->once();
-		$link->shouldReceive('getUser')->ordered()->once()->andReturn($user);
-
-		// Sentinel's jobs
-		$this->sentinel->shouldReceive('getThrottleProvider')->once()->andReturn($throttleProvider = m::mock('Cartalyst\Sentinel\Throtting\ThrottleProvider'));
-		$this->sentinel->shouldReceive('getIpAddress')->once()->andReturn('127.0.0.1');
-
-		// Checking throttle status
-		$throttleProvider->shouldReceive('isEnabled')->once()->andReturn(true);
-		$throttleProvider->shouldReceive('findByUserId')->with(123, '127.0.0.1')->once()->andReturn($throttle = m::mock('Cartalyst\Sentinel\Throtting\ThrottleInterface'));
-		$throttle->shouldReceive('check')->once();
+		$link->shouldReceive('getUser')->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
 
 		// And finally, logging a user in
-		$this->sentinel->shouldReceive('login')->with($user, true)->once();
+		$this->sentinel->shouldReceive('authenticate')->with($user, true)->once();
 
-		$me = $this;
-		$manager->existing(function($link, $provider, $token, $slug) use ($me)
+		$manager->existing(function($link, $provider, $token, $slug)
 		{
 			$_SERVER['__sentinel_social_existing'] = true;
 		});
@@ -408,6 +379,8 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$manager = m::mock('Cartalyst\SentinelSocial\Manager[make]');
 		$manager->__construct($this->sentinel, $this->linkProvider, $this->requestProvider, $this->session, $this->dispatcher);
 
+		$user = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+
 		$manager->shouldReceive('make')->with('foo', 'http://example.com/callback')->once()->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'));
 
 		// Request proxy
@@ -423,65 +396,32 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 
 		// Finding an appropriate link
 		$this->linkProvider->shouldReceive('findLink')->with('foo', 789)->once()->andReturn($link = m::mock('Cartalyst\SentinelSocial\Links\LinkInterface'));
+
 		$link->shouldReceive('storeToken')->with($tokenCredentials)->once();
 
-		// Logged in user
-		$this->sentinel->shouldReceive('getUser')->once()->andReturn(null);
+		$this->sentinel->shouldReceive('getUser')->once();
 
-		// Retrieving a user from the link
-		$link->shouldReceive('getUser')->ordered()->once()->andReturn(null);
+		$link->shouldReceive('getUser')->once();
 
-		// Retrieving an existing user
-		$this->sentinel->shouldReceive('getUserProvider')->once()->andReturn($userProvider = m::mock('Cartalyst\Sentinel\Users\ProviderInterface'));
-		$provider->shouldReceive('getUserEmail')->once()->andReturn('a@b.c');
-		$userProvider->shouldReceive('findByLogin')->with('a@b.c')->once()->andThrow(new \Cartalyst\Sentinel\Users\UserNotFoundException);
+		$link->shouldReceive('getUser')->once()->andReturn($user);
 
-		// Determining user attributes
-		$userProvider->shouldReceive('getEmptyUser')->once()->andReturn($emptyUser = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
-		$emptyUser->shouldReceive('getLoginName')->once()->andReturn('login');
-		$emptyUser->shouldReceive('getPasswordName')->once()->andReturn('password');
-		$provider->shouldReceive('getUserScreenName')->once()->andReturn(array('Ben', 'Corlett'));
-
-		// Create a user
-		$me = $this;
-		$userProvider->shouldReceive('create')->with(m::on(function($attributes) use ($me)
-		{
-			foreach (array('login', 'password', 'first_name', 'last_name') as $key)
-			{
-				$me->assertTrue(isset($attributes[$key]));
-			}
-
-			$me->assertEquals('a@b.c', $attributes['login']);
-			$me->assertEquals('Ben', $attributes['first_name']);
-			$me->assertEquals('Corlett', $attributes['last_name']);
-
-			// Keep mockery happy
-			return true;
-		}))->once()->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
-
-		// Activate the user
-		$user->shouldReceive('getActivationCode')->once()->andReturn('activation_code');
-		$user->shouldReceive('attemptActivation')->with('activation_code')->once();
-
-		// And back on track
-		$user->shouldReceive('getId')->once()->andReturn(123);
 		$link->shouldReceive('setUser')->with($user)->once();
-		$link->shouldReceive('getUser')->ordered()->once()->andReturn($user);
 
-		// Sentinel's jobs
-		$this->sentinel->shouldReceive('getThrottleProvider')->once()->andReturn($throttleProvider = m::mock('Cartalyst\Sentinel\Throtting\ThrottleProvider'));
-		$this->sentinel->shouldReceive('getIpAddress')->once()->andReturn('127.0.0.1');
+		$provider->shouldReceive('getUserEmail')->once()->andReturn('foo@bar.com');
 
-		// Checking throttle status
-		$throttleProvider->shouldReceive('isEnabled')->once()->andReturn(true);
-		$throttleProvider->shouldReceive('findByUserId')->with(123, '127.0.0.1')->once()->andReturn($throttle = m::mock('Cartalyst\Sentinel\Throtting\ThrottleInterface'));
-		$throttle->shouldReceive('check')->once();
+		$this->sentinel->shouldReceive('findByCredentials')->with(['login'=>'foo@bar.com'])->once();
 
-		// And finally, logging a user in
-		$this->sentinel->shouldReceive('login')->with($user, true)->once();
+		$this->sentinel->shouldReceive('getUserRepository')->once()->andReturn($users = m::mock('Cartalyst\Sentinel\Users\UserRepositoryInterface'));
 
-		$me = $this;
-		$manager->registering(function($link, $provider, $token, $slug) use ($me)
+		$users->shouldReceive('createModel')->once()->andReturn($user);
+
+		$provider->shouldReceive('getUserScreenName')->once()->andReturn(['Ben', 'Corlett']);
+
+		$this->sentinel->shouldReceive('registerAndActivate')->once()->andReturn($user);
+
+		$this->sentinel->shouldReceive('authenticate')->with($user, true)->once()->andReturn($user);
+
+		$manager->registering(function($link, $provider, $token, $slug)
 		{
 			$_SERVER['__sentinel_social_registering'] = true;
 		});
@@ -535,8 +475,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		// Retrieving a user from the link
 		$link->shouldReceive('getUser')->andReturn($user);
 
-		$me = $this;
-		$manager->existing(function($link, $provider, $token, $slug) use ($me)
+		$manager->existing(function($link, $provider, $token, $slug)
 		{
 			$_SERVER['__sentinel_social_existing'] = true;
 		});
@@ -597,27 +536,21 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->linkProvider->shouldReceive('findLink')->with('foo', 789)->once()->andReturn($link = m::mock('Cartalyst\SentinelSocial\Links\LinkInterface'));
 		$link->shouldReceive('storeToken')->with($accessToken)->once();
 
-		// Logged in user
-		$this->sentinel->shouldReceive('getUser')->once()->andReturn(null);
+		$user = m::mock('Cartalyst\Sentinel\Users\UserInterface');
 
-		// Retrieving a user from the link
-		$link->shouldReceive('getUser')->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
-		$user->shouldReceive('getId')->once()->andReturn(123);
+		$this->sentinel->shouldReceive('getUser')
+					->once();
 
-		// Sentinel's jobs
-		$this->sentinel->shouldReceive('getThrottleProvider')->once()->andReturn($throttleProvider = m::mock('Cartalyst\Sentinel\Throtting\ThrottleProvider'));
-		$this->sentinel->shouldReceive('getIpAddress')->once()->andReturn('127.0.0.1');
+		$link->shouldReceive('getUser')
+			->once()
+			->andReturn($user);
 
-		// Checking throttle status
-		$throttleProvider->shouldReceive('isEnabled')->once()->andReturn(true);
-		$throttleProvider->shouldReceive('findByUserId')->with(123, '127.0.0.1')->once()->andReturn($throttle = m::mock('Cartalyst\Sentinel\Throtting\ThrottleInterface'));
-		$throttle->shouldReceive('check')->once();
+		$link->shouldReceive('getUser')->ordered()->once()->andReturn($user);
 
 		// And finally, logging a user in
-		$this->sentinel->shouldReceive('login')->with($user, true)->once();
+		$this->sentinel->shouldReceive('authenticate')->with($user, true)->once();
 
-		$me = $this;
-		$manager->existing(function($link, $provider, $token, $slug) use ($me)
+		$manager->existing(function($link, $provider, $token, $slug)
 		{
 			$_SERVER['__sentinel_social_existing'] = true;
 		});
@@ -662,34 +595,21 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->linkProvider->shouldReceive('findLink')->with('foo', 789)->once()->andReturn($link = m::mock('Cartalyst\SentinelSocial\Links\LinkInterface'));
 		$link->shouldReceive('storeToken')->with($accessToken)->once();
 
-		// Logged in user
-		$this->sentinel->shouldReceive('getUser')->once()->andReturn(null);
+		$user = m::mock('Cartalyst\Sentinel\Users\UserInterface');
 
-		// Retrieving a user from the link
-		$link->shouldReceive('getUser')->ordered()->once()->andReturn(null);
+		$this->sentinel->shouldReceive('getUser')
+					->once();
 
-		// Retrieving an existing user
-		$this->sentinel->shouldReceive('getUserProvider')->once()->andReturn($userProvider = m::mock('Cartalyst\Sentinel\Users\ProviderInterface'));
-		$provider->shouldReceive('getUserEmail')->once()->andReturn('a@b.c');
-		$userProvider->shouldReceive('findByLogin')->with('a@b.c')->once()->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
-		$user->shouldReceive('getId')->once()->andReturn(123);
-		$link->shouldReceive('setUser')->with($user)->once();
+		$link->shouldReceive('getUser')
+			->once()
+			->andReturn($user);
+
 		$link->shouldReceive('getUser')->ordered()->once()->andReturn($user);
 
-		// Sentinel's jobs
-		$this->sentinel->shouldReceive('getThrottleProvider')->once()->andReturn($throttleProvider = m::mock('Cartalyst\Sentinel\Throtting\ThrottleProvider'));
-		$this->sentinel->shouldReceive('getIpAddress')->once()->andReturn('127.0.0.1');
-
-		// Checking throttle status
-		$throttleProvider->shouldReceive('isEnabled')->once()->andReturn(true);
-		$throttleProvider->shouldReceive('findByUserId')->with(123, '127.0.0.1')->once()->andReturn($throttle = m::mock('Cartalyst\Sentinel\Throtting\ThrottleInterface'));
-		$throttle->shouldReceive('check')->once();
-
 		// And finally, logging a user in
-		$this->sentinel->shouldReceive('login')->with($user, true)->once();
+		$this->sentinel->shouldReceive('authenticate')->with($user, true)->once();
 
-		$me = $this;
-		$manager->existing(function($link, $provider, $token, $slug) use ($me)
+		$manager->existing(function($link, $provider, $token, $slug)
 		{
 			$_SERVER['__sentinel_social_existing'] = true;
 		});
@@ -719,6 +639,8 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$manager = m::mock('Cartalyst\SentinelSocial\Manager[make]');
 		$manager->__construct($this->sentinel, $this->linkProvider, $this->requestProvider, $this->session, $this->dispatcher);
 
+		$user = m::mock('Cartalyst\Sentinel\Users\UserInterface');
+
 		$manager->shouldReceive('make')->with('foo', 'http://example.com/callback')->once()->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'));
 
 		// Request proxy
@@ -734,63 +656,29 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		$this->linkProvider->shouldReceive('findLink')->with('foo', 789)->once()->andReturn($link = m::mock('Cartalyst\SentinelSocial\Links\LinkInterface'));
 		$link->shouldReceive('storeToken')->with($accessToken)->once();
 
-		// Logged in user
-		$this->sentinel->shouldReceive('getUser')->once()->andReturn(null);
+		$this->sentinel->shouldReceive('getUser')->once();
 
-		// Retrieving a user from the link
-		$link->shouldReceive('getUser')->ordered()->once()->andReturn(null);
+		$link->shouldReceive('getUser')->once();
 
-		// Retrieving an existing user
-		$this->sentinel->shouldReceive('getUserProvider')->once()->andReturn($userProvider = m::mock('Cartalyst\Sentinel\Users\ProviderInterface'));
-		$provider->shouldReceive('getUserEmail')->once()->andReturn('a@b.c');
-		$userProvider->shouldReceive('findByLogin')->with('a@b.c')->once()->andThrow(new \Cartalyst\Sentinel\Users\UserNotFoundException);
+		$link->shouldReceive('getUser')->once()->andReturn($user);
 
-		// Determining user attributes
-		$userProvider->shouldReceive('getEmptyUser')->once()->andReturn($emptyUser = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
-		$emptyUser->shouldReceive('getLoginName')->once()->andReturn('login');
-		$emptyUser->shouldReceive('getPasswordName')->once()->andReturn('password');
-		$provider->shouldReceive('getUserScreenName')->once()->andReturn(array('Ben', 'Corlett'));
-
-		// Create a user
-		$me = $this;
-		$userProvider->shouldReceive('create')->with(m::on(function($attributes) use ($me)
-		{
-			foreach (array('login', 'password', 'first_name', 'last_name') as $key)
-			{
-				$me->assertTrue(isset($attributes[$key]));
-			}
-
-			$me->assertEquals('a@b.c', $attributes['login']);
-			$me->assertEquals('Ben', $attributes['first_name']);
-			$me->assertEquals('Corlett', $attributes['last_name']);
-
-			// Keep mockery happy
-			return true;
-		}))->once()->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
-
-		// Activate the user
-		$user->shouldReceive('getActivationCode')->once()->andReturn('activation_code');
-		$user->shouldReceive('attemptActivation')->with('activation_code')->once();
-
-		// And back on track
-		$user->shouldReceive('getId')->once()->andReturn(123);
 		$link->shouldReceive('setUser')->with($user)->once();
-		$link->shouldReceive('getUser')->ordered()->once()->andReturn($user);
 
-		// Sentinel's jobs
-		$this->sentinel->shouldReceive('getThrottleProvider')->once()->andReturn($throttleProvider = m::mock('Cartalyst\Sentinel\Throtting\ThrottleProvider'));
-		$this->sentinel->shouldReceive('getIpAddress')->once()->andReturn('127.0.0.1');
+		$provider->shouldReceive('getUserEmail')->once()->andReturn('foo@bar.com');
 
-		// Checking throttle status
-		$throttleProvider->shouldReceive('isEnabled')->once()->andReturn(true);
-		$throttleProvider->shouldReceive('findByUserId')->with(123, '127.0.0.1')->once()->andReturn($throttle = m::mock('Cartalyst\Sentinel\Throtting\ThrottleInterface'));
-		$throttle->shouldReceive('check')->once();
+		$this->sentinel->shouldReceive('findByCredentials')->with(['login'=>'foo@bar.com'])->once();
 
-		// And finally, logging a user in
-		$this->sentinel->shouldReceive('login')->with($user, true)->once();
+		$this->sentinel->shouldReceive('getUserRepository')->once()->andReturn($users = m::mock('Cartalyst\Sentinel\Users\UserRepositoryInterface'));
 
-		$me = $this;
-		$manager->registering(function($link, $provider, $token, $slug) use ($me)
+		$users->shouldReceive('createModel')->once()->andReturn($user);
+
+		$provider->shouldReceive('getUserScreenName')->once()->andReturn(['Ben', 'Corlett']);
+
+		$this->sentinel->shouldReceive('registerAndActivate')->once()->andReturn($user);
+
+		$this->sentinel->shouldReceive('authenticate')->with($user, true)->once()->andReturn($user);
+
+		$manager->registering(function($link, $provider, $token, $slug)
 		{
 			$_SERVER['__sentinel_social_registering'] = true;
 		});
@@ -842,8 +730,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase {
 		// Retrieving a user from the link
 		$link->shouldReceive('getUser')->andReturn($user);
 
-		$me = $this;
-		$manager->existing(function($link, $provider, $token, $slug) use ($me)
+		$manager->existing(function($link, $provider, $token, $slug)
 		{
 			$_SERVER['__sentinel_social_existing'] = true;
 		});

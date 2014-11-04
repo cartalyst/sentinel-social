@@ -18,7 +18,7 @@
  */
 
 use Mockery as m;
-use Cartalyst\SentinelSocial\RequestProviders\NativeProvider as Provider;
+use Cartalyst\SentinelSocial\RequestProviders\NativeRequestProvider as Provider;
 use PHPUnit_Framework_TestCase;
 
 class NativeRequestProviderTest extends PHPUnit_Framework_TestCase {

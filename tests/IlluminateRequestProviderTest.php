@@ -18,7 +18,7 @@
  */
 
 use Mockery as m;
-use Cartalyst\SentinelSocial\RequestProviders\IlluminateProvider as Provider;
+use Cartalyst\SentinelSocial\RequestProviders\IlluminateRequestProvider as Provider;
 use PHPUnit_Framework_TestCase;
 
 class IlluminateRequestProviderTest extends PHPUnit_Framework_TestCase {
