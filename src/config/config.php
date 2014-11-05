@@ -127,7 +127,7 @@ return [
 	| Link Model
 	|--------------------------------------------------------------------------
 	|
-	| When users are registered, a "link provider" will map the social
+	| When users are registered, a "link repository" will map the social
 	| authentications with user instances. Feel free to use your own model
 	| with our provider.
 	|
