@@ -12,7 +12,12 @@ Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](license.txt). Code well
 
 Package history and capabilities.
 
-#### 9-Oct-14 - v1.0.0
+#### 4-Nov-14 - v0.2.0
+
+- Refactored classes.
+- Removed default controller and views.
+
+#### 4-Nov-14 - v0.1.0
 
 - Authentication trhough social networks and third-party OAuth providers.
 
