@@ -19,7 +19,7 @@ Package history and capabilities.
 
 #### 4-Nov-14 - v0.1.0
 
-- Authentication trhough social networks and third-party OAuth providers.
+- Authentication through social networks and third-party OAuth providers.
 
 ## Installation
 
