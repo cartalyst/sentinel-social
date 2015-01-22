@@ -681,6 +681,8 @@ class Manager {
 			'scopes'       => isset($connection['scopes']) ? $connection['scopes'] : [],
 		];
 
+		if(isset($connection['access_type'])) { $options['accessType'] = $connection['access_type']; }
+
 		return new $driver($options);
 	}
 
