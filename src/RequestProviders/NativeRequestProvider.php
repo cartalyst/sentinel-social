@@ -11,7 +11,7 @@
  * bundled with this package in the license.txt file.
  *
  * @package    Sentinel Social
- * @version    0.2.0
+ * @version    1.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2014, Cartalyst LLC
