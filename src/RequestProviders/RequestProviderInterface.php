@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social\RequestProviders;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,27 +18,28 @@
  * @link       http://cartalyst.com
  */
 
-interface RequestProviderInterface {
+namespace Cartalyst\Sentinel\Addons\Social\RequestProviders;
 
-	/**
-	 * Get the OAuth 1 temporary credentials identifier from the query string.
-	 *
-	 * @return string
-	 */
-	public function getOAuth1TemporaryCredentialsIdentifier();
+interface RequestProviderInterface
+{
+    /**
+     * Get the OAuth 1 temporary credentials identifier from the query string.
+     *
+     * @return string
+     */
+    public function getOAuth1TemporaryCredentialsIdentifier();
 
-	/**
-	 * Get the OAuth 1 verifier code from the query string.
-	 *
-	 * @return string
-	 */
-	public function getOAuth1Verifier();
+    /**
+     * Get the OAuth 1 verifier code from the query string.
+     *
+     * @return string
+     */
+    public function getOAuth1Verifier();
 
-	/**
-	 * Get the OAuth 2 code from the query string used to retrieve access tokens.
-	 *
-	 * @return string
-	 */
-	public function getOAuth2Code();
-
+    /**
+     * Get the OAuth 2 code from the query string used to retrieve access tokens.
+     *
+     * @return string
+     */
+    public function getOAuth2Code();
 }

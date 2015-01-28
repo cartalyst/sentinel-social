@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,4 +18,8 @@
  * @link       http://cartalyst.com
  */
 
-class AccessMissingException extends \RuntimeException {}
+namespace Cartalyst\Sentinel\Addons\Social;
+
+class Exceptions extends \RuntimeException
+{
+}

@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social\RequestProviders;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,30 +18,31 @@
  * @link       http://cartalyst.com
  */
 
-class NativeRequestProvider implements RequestProviderInterface {
+namespace Cartalyst\Sentinel\Addons\Social\RequestProviders;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getOAuth1TemporaryCredentialsIdentifier()
-	{
-		return isset($_GET['oauth_token']) ? $_GET['oauth_token'] : null;
-	}
+class NativeRequestProvider implements RequestProviderInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function getOAuth1TemporaryCredentialsIdentifier()
+    {
+        return isset($_GET['oauth_token']) ? $_GET['oauth_token'] : null;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getOAuth1Verifier()
-	{
-		return isset($_GET['oauth_verifier']) ? $_GET['oauth_verifier'] : null;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function getOAuth1Verifier()
+    {
+        return isset($_GET['oauth_verifier']) ? $_GET['oauth_verifier'] : null;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getOAuth2Code()
-	{
-		return isset($_GET['code']) ? $_GET['code'] : null;
-	}
-
+    /**
+     * {@inheritDoc}
+     */
+    public function getOAuth2Code()
+    {
+        return isset($_GET['code']) ? $_GET['code'] : null;
+    }
 }

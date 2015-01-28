@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social\Models;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,31 +18,32 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Sentinel\Addons\Social\Models;
+
 use Cartalyst\Sentinel\Users\UserInterface;
 
-interface LinkInterface {
+interface LinkInterface
+{
+    /**
+     * Store a token with the link.
+     *
+     * @param  mixed  $token
+     * @return void
+     */
+    public function storeToken($token);
 
-	/**
-	 * Store a token with the link.
-	 *
-	 * @param  mixed  $token
-	 * @return void
-	 */
-	public function storeToken($token);
+    /**
+     * Get the user associated with the social link.
+     *
+     * @return \Cartalyst\Sentinel\Users\UserInterface  $user
+     */
+    public function getUser();
 
-	/**
-	 * Get the user associated with the social link.
-	 *
-	 * @return \Cartalyst\Sentinel\Users\UserInterface  $user
-	 */
-	public function getUser();
-
-	/**
-	 * Set the user associated with the social link.
-	 *
-	 * @param  \Cartalyst\Sentinel\Users\UserInterface  $user
-	 * @return void
-	 */
-	public function setUser(UserInterface $user);
-
+    /**
+     * Set the user associated with the social link.
+     *
+     * @param  \Cartalyst\Sentinel\Users\UserInterface  $user
+     * @return void
+     */
+    public function setUser(UserInterface $user);
 }

@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social\Tests;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,163 +18,164 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Sentinel\Addons\Social\Tests;
+
 use Mockery as m;
 use PHPUnit_Framework_TestCase;
 use Cartalyst\Sentinel\Addons\Social\Models\Link;
 use League\OAuth2\Client\Token\AccessToken as OAuth2AccessToken;
 use League\OAuth1\Client\Credentials\TokenCredentials as OAuth1TokenCredentials;
 
-class LinkTest extends PHPUnit_Framework_TestCase {
+class LinkTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
 
-	/**
-	 * Close mockery.
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		m::close();
-	}
+    /**
+     * @test
+     * @expectedException InvalidArgumentException
+     */
+    public function it_throws_an_exception_when_passed_an_invalid_token()
+    {
+        $link = new Link;
 
-	/**
-	 * @test
-	 * @expectedException InvalidArgumentException
-	 */
-	public function it_throws_an_exception_when_passed_an_invalid_token()
-	{
-		$link = new Link;
+        $token = new \stdClass;
 
-		$token = new \stdClass;
+        $link->storeToken($token);
+    }
 
-		$link->storeToken($token);
-	}
+    /** @test */
+    public function it_has_a_user_relationship()
+    {
+        $link = new Link;
 
-	/** @test */
-	public function it_has_a_user_relationship()
-	{
-		$link = new Link;
+        $this->addMockConnection($link);
 
-		$this->addMockConnection($link);
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo', $link->user());
+    }
 
-		$this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo', $link->user());
-	}
+    /** @test */
+    public function it_can_set_and_retrieve_the_user()
+    {
+        $user = m::mock('Cartalyst\Sentinel\Users\EloquentUser');
 
-	/** @test */
-	public function it_can_set_and_retrieve_the_user()
-	{
-		$user = m::mock('Cartalyst\Sentinel\Users\EloquentUser');
+        $link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[user]');
 
-		$link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[user]');
+        $link->getConnection()
+            ->getQueryGrammar()
+            ->shouldReceive('getDateFormat')
+            ->andReturn('Y-m-d H:i:s');
 
-		$link->getConnection()
-			->getQueryGrammar()
-			->shouldReceive('getDateFormat')
-			->andReturn('Y-m-d H:i:s');
+        $link->getConnection()
+            ->getPostProcessor()
+            ->shouldReceive('processInsertGetId');
 
-		$link->getConnection()
-			->getPostProcessor()
-			->shouldReceive('processInsertGetId');
+        $link->getConnection()
+            ->shouldReceive('getQueryGrammar')
+            ->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'));
 
-		$link->getConnection()
-			->shouldReceive('getQueryGrammar')
-			->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'));
+        $link->getConnection()
+            ->getQueryGrammar()
+            ->shouldReceive('compileInsertGetId');
 
-		$link->getConnection()
-			->getQueryGrammar()
-			->shouldReceive('compileInsertGetId');
+        $link->shouldReceive('user')
+            ->twice()
+            ->andReturn($relation = m::mock('Illuminate\Database\Eloquent\Relations\BelongsTo'));
 
-		$link->shouldReceive('user')
-			->twice()
-			->andReturn($relation = m::mock('Illuminate\Database\Eloquent\Relations\BelongsTo'));
+        $relation->shouldReceive('associate')
+            ->with($user)
+            ->once();
 
-		$relation->shouldReceive('associate')
-			->with($user)
-			->once();
+        $relation->shouldReceive('getResults')
+            ->once()
+            ->andReturn($user);
 
-		$relation->shouldReceive('getResults')
-			->once()
-			->andReturn($user);
+        $link->setUser($user);
 
-		$link->setUser($user);
+        $this->assertSame($user, $link->getUser());
+    }
 
-		$this->assertSame($user, $link->getUser());
-	}
+    /** @test */
+    public function it_can_store_oauth1_tokens()
+    {
+        $link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[save]');
 
-	/** @test */
-	public function it_can_store_oauth1_tokens()
-	{
-		$link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[save]');
+        $tokenCredentials = new OAuth1TokenCredentials;
+        $tokenCredentials->setIdentifier('foo');
+        $tokenCredentials->setSecret('bar');
 
-		$tokenCredentials = new OAuth1TokenCredentials;
-		$tokenCredentials->setIdentifier('foo');
-		$tokenCredentials->setSecret('bar');
+        $link->shouldReceive('save')
+            ->once();
 
-		$link->shouldReceive('save')
-			->once();
+        $link->storeToken($tokenCredentials);
 
-		$link->storeToken($tokenCredentials);
+        $this->assertEquals('foo', $link->oauth1_token_identifier);
+        $this->assertEquals('bar', $link->oauth1_token_secret);
+    }
 
-		$this->assertEquals('foo', $link->oauth1_token_identifier);
-		$this->assertEquals('bar', $link->oauth1_token_secret);
-	}
+    /** @test */
+    public function it_can_store_oauth2_tokens()
+    {
+        $link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[save]');
 
-	/** @test */
-	public function it_can_store_oauth2_tokens()
-	{
-		$link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[save]');
+        $this->addMockConnection($link);
 
-		$this->addMockConnection($link);
+        $link->getConnection()
+            ->getQueryGrammar()
+            ->shouldReceive('getDateFormat')
+            ->andReturn('Y-m-d H:i:s');
 
-		$link->getConnection()
-			->getQueryGrammar()
-			->shouldReceive('getDateFormat')
-			->andReturn('Y-m-d H:i:s');
+        $accessToken = new OAuth2AccessToken([
+            'access_token' => 'foo',
+            'expires_in' => 10,
+            'refresh_token' => 'bar',
+        ]);
 
-		$accessToken = new OAuth2AccessToken([
-			'access_token' => 'foo',
-			'expires_in' => 10,
-			'refresh_token' => 'bar',
-		]);
+        $link->shouldReceive('save')
+            ->once();
 
-		$link->shouldReceive('save')
-			->once();
+        $link->storeToken($accessToken);
 
-		$link->storeToken($accessToken);
+        $this->assertEquals('foo', $link->oauth2_access_token);
+        $this->assertEquals('bar', $link->oauth2_refresh_token);
+        $this->assertInstanceOf('DateTime', $link->oauth2_expires);
+        $this->assertEquals(time() + 10, $link->oauth2_expires->getTimestamp());
+    }
 
-		$this->assertEquals('foo', $link->oauth2_access_token);
-		$this->assertEquals('bar', $link->oauth2_refresh_token);
-		$this->assertInstanceOf('DateTime', $link->oauth2_expires);
-		$this->assertEquals(time() + 10, $link->oauth2_expires->getTimestamp());
-	}
+    /** @test */
+    public function it_can_set_and_retrieve_the_users_model()
+    {
+        Link::setUsersModel('foo');
 
-	/** @test */
-	public function it_can_set_and_retrieve_the_users_model()
-	{
-		Link::setUsersModel('foo');
+        $this->assertEquals('foo', Link::getUsersModel());
+    }
 
-		$this->assertEquals('foo', Link::getUsersModel());
-	}
+    /**
+     * Adds a mock connection to the object.
+     *
+     * @param  mixed  $model
+     * @return void
+     */
+    protected function addMockConnection($model)
+    {
+        $model->setConnectionResolver($resolver = m::mock('Illuminate\Database\ConnectionResolverInterface'));
 
-	/**
-	 * Adds a mock connection to the object.
-	 *
-	 * @param  mixed  $model
-	 * @return void
-	 */
-	protected function addMockConnection($model)
-	{
-		$model->setConnectionResolver($resolver = m::mock('Illuminate\Database\ConnectionResolverInterface'));
+        $resolver->shouldReceive('connection')
+            ->andReturn(m::mock('Illuminate\Database\Connection'));
 
-		$resolver->shouldReceive('connection')
-			->andReturn(m::mock('Illuminate\Database\Connection'));
+        $model->getConnection()
+            ->shouldReceive('getQueryGrammar')
+            ->andReturn(m::mock('Illuminate\Database\Query\Grammars\Grammar'));
 
-		$model->getConnection()
-			->shouldReceive('getQueryGrammar')
-			->andReturn(m::mock('Illuminate\Database\Query\Grammars\Grammar'));
-
-		$model->getConnection()
-			->shouldReceive('getPostProcessor')
-			->andReturn(m::mock('Illuminate\Database\Query\Processors\Processor'));
-	}
-
+        $model->getConnection()
+            ->shouldReceive('getPostProcessor')
+            ->andReturn(m::mock('Illuminate\Database\Query\Processors\Processor'));
+    }
 }

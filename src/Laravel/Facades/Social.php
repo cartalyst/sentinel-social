@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social\Laravel\Facades;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,18 +18,19 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Sentinel\Addons\Social\Laravel\Facades;
+
 use Illuminate\Support\Facades\Facade;
 
-class Social extends Facade {
-
-	/**
-	 * Get the registered name of the component.
-	 *
-	 * @return string
-	 */
-	protected static function getFacadeAccessor()
-	{
-		return 'sentinel.addons.social';
-	}
-
+class Social extends Facade
+{
+    /**
+     * Get the registered name of the component.
+     *
+     * @return string
+     */
+    protected static function getFacadeAccessor()
+    {
+        return 'sentinel.addons.social';
+    }
 }

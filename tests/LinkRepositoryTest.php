@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social\Tests;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,108 +18,109 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Sentinel\Addons\Social\Tests;
+
 use Mockery as m;
-use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 use PHPUnit_Framework_TestCase;
+use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 
-class LinkRepositoryTest extends PHPUnit_Framework_TestCase {
+class LinkRepositoryTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
 
-	/**
-	 * Close mockery.
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		m::close();
-	}
+    /** @test */
+    public function it_can_find_existing_links()
+    {
+        $linkRepository = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository[createModel]');
 
-	/** @test */
-	public function it_can_find_existing_links()
-	{
-		$linkRepository = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository[createModel]');
+        $linkRepository->shouldReceive('createModel')
+            ->once()
+            ->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'));
 
-		$linkRepository->shouldReceive('createModel')
-			->once()
-			->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'));
+        $model->shouldReceive('newQuery')
+            ->once()
+            ->andReturn($model);
 
-		$model->shouldReceive('newQuery')
-			->once()
-			->andReturn($model);
+        $model->shouldReceive('with')
+            ->with('user')
+            ->once()
+            ->andReturn($model);
 
-		$model->shouldReceive('with')
-			->with('user')
-			->once()
-			->andReturn($model);
+        $model->shouldReceive('where')
+            ->with('provider', '=', 'slug')
+            ->once()
+            ->andReturn($model);
 
-		$model->shouldReceive('where')
-			->with('provider', '=', 'slug')
-			->once()
-			->andReturn($model);
+        $model->shouldReceive('where')
+            ->with('uid', '=', 789)
+            ->once()
+            ->andReturn($model);
 
-		$model->shouldReceive('where')
-			->with('uid', '=', 789)
-			->once()
-			->andReturn($model);
+        $model->shouldReceive('first')
+            ->once()
+            ->andReturn('success');
 
-		$model->shouldReceive('first')
-			->once()
-			->andReturn('success');
+        $this->assertEquals('success', $linkRepository->findLink('slug', 789));
+    }
 
-		$this->assertEquals('success', $linkRepository->findLink('slug', 789));
-	}
+    /** @test */
+    public function it_will_create_a_link_if_non_existent_found()
+    {
+        $linkRepository = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository[createModel]');
 
-	/** @test */
-	public function it_will_create_a_link_if_non_existent_found()
-	{
-		$linkRepository = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository[createModel]');
+        $linkRepository->shouldReceive('createModel')
+            ->twice()
+            ->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'));
 
-		$linkRepository->shouldReceive('createModel')
-			->twice()
-			->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'));
+        $model->shouldReceive('newQuery')
+            ->once()
+            ->andReturn($model);
 
-		$model->shouldReceive('newQuery')
-			->once()
-			->andReturn($model);
+        $model->shouldReceive('with')
+            ->with('user')
+            ->once()
+            ->andReturn($model);
 
-		$model->shouldReceive('with')
-			->with('user')
-			->once()
-			->andReturn($model);
+        $model->shouldReceive('where')
+            ->with('provider', '=', 'slug')
+            ->once()
+            ->andReturn($model);
 
-		$model->shouldReceive('where')
-			->with('provider', '=', 'slug')
-			->once()
-			->andReturn($model);
+        $model->shouldReceive('where')
+            ->with('uid', '=', 789)
+            ->once()
+            ->andReturn($model);
 
-		$model->shouldReceive('where')
-			->with('uid', '=', 789)
-			->once()
-			->andReturn($model);
+        $model->shouldReceive('first')
+            ->once()
+            ->andReturn(null);
 
-		$model->shouldReceive('first')
-			->once()
-			->andReturn(null);
+        $model->shouldReceive('fill')->with([
+            'provider' => 'slug',
+            'uid'      => 789,
+        ])->once();
 
-		$model->shouldReceive('fill')->with([
-			'provider' => 'slug',
-			'uid'      => 789,
-		])->once();
+        $model->shouldReceive('save')
+            ->once();
 
-		$model->shouldReceive('save')
-			->once();
+        $this->assertEquals($model, $linkRepository->findLink('slug', 789));
+    }
 
-		$this->assertEquals($model, $linkRepository->findLink('slug', 789));
-	}
+    /** @test */
+    public function it_can_create_models()
+    {
+        $provider = new LinkRepository;
 
-	/** @test */
-	public function it_can_create_models()
-	{
-		$provider = new LinkRepository;
+        $model = $provider->createModel();
 
-		$model = $provider->createModel();
-
-		$this->assertInstanceOf('Cartalyst\Sentinel\Addons\Social\Models\Link', $model);
-	}
-
+        $this->assertInstanceOf('Cartalyst\Sentinel\Addons\Social\Models\Link', $model);
+    }
 }

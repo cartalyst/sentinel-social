@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social\Repositories;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,15 +18,16 @@
  * @link       http://cartalyst.com
  */
 
-interface LinkRepositoryInterface {
+namespace Cartalyst\Sentinel\Addons\Social\Repositories;
 
-	/**
-	 * Finds a link (or creates one) for the given provider slug and uid.
-	 *
-	 * @param  string  $slug
-	 * @param  mixed   $uid
-	 * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
-	 */
-	public function findLink($slug, $uid);
-
+interface LinkRepositoryInterface
+{
+    /**
+     * Finds a link (or creates one) for the given provider slug and uid.
+     *
+     * @param  string  $slug
+     * @param  mixed   $uid
+     * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
+     */
+    public function findLink($slug, $uid);
 }

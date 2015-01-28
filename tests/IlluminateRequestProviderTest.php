@@ -1,4 +1,5 @@
-<?php namespace Cartalyst\Sentinel\Addons\Social\Tests;
+<?php
+
 /**
  * Part of the Sentinel Social package.
  *
@@ -17,41 +18,42 @@
  * @link       http://cartalyst.com
  */
 
+namespace Cartalyst\Sentinel\Addons\Social\Tests;
+
 use Mockery as m;
-use Cartalyst\Sentinel\Addons\Social\RequestProviders\IlluminateRequestProvider;
 use PHPUnit_Framework_TestCase;
+use Cartalyst\Sentinel\Addons\Social\RequestProviders\IlluminateRequestProvider;
 
-class IlluminateRequestProviderTest extends PHPUnit_Framework_TestCase {
+class IlluminateRequestProviderTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * Close mockery.
+     *
+     * @return void
+     */
+    public function tearDown()
+    {
+        m::close();
+    }
 
-	/**
-	 * Close mockery.
-	 *
-	 * @return void
-	 */
-	public function tearDown()
-	{
-		m::close();
-	}
+    public function testOAuth1TemporaryCredentialsIdentifier()
+    {
+        $provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
+        $request->shouldReceive('input')->with('oauth_token')->once()->andReturn('oauth_token_value');
+        $this->assertEquals('oauth_token_value', $provider->getOAuth1TemporaryCredentialsIdentifier());
+    }
 
-	public function testOAuth1TemporaryCredentialsIdentifier()
-	{
-		$provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
-		$request->shouldReceive('input')->with('oauth_token')->once()->andReturn('oauth_token_value');
-		$this->assertEquals('oauth_token_value', $provider->getOAuth1TemporaryCredentialsIdentifier());
-	}
+    public function testOAuth1Verifier()
+    {
+        $provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
+        $request->shouldReceive('input')->with('oauth_verifier')->once()->andReturn('verifier_value');
+        $this->assertEquals('verifier_value', $provider->getOAuth1Verifier());
+    }
 
-	public function testOAuth1Verifier()
-	{
-		$provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
-		$request->shouldReceive('input')->with('oauth_verifier')->once()->andReturn('verifier_value');
-		$this->assertEquals('verifier_value', $provider->getOAuth1Verifier());
-	}
-
-	public function testOAuth2Code()
-	{
-		$provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
-		$request->shouldReceive('input')->with('code')->once()->andReturn('code_value');
-		$this->assertEquals('code_value', $provider->getOAuth2Code());
-	}
-
+    public function testOAuth2Code()
+    {
+        $provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
+        $request->shouldReceive('input')->with('code')->once()->andReturn('code_value');
+        $this->assertEquals('code_value', $provider->getOAuth2Code());
+    }
 }
