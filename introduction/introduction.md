@@ -13,7 +13,7 @@ Have a [read through the Installation Guide](#installation).
 #### Add Connections
 
 ```php
-SentinelSocial::addConnection('facebook' => [
+Social::addConnection('facebook' => [
 		'driver'     => 'Facebook',
 		'identifier' => '',
 		'secret'     => '',
@@ -26,7 +26,7 @@ SentinelSocial::addConnection('facebook' => [
 
 ```php
 $callback = 'http://app.dev/callback.php';
-$url      = SentinelSocial::getAuthorizationUrl('facebook', $callback);
+$url      = Social::getAuthorizationUrl('facebook', $callback);
 
 header('Location: ' . $url);
 exit;
@@ -39,7 +39,7 @@ $callback = 'http://app.dev/callback.php';
 
 try
 {
-	$user = SentinelSocial::authenticate('facebook', $callback, function(Cartalyst\SentinelSocial\Links\LinkInterface $link, $provider, $token, $slug)
+	$user = Social::authenticate('facebook', $callback, function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
 	{
 		// Retrieve the user in question for modificiation
 		$user = $link->getUser();
@@ -51,7 +51,7 @@ try
 		$user->save();
 	});
 }
-catch (Cartalyst\SentinelSocial\AccessMissingException $e)
+catch (Cartalyst\Sentinel\Addons\Social\AccessMissingException $e)
 {
 	var_dump($e); // You may save this to the session, redirect somewhere
 	die();

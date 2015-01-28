@@ -8,50 +8,50 @@ While OAuth1 and OAuth2 are incompatible protocols, they (for the most part) fol
 2. A user is redirected to the provider where they may login and approve (or reject) your app to have access.
 3. Your app receives a token from the service so your app may act on behalf of the person who authenticated. You never find out their password and they have the option to revoke your access at any point.
 
-Sentinel Social 3 abstracts all the differences between OAuth 1 and OAuth 2, so that you can focus on the more interesting parts of your app.
+Sentinel Social abstracts all the differences between OAuth 1 and OAuth 2, so that you can focus on the more interesting parts of your app.
 
 ## Manager
 
-	$manager = new Cartalyst\SentinelSocial\Manager($instanceOfSentinel);
+	$manager = new Cartalyst\Sentinel\Addons\Social\Manager($instanceOfSentinel);
 
-> `SentinelSocial` is the Laravel alias for the manager and can be directly used without instantiation.
+> `Social` is the Laravel alias for the manager and can be directly used without instantiation.
 
 ## Connections
 
 Single connection
 
 ```php
-SentinelSocial::addConnection('facebook' => array(
+Social::addConnection('facebook' => [
 		'driver'     => 'Facebook',
 		'identifier' => '',
 		'secret'     => '',
-		'scopes'     => array('email'),
-	),
+		'scopes'     => ['email'],
+	],
 );
 ```
 
 Multiple connections
 
 ```php
-$connections = array(
+$connections = [
 
-	'facebook' => array(
+	'facebook' => [
 		'driver'     => 'Facebook',
 		'identifier' => '',
 		'secret'     => '',
-		'scopes'     => array('email'),
-	),
+		'scopes'     => ['email'],
+	],
 
-	'github' => array(
+	'github' => [
 		'driver'     => 'GitHub',
 		'identifier' => '',
 		'secret'     => '',
-		'scopes'     => array('user'),
-	),
+		'scopes'     => ['user'],
+	],
 
 );
 
-SentinelSocial::addConnections($connections);
+Social::addConnections($connections);
 ```
 
 > Connections on Laravel are stored in `app/config/packages/cartalyst/sentinel-social/config.php`
@@ -66,7 +66,7 @@ Once you've configured a provider with Sentinel Social, you simply need to redir
 Route::get('oauth/authorize', function()
 {
 	$callback = URL::to('oauth/callback');
-	$url = SentinelSocial::getAuthorizationUrl('facebook', $callback);
+	$url = Social::getAuthorizationUrl('facebook', $callback);
 	return Redirect::to($url);
 });
 ```
@@ -86,7 +86,7 @@ Route::get('oauth/callback', function()
 
 	try
 	{
-		$user = SentinelSocial::authenticate('facebook', URL::current(), function(Cartalyst\SentinelSocial\Links\LinkInterface $link, $provider, $token, $slug)
+		$user = Social::authenticate('facebook', URL::current(), function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
 		{
 			// Retrieve the user in question for modificiation
 			$user = $link->getUser();
@@ -98,7 +98,7 @@ Route::get('oauth/callback', function()
 			$user->save();
 		});
 	}
-	catch (Cartalyst\SentinelSocial\AccessMissingException $e)
+	catch (Cartalyst\Sentinel\Addons\Social\AccessMissingException $e)
 	{
 		// Missing OAuth parameters were missing from the query string.
 		// Either the person rejected the app, or the URL has been manually
@@ -122,18 +122,18 @@ In addition to providing a hook (callback) for when a user is being linked (the 
 For example, this may be useful to send welcome emails when new users are being registered:
 
 ```php
-SentinelSocial::registering(function(Cartalyst\SentinelSocial\Links\LinkInterface $link, $provider, $token, $slug)
+Social::registering(function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
 {
 	$user = $link->getUser();
 
 	Mail::later($user->email, 'welcome', compact('user', 'slug'));
 });
 
-SentinelSocial::existing(function(Cartalyst\SentinelSocial\Links\LinkInterface $link, $provider, $token, $slug)
+Social::existing(function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
 {
 	// Callback for existing users
 });
 
 // Finally, after hooks are registered, you may authenticate away
-$user = SentinelSocial::authenticate($params);
+$user = Social::authenticate($params);
 ```

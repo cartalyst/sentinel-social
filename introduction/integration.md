@@ -11,11 +11,11 @@ Open your Laravel config file `app/config/app.php` and add the following lines.
 
 In the `$providers` array add the following service provider for this package.
 
-	'Cartalyst\SentinelSocial\Laravel\SentinelSocialServiceProvider',
+	'Cartalyst\Sentinel\Addons\Social\Laravel\SocialServiceProvider',
 
 In the `$aliases` array add the following facade for this package.
 
-	'SentinelSocial' => 'Cartalyst\SentinelSocial\Laravel\Facades\SentinelSocial',
+	'Social' => 'Cartalyst\Sentinel\Addons\Social\Laravel\Facades\Social',
 
 ### Migrations
 
@@ -60,7 +60,7 @@ After you have installed the package, just follow the instructions.
 require_once 'vendor/autoload.php';
 
 // Import the necessary classes
-use Cartalyst\SentinelSocial\Manager;
+use Cartalyst\Sentinel\Addons\Social\Manager;
 
 $manager = new Manager($instanceOfSentinel);
 
@@ -90,7 +90,7 @@ $callback = 'http://app.dev/callback.php';
 
 try
 {
-	$user = $manager->authenticate('facebook', $callback, function(Cartalyst\SentinelSocial\Links\LinkInterface $link, $provider, $token, $slug)
+	$user = $manager->authenticate('facebook', $callback, function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
 	{
 		// Retrieve the user in question for modificiation
 		$user = $link->getUser();
@@ -102,7 +102,7 @@ try
 		$user->save();
 	});
 }
-catch (Cartalyst\SentinelSocial\AccessMissingException $e)
+catch (Cartalyst\Sentinel\Addons\Social\AccessMissingException $e)
 {
 	var_dump($e); // You may save this to the session, redirect somewhere
 	die();

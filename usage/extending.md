@@ -1,6 +1,6 @@
 ## Extending Sentinel Social
 
-Sentinel Social 3 was designed from the ground up with extendability in mind.
+Sentinel Social was designed from the ground up with extendability in mind.
 
 Extending is as simple as 2 steps
 
@@ -13,7 +13,7 @@ To create an implementation class, you firstly need to determine if you're deali
 
 #### OAuth 1
 
-To create an OAuth 1 implementation class for Sentinel Social 3, simply create a class which extends `League\OAuth1\Client\Server\Server`.
+To create an OAuth 1 implementation class for Sentinel Social, simply create a class which extends `League\OAuth1\Client\Server\Server`.
 
 Example:
 
@@ -153,7 +153,7 @@ use League\OAuth2\Client\Provider\User;
 class MyOAuth2Provider extends League\OAuth2\Client\Provider\IdentityProvider {
 
 	// Default scopes
-	public $scopes = array('scope1', 'scope2');
+	public $scopes = ['scope1', 'scope2'];
 
 	// Response type
 	public $responseType = 'json';
@@ -219,7 +219,7 @@ class MyOAuth2Provider extends League\OAuth2\Client\Provider\IdentityProvider {
 
 ### Adding a Connection
 
-Now that you've made an implementation class for Sentinel Social 3, you need to add a connection.
+Now that you've made an implementation class for Sentinel Social, you need to add a connection.
 
 #### In Laravel
 
@@ -227,11 +227,11 @@ In Laravel, the easiest way is to add the connection to your config file
 
 ```php
 // After publishing your config, this is in app/config/packages/cartalyst/sentinel-social/config.php
-'connections' => array(
+'connections' => [
 
 	// Additional, default connections…
 
-	'myprovider' => array(
+	'myprovider' => [
 
 		// The driver should match your implementation's name (including namespace)
 		'driver'     => 'MyOAuth2Provider',
@@ -242,25 +242,25 @@ In Laravel, the easiest way is to add the connection to your config file
 		// To override OAuth2 scopes (scopes don't exist on OAuth 1), specify
 		// this parameter. Otherwise, the default scopes from your implementation
 		// class will be used.
-		'scopes'     => array('scope1', 'scope2', 'scope3'),
-	),
+		'scopes'     => ['scope1', 'scope2', 'scope3'],
+	],
 ),
 ```
 
 #### Outside Laravel
 
-Outside of Laravel, you can add a connection by calling a method on your `$SentinelSocial` object
+Outside of Laravel, you can add a connection by calling a method on your `$social` object
 
 ```php
-$SentinelSocial->addConnection('myprovider', array(
+$social->addConnection('myprovider', [
 
 	// See the comments for "In Laravel" above, these parameters
 	// are the same
 	'driver'     => 'MyOAuth2Provider',
 	'identifier' => 'your-app-identifier',
 	'secret'     => 'your-app-secret',
-	'scopes'     => array('scope1', 'scope2', 'scope3'),
-));
+	'scopes'     => ['scope1', 'scope2', 'scope3'],
+]);
 ```
 
 Now, continue to use Sentinel Social as normal, instead substituting `myprovider` (or whatever you named your connection as) when authorizing and authenticating!
