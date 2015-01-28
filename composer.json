@@ -47,7 +47,7 @@
 		"cartalyst/sentinel": "~1.0",
 		"cartalyst/support": "~1.0",
 		"league/oauth1-client": "1.0.*",
-		"league/oauth2-client": "0.4.*"
+		"league/oauth2-client": "0.7.*"
 	},
 	"require-dev": {
 		"illuminate/database": "~4.1",
