@@ -35,28 +35,37 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
     /**
      * {@inheritDoc}
      */
-    public function boot()
-    {
-        $this->package('cartalyst/sentinel-social', 'cartalyst/sentinel-social', __DIR__.'/..');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function register()
     {
+        $this->prepareResources();
         $this->registerLinkRepository();
         $this->registerRequestProvider();
         $this->registerSession();
         $this->registerSentinelSocial();
     }
 
+    /**
+     * Prepare the package resources.
+     *
+     * @return void
+     */
+    protected function prepareResources()
+    {
+        $config = realpath(__DIR__.'/../config/config.php');
+
+        $this->mergeConfigFrom($config, 'cartalyst.sentinel.addons.social');
+
+        $this->publishes([
+            $config => config_path('cartalyst.sentinel.addons.social.php'),
+        ]);
+    }
+
     protected function registerLinkRepository()
     {
         $this->app['sentinel.addons.social.repository'] = $this->app->share(function ($app) {
-            $model = $app['config']['cartalyst/sentinel-social::link'];
+            $model = $app['config']->get('cartalyst.sentinel.addons.social.link');
 
-            $users = $app['config']['cartalyst/sentinel::users.model'];
+            $users = $app['config']->get('cartalyst.sentinel.users.model');
 
             if (class_exists($model) and method_exists($model, 'setUsersModel')) {
                 forward_static_call_array([$model, 'setUsersModel'], [$users]);
@@ -76,7 +85,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
     protected function registerSession()
     {
         $this->app['sentinel.addons.social.session'] = $this->app->share(function ($app) {
-            $key = $app['config']['cartalyst/sentinel::cookie.key'].'_social';
+            $key = $app['config']->get('cartalyst.sentinel.cookie.key').'_social';
 
             return new IlluminateSession($app['session.store'], $key);
         });
@@ -98,7 +107,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
                 $app['events']
             );
 
-            $connections = $app['config']['cartalyst/sentinel-social::connections'];
+            $connections = $app['config']->get('cartalyst.sentinel.addons.social.connections');
 
             $manager->addConnections($connections);
 
