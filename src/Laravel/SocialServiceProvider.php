@@ -53,17 +53,17 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         $config = realpath(__DIR__.'/../config/config.php');
 
-        $this->mergeConfigFrom($config, 'cartalyst.sentinel.addons.social');
+        $this->mergeConfigFrom($config, 'cartalyst.sentinel-addons.social');
 
         $this->publishes([
-            $config => config_path('cartalyst.sentinel.addons.social.php'),
+            $config => config_path('cartalyst.sentinel-addons.social.php'),
         ]);
     }
 
     protected function registerLinkRepository()
     {
         $this->app['sentinel.addons.social.repository'] = $this->app->share(function ($app) {
-            $model = $app['config']->get('cartalyst.sentinel.addons.social.link');
+            $model = $app['config']->get('cartalyst.sentinel-addons.social.link');
 
             $users = $app['config']->get('cartalyst.sentinel.users.model');
 
@@ -107,7 +107,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
                 $app['events']
             );
 
-            $connections = $app['config']->get('cartalyst.sentinel.addons.social.connections');
+            $connections = $app['config']->get('cartalyst.sentinel-addons.social.connections');
 
             $manager->addConnections($connections);
 
