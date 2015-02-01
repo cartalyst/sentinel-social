@@ -86,7 +86,7 @@ Route::get('oauth/callback', function()
 
 	try
 	{
-		$user = Social::authenticate('facebook', URL::current(), function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
+		$user = Social::authenticate('facebook', URL::current(), function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
 		{
 			// Retrieve the user in question for modificiation
 			$user = $link->getUser();
@@ -122,14 +122,14 @@ In addition to providing a hook (callback) for when a user is being linked (the 
 For example, this may be useful to send welcome emails when new users are being registered:
 
 ```php
-Social::registering(function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
+Social::registering(function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
 {
 	$user = $link->getUser();
 
 	Mail::later($user->email, 'welcome', compact('user', 'slug'));
 });
 
-Social::existing(function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
+Social::existing(function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
 {
 	// Callback for existing users
 });
