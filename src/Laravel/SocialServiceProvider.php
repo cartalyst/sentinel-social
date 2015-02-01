@@ -51,12 +51,14 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function prepareResources()
     {
-        $config = realpath(__DIR__.'/../config/config.php');
+        $config     = realpath(__DIR__.'/../config/config.php');
+        $migrations = realpath(__DIR__.'/../migrations');
 
         $this->mergeConfigFrom($config, 'cartalyst.sentinel-addons.social');
 
         $this->publishes([
-            $config => config_path('cartalyst.sentinel-addons.social.php'),
+            $config     => config_path('cartalyst.sentinel-addons.social.php'),
+            $migrations => $this->app->databasePath().'/migrations',
         ]);
     }
 
