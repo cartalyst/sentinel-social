@@ -86,7 +86,7 @@ Route::get('oauth/callback', function()
 
 	try
 	{
-		$user = SentinelSocial::authenticate('facebook', URL::current(), function(Cartalyst\SentinelSocial\Links\LinkInterface $link, $provider, $token, $slug)
+		$user = SentinelSocial::authenticate('facebook', URL::current(), function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
 		{
 			// Retrieve the user in question for modificiation
 			$user = $link->getUser();
