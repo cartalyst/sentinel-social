@@ -21,7 +21,7 @@ Sentinel Social abstracts all the differences between OAuth 1 and OAuth 2, so th
 Single connection
 
 ```php
-Social::addConnection('facebook' => [
+Social::addConnection('facebook', [
 		'driver'     => 'Facebook',
 		'identifier' => '',
 		'secret'     => '',
