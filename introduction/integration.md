@@ -90,7 +90,7 @@ $callback = 'http://app.dev/callback.php';
 
 try
 {
-	$user = $manager->authenticate('facebook', $callback, function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
+	$user = $manager->authenticate('facebook', $callback, function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
 	{
 		// Retrieve the user in question for modificiation
 		$user = $link->getUser();

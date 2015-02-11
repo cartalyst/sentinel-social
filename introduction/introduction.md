@@ -39,7 +39,7 @@ $callback = 'http://app.dev/callback.php';
 
 try
 {
-	$user = Social::authenticate('facebook', $callback, function(Cartalyst\Sentinel\Addons\Social\Links\LinkInterface $link, $provider, $token, $slug)
+	$user = Social::authenticate('facebook', $callback, function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
 	{
 		// Retrieve the user in question for modificiation
 		$user = $link->getUser();
