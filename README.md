@@ -14,12 +14,14 @@ Reader-friendly Documentation can be found here. [Sentinel Social Manual](https:
 
 Raw files can be found via this projects docs/version branch.
 
+- [2.0](https://github.com/cartalyst/sentinel-social/tree/docs/2.0)
 - [1.0](https://github.com/cartalyst/sentinel-social/tree/docs/1.0)
 
 ## Changelog
 
 Important versions listed below. Refer to the [Changelog](CHANGELOG.md) for a full history of the project.
 
+- [2.0](CHANGELOG.md) - 2015-02-24
 - [1.0](CHANGELOG.md) - 2015-01-28
 
 ## Support
