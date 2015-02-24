@@ -1,13 +1,13 @@
 # Integration
 
-## Laravel 4
+## Laravel 5
 
-The Sentinel Social package has optional support for Laravel 4 and it comes bundled with a
+The Sentinel Social package has optional support for Laravel 5 and it comes bundled with a
 Service Provider and a Facade for easier integration.
 
 After you have installed the package, just follow the instructions.
 
-Open your Laravel config file `app/config/app.php` and add the following lines.
+Open your Laravel config file `config/app.php` and add the following lines.
 
 In the `$providers` array add the following service provider for this package.
 
@@ -17,25 +17,27 @@ In the `$aliases` array add the following facade for this package.
 
 	'Social' => 'Cartalyst\Sentinel\Addons\Social\Laravel\Facades\Social',
 
-### Migrations
+### Assets
 
-#### Sentinel
+Run the following commands to publish the migration and config files.
 
-	php artisan migrate --package=cartalyst/sentinel
+- Sentinel
 
-#### Sentinel Social
+`php artisan vendor:publish --provider="Cartalyst\Sentinel\Laravel\SentinelServiceProvider"`
 
-	php artisan migrate --package=cartalyst/sentinel-social
+- Sentinel Social
 
-### Configuration
+`php artisan vendor:publish --provider="Cartalyst\Sentinel\Addons\Social\Laravel\SocialServiceProvider"`
 
-After installing, you can publish the package's configuration file into your
-application by running the following command:
+#### Migrations
 
-	php artisan config:publish cartalyst/sentinel-social
+Run the following command to migrate Sentinel after publishing the assets.
 
-This will publish the config file to `app/config/packages/cartalyst/sentinel-social/config.php`
-where you can modify the package configuration.
+`php artisan migrate`
+
+#### Configuration
+
+After publishing, the sentinel social config file can be found under `config/cartalyst.sentinel-addons.social.php` where you can modify the package configuration.
 
 ## Native
 

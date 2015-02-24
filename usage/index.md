@@ -54,7 +54,7 @@ $connections = [
 Social::addConnections($connections);
 ```
 
-> Connections on Laravel are stored in `app/config/packages/cartalyst/sentinel-social/config.php`
+> Connections on Laravel are stored in `config/cartalyst.sentinel-addons.social.php`
 
 ## Authorization
 
