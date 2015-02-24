@@ -45,23 +45,47 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function provides()
+    {
+        return [
+            'sentinel.addons.social.repository',
+            'sentinel.addons.social.request',
+            'sentinel.addons.social.session',
+            'sentinel.addons.social',
+        ];
+    }
+
+    /**
      * Prepare the package resources.
      *
      * @return void
      */
     protected function prepareResources()
     {
-        $config     = realpath(__DIR__.'/../config/config.php');
-        $migrations = realpath(__DIR__.'/../migrations');
+        // Publish config
+        $config = realpath(__DIR__.'/../config/config.php');
 
         $this->mergeConfigFrom($config, 'cartalyst.sentinel-addons.social');
 
         $this->publishes([
-            $config     => config_path('cartalyst.sentinel-addons.social.php'),
+            $config => config_path('cartalyst.sentinel-addons.social.php'),
+        ], 'config');
+
+        // Publish migrations
+        $migrations = realpath(__DIR__.'/../migrations');
+
+        $this->publishes([
             $migrations => $this->app->databasePath().'/migrations',
-        ]);
+        ], 'migrations');
     }
 
+    /**
+     * Registers the link repository.
+     *
+     * @return void
+     */
     protected function registerLinkRepository()
     {
         $this->app['sentinel.addons.social.repository'] = $this->app->share(function ($app) {
@@ -77,6 +101,11 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
         });
     }
 
+    /**
+     * Registers the request provider.
+     *
+     * @return void
+     */
     protected function registerRequestProvider()
     {
         $this->app['sentinel.addons.social.request'] = $this->app->share(function ($app) {
@@ -84,6 +113,11 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
         });
     }
 
+    /**
+     * Registers the session.
+     *
+     * @return void
+     */
     protected function registerSession()
     {
         $this->app['sentinel.addons.social.session'] = $this->app->share(function ($app) {
@@ -117,18 +151,5 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
         $this->app->alias('sentinel.addons.social', 'Cartalyst\Sentinel\Addons\Social\Manager');
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function provides()
-    {
-        return [
-            'sentinel.addons.social.repository',
-            'sentinel.addons.social.request',
-            'sentinel.addons.social.session',
-            'sentinel.addons.social',
-        ];
     }
 }
