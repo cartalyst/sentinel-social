@@ -31,7 +31,7 @@ return [
     | driver or may match your own custom class name that inherits from a
     | valid base driver.
     |
-    | Make sure each connection contains an "identifier" and a "secret". Thse
+    | Make sure each connection contains an "identifier" and a "secret". These
     | are also known as "key" and "secret", "app id" and "app secret"
     | depending on the service. We're using "identifier" and
     | "secret" for consistency.
