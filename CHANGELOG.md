@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.1 - 2015-03-18
+
+`FIXED`
+
+- Check for refresh token before assigning it on the model to prevent setting existing refresh tokens to null.
+
 ### v2.0.0 - 2015-02-24
 
 - Updated for Laravel 5.
