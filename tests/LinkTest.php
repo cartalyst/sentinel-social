@@ -157,6 +157,37 @@ class LinkTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foo', Link::getUsersModel());
     }
 
+    /** @test */
+    public function it_does_not_replace_refresh_tokens_with_null()
+    {
+        $link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[save]');
+
+        $link->oauth2_refresh_token = 'bar';
+
+        $this->addMockConnection($link);
+
+        $link->getConnection()
+            ->getQueryGrammar()
+            ->shouldReceive('getDateFormat')
+            ->andReturn('Y-m-d H:i:s');
+
+        $accessToken = new OAuth2AccessToken([
+            'access_token' => 'foo',
+            'expires_in' => 10,
+            'refresh_token' => null,
+        ]);
+
+        $link->shouldReceive('save')
+            ->once();
+
+        $link->storeToken($accessToken);
+
+        $this->assertEquals('foo', $link->oauth2_access_token);
+        $this->assertEquals('bar', $link->oauth2_refresh_token);
+        $this->assertInstanceOf('DateTime', $link->oauth2_expires);
+        $this->assertEquals(time() + 10, $link->oauth2_expires->getTimestamp());
+    }
+
     /**
      * Adds a mock connection to the object.
      *
