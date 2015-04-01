@@ -65,7 +65,7 @@
 		}
 	},
 	"extra": {
-		"component": "package",
+		"component": "addon",
 		"branch-alias": {
 			"dev-master": "2.0.x-dev"
 		}
