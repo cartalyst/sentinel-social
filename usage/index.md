@@ -117,12 +117,12 @@ Route::get('oauth/callback', function()
 
 ## Hooks
 
-In addition to providing a hook (callback) for when a user is being linked (the second parameter passed to `authenticate()`), we also provide ways to hook into new user registrations as well as only existing user linking.
+In addition to providing a hook (callback) for when a user is being linked (the second parameter passed to `authenticate()`), we also provide ways to hook into new user registrations as well as existing user linking.
 
 For example, this may be useful to send welcome emails when new users are being registered:
 
 ```php
-Social::registering(function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
+Social::registered(function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
 {
 	$user = $link->getUser();
 
