@@ -56,8 +56,7 @@
 	},
 	"autoload": {
 		"classmap": [
-			"src/Exceptions.php",
-			"src/migrations"
+			"src/Exceptions.php"
 		],
 		"psr-4": {
 			"Cartalyst\\Sentinel\\Addons\\Social\\": "src/"
