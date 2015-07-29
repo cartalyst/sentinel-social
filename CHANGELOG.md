@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.3 - 2015-07-29
+
+`UPDATED`
+
+- Bumped `league/oauth2-client` package version.
+
 ### v2.0.2 - 2015-07-21
 
 `UPDATED`
@@ -26,6 +32,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 ### v2.0.0 - 2015-02-24
 
 - Updated for Laravel 5.
+
+### v1.0.2 - 2015-07-29
+
+`UPDATED`
+
+- Bumped `league/oauth2-client` package version.
 
 ### v1.0.1 - 2015-07-21
 
