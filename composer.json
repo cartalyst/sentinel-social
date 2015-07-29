@@ -36,12 +36,6 @@
 			"role": "Developer"
 		}
 	],
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "https://packages.cartalyst.com"
-		}
-	],
 	"require": {
 		"php": ">=5.4.0",
 		"cartalyst/sentinel": "~1.0",
