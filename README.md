@@ -1,6 +1,6 @@
 # Sentinel Social Addon
 
-[![Build Status](http://ci.cartalyst.com/build-status/svg/31)](http://ci.cartalyst.com/build-status/view/31)
+[![Build Status](https://magnum.travis-ci.com/cartalyst/sentinel-social.svg?token=98Zt8zYdwyheTKqziswS&branch=2.0)](https://magnum.travis-ci.com/cartalyst/sentinel-social)
 
 Sentinel Social is a `Sentinel` addon that makes authenticating your users through social networks & third-party OAuth providers in Sentinel an absolute breeze.
 
