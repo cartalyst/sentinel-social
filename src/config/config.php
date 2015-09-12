@@ -22,7 +22,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Connections - Custom
+    | Connections - Custom 2
     |--------------------------------------------------------------------------
     |
     | Connections are simple. Each key is a unique slug for the connection. Use
