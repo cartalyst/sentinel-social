@@ -55,7 +55,7 @@ return [
         ],
 
         'github' => [
-            'driver'     => 'GitHub',
+            'driver'     => 'Github',
             'identifier' => '',
             'secret'     => '',
             'scopes'     => [
