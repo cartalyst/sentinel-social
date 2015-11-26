@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.4 - 2015-11-25
+
+`FIXED`
+
+- Fixed github driver name.
+
 ### v2.0.3 - 2015-07-29
 
 `UPDATED`
