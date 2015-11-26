@@ -11,7 +11,7 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    2.0.3
+ * @version    2.0.4
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
  * @copyright  (c) 2011-2015, Cartalyst LLC
@@ -38,8 +38,8 @@ class MigrationCartalystSentinelSocial extends Migration
             $table->string('oauth1_token_identifier')->nullable();
             $table->string('oauth1_token_secret')->nullable();
 
-            $table->string('oauth2_access_token')->nullable();
-            $table->string('oauth2_refresh_token')->nullable();
+            $table->string('oauth2_access_token', 1024)->nullable();
+            $table->string('oauth2_refresh_token', 1024)->nullable();
             $table->timestamp('oauth2_expires')->nullable();
 
             $table->timestamps();
