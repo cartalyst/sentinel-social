@@ -36,6 +36,19 @@ class LinkRepository implements LinkRepositoryInterface
      */
     protected $model = 'Cartalyst\Sentinel\Addons\Social\Models\Link';
 
+
+    /**
+     * LinkRepository constructor.
+     * @param null $model
+     */
+    public function __construct($model = null)
+    {
+        if ($model !== null) {
+            $this->model = $model;
+        }
+    }
+    
+    
     /**
      * Finds a link (or creates one) for the given provider slug and uid.
      *
