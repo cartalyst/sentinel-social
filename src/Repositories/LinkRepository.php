@@ -36,10 +36,11 @@ class LinkRepository implements LinkRepositoryInterface
      */
     protected $model = 'Cartalyst\Sentinel\Addons\Social\Models\Link';
 
-
     /**
-     * LinkRepository constructor.
-     * @param null $model
+     * Constructor.
+
+     * @param  string|null  $model
+     * @return void
      */
     public function __construct($model = null)
     {
@@ -47,8 +48,7 @@ class LinkRepository implements LinkRepositoryInterface
             $this->model = $model;
         }
     }
-    
-    
+
     /**
      * Finds a link (or creates one) for the given provider slug and uid.
      *
