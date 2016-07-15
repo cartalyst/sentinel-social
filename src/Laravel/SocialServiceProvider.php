@@ -21,7 +21,7 @@
 namespace Cartalyst\Sentinel\Addons\Social\Laravel;
 
 use Cartalyst\Sentinel\Addons\Social\Manager;
-use Cartalyst\Sentinel\Sessions\IlluminateSession;
+use Cartalyst\Sentinel\Laravel\Sessions\Session;
 use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 use Cartalyst\Sentinel\Addons\Social\RequestProviders\IlluminateRequestProvider;
 
@@ -123,7 +123,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->bind('sentinel.addons.social.session', function ($app) {
             $key = $app['config']->get('cartalyst.sentinel.cookie.key').'_social';
 
-            return new IlluminateSession($app['session.store'], $key);
+            return new Session($app['session.store'], $key);
         });
     }
 
