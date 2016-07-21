@@ -17,8 +17,6 @@ Add the following lines after the `require` array on your `composer.json` file:
 		}
 	],
 
-> **Note:** This version is still in development, make sure that you set `min-stability` to `dev` on your `composer.json` file.
-
 > **Note:** Make sure that after the required changes your `composer.json` file is valid by running `composer validate`.
 
 ## Install the dependencies
