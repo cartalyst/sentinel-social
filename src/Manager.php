@@ -270,7 +270,12 @@ class Manager
      */
     protected function linkLoggedIn($slug, $provider, $token, UserInterface $user)
     {
-        $uid  = $provider->getUserUid($token);
+        if (method_exists($provider, 'getUserUid')) {
+            $uid  = $provider->getUserUid($token);
+        } else {
+            $uid  = $provider->getResourceOwner($token)->getId();
+        }
+
         $link = $this->retrieveLink($slug, $uid, $token);
 
         $link->setUser($user);
@@ -292,11 +297,22 @@ class Manager
      */
     protected function linkLoggedOut($slug, $provider, $token)
     {
-        $uid  = $provider->getUserUid($token);
+        if (method_exists($provider, 'getUserUid')) {
+            $uid  = $provider->getUserUid($token);
+        } else {
+            $uid  = $provider->getResourceOwner($token)->getId();
+        }
+
         $link = $this->retrieveLink($slug, $uid, $token);
 
         if (! $user = $link->getUser()) {
-            $login = $provider->getUserEmail($token) ?: $uid.'@'.$slug;
+            if (method_exists($provider, 'getUserEmail')) {
+                $login = $provider->getUserEmail($token) ?: $uid.'@'.$slug;
+            } else {
+                $email = isset($provider->getResourceOwner($token)->toArray()['email']) ? $provider->getResourceOwner($token)->toArray()['email'] : null;
+                $login = $email ?: $uid.'@'.$slug;
+            }
+
             $user = $this->sentinel->findByCredentials(compact('login'));
 
             if ($user) {
@@ -322,7 +338,13 @@ class Manager
                 // Some providers give a first / last name, some don't.
                 // If we only have one name, we'll just put it in the
                 // "first_name" attribute.
-                if (is_array($name = $provider->getUserScreenName($token))) {
+                if (method_exists($provider, 'getUserScreenName')) {
+                    $name = $provider->getUserScreenName($token);
+                } else {
+                    $name = isset($provider->getResourceOwner($token)->toArray()['name']) ? $provider->getResourceOwner($token)->toArray()['name'] : null;
+                }
+
+                if (is_array($name)) {
                     $credentials['first_name'] = $name[0];
                     $credentials['last_name']  = $name[1];
                 } elseif (is_string($name)) {
@@ -629,6 +651,12 @@ class Manager
             'callback_uri' => $callbackUri,
         ];
 
+        if (isset($connection['additional_options'])) {
+            foreach ($connection['additional_options'] as $key => $value) {
+                $credentials[$key] = $value;
+            }
+        }
+
         return new $driver($credentials);
     }
 
@@ -649,6 +677,12 @@ class Manager
             'redirectUri'  => $callbackUri,
             'scopes'       => isset($connection['scopes']) ? $connection['scopes'] : [],
         ];
+
+        if (isset($connection['additional_options'])) {
+            foreach ($connection['additional_options'] as $key => $value) {
+                $options[$key] = $value;
+            }
+        }
 
         return new $driver($options);
     }
