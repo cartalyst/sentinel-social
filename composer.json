@@ -40,8 +40,8 @@
 		"php": ">=5.4.0",
 		"cartalyst/sentinel": "~2.0",
 		"cartalyst/support": "~1.0",
-		"league/oauth1-client": "1.2.*",
-		"league/oauth2-client": "0.12.*"
+		"league/oauth1-client": "~1.2",
+		"league/oauth2-client": "~0.12|~1.0"
 	},
 	"require-dev": {
 		"illuminate/database": "~5.0",
