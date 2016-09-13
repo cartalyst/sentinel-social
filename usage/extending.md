@@ -20,7 +20,7 @@ Example:
 ```php
 	use League\OAuth1\Client\Server\User;
 
-	class MyOAuth1Provider extends League\OAuth1\Client\Server\Server {
+	class MyOAuth1Provider extends \League\OAuth1\Client\Server\Server {
 
 		/**
 		 * The response type for data returned from API calls.
@@ -150,7 +150,7 @@ Creating an OAuth 2 implementation is much the same, however just a little easie
 ```php
 use League\OAuth2\Client\Provider\User;
 
-class MyOAuth2Provider extends League\OAuth2\Client\Provider\IdentityProvider {
+class MyOAuth2Provider extends \League\OAuth2\Client\Provider\AbstractProvider {
 
 	// Default scopes
 	public $scopes = ['scope1', 'scope2'];
