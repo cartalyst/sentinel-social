@@ -51,7 +51,11 @@
 		"league/oauth2-facebook": "~1.0"
 	},
 	"suggest": {
-		"league/oauth2-facebook": "Required for facebook login"
+		"league/oauth2-facebook": "Required for facebook login",
+		"league/oauth2-github": "Required for github login",
+		"league/oauth2-google": "Required for google login",
+		"league/oauth2-linkedin": "Required for linkedin login",
+		"league/oauth2-instagram": "Required for instagram login"
 	},
 	"autoload": {
 		"classmap": [
