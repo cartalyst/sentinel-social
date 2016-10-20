@@ -292,7 +292,10 @@ class Manager
      */
     protected function linkLoggedOut($slug, $provider, $token)
     {
-        $uid  = $provider->getUserUid($token);
+        $user = $provider->getResourceOwner($token);
+
+        $uid = $user->getId();
+
         $link = $this->retrieveLink($slug, $uid, $token);
 
         if (! $user = $link->getUser()) {
