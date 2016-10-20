@@ -326,8 +326,8 @@ class Manager
                 // If we only have one name, we'll just put it in the
                 // "first_name" attribute.
                 if (is_array($name = $provider->getUserScreenName($token))) {
-                    $credentials['first_name'] = $name[0];
-                    $credentials['last_name']  = $name[1];
+                    $credentials['first_name'] = $oAuthUser->getFirstName();
+                    $credentials['last_name'] = $oAuthUser->getLastName();
                 } elseif (is_string($name)) {
                     $credentials['first_name'] = $name;
                 }
