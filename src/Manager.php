@@ -292,14 +292,14 @@ class Manager
      */
     protected function linkLoggedOut($slug, $provider, $token)
     {
-        $user = $provider->getResourceOwner($token);
+        $oAuthUser = $provider->getResourceOwner($token);
 
-        $uid = $user->getId();
+        $uid = $oAuthUser->getId();
 
         $link = $this->retrieveLink($slug, $uid, $token);
 
         if (! $user = $link->getUser()) {
-            $login = $provider->getUserEmail($token) ?: $uid.'@'.$slug;
+            $login = $oAuthUser->getEmail($token) ?: $uid.'@'.$slug;
             $user = $this->sentinel->findByCredentials(compact('login'));
 
             if ($user) {
