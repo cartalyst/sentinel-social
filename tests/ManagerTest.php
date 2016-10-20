@@ -219,6 +219,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             'driver'     => 'Facebook',
             'identifier' => 'appid',
             'secret'     => 'appsecret',
+            'graphApiVersion' => 'v2.8',
         ]);
 
         $provider = $this->manager->make('facebook', 'http://example.com/callback');

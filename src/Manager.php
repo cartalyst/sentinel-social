@@ -648,6 +648,7 @@ class Manager
             'clientSecret' => $connection['secret'],
             'redirectUri'  => $callbackUri,
             'scopes'       => isset($connection['scopes']) ? $connection['scopes'] : [],
+            'graphApiVersion' => isset($connection['graphApiVersion']) ? $connection['graphApiVersion'] : '',
         ];
 
         return new $driver($options);
