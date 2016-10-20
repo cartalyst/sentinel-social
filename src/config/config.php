@@ -52,6 +52,7 @@ return [
             'scopes'     => [
                 'email',
             ],
+            'graphApiVersion' => 'v2.8',
         ],
 
         'github' => [
