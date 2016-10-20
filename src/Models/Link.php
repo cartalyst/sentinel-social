@@ -83,9 +83,9 @@ class Link extends Model implements LinkInterface
             $this->oauth1_token_identifier = $token->getIdentifier();
             $this->oauth1_token_secret     = $token->getSecret();
         } elseif ($token instanceof OAuth2AccessToken) {
-            $this->oauth2_access_token  = $token->accessToken;
-            $this->oauth2_refresh_token = $token->refreshToken ?: $this->oauth2_refresh_token;
-            $this->oauth2_expires       = $token->expires;
+            $this->oauth2_access_token  = $token->getToken();
+            $this->oauth2_refresh_token = $token->getRefreshToken() ?: $this->oauth2_refresh_token;
+            $this->oauth2_expires       = $token->getExpires();
         } else {
             throw new \InvalidArgumentException('Invalid token type ['.gettype($token).'] passed to be stored.');
         }

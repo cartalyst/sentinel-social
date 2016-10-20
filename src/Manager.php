@@ -292,11 +292,14 @@ class Manager
      */
     protected function linkLoggedOut($slug, $provider, $token)
     {
-        $uid  = $provider->getUserUid($token);
+        $oAuthUser = $provider->getResourceOwner($token);
+
+        $uid = $oAuthUser->getId();
+
         $link = $this->retrieveLink($slug, $uid, $token);
 
         if (! $user = $link->getUser()) {
-            $login = $provider->getUserEmail($token) ?: $uid.'@'.$slug;
+            $login = $oAuthUser->getEmail($token) ?: $uid.'@'.$slug;
             $user = $this->sentinel->findByCredentials(compact('login'));
 
             if ($user) {
@@ -322,11 +325,16 @@ class Manager
                 // Some providers give a first / last name, some don't.
                 // If we only have one name, we'll just put it in the
                 // "first_name" attribute.
-                if (is_array($name = $provider->getUserScreenName($token))) {
-                    $credentials['first_name'] = $name[0];
-                    $credentials['last_name']  = $name[1];
-                } elseif (is_string($name)) {
-                    $credentials['first_name'] = $name;
+                $data = $oAuthUser->toArray();
+
+                if (isset($data['name']) && ! empty($data['name'])) {
+                    $names = explode(' ', $data['name']);
+
+                    $credentials['first_name'] = $names[0];
+
+                    if (count($names) > 1) {
+                        $credentials['last_name'] = end($names);
+                    }
                 }
 
                 $this->fireEvent('sentinel.social.registering', [$link, $provider, $token, $slug]);
@@ -643,12 +651,12 @@ class Manager
      */
     protected function createOAuth2Provider($driver, $connection, $callbackUri)
     {
-        $options = [
+        $options = array_merge([
             'clientId'     => $connection['identifier'],
             'clientSecret' => $connection['secret'],
             'redirectUri'  => $callbackUri,
             'scopes'       => isset($connection['scopes']) ? $connection['scopes'] : [],
-        ];
+        ], isset($connection['options']) ? $connection['options'] : []);
 
         return new $driver($options);
     }
