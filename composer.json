@@ -47,7 +47,11 @@
 		"illuminate/database": "~5.0",
 		"illuminate/events": "~5.0",
 		"mockery/mockery": "~0.9",
-		"phpunit/phpunit": "~4.4"
+		"phpunit/phpunit": "~4.4",
+		"league/oauth2-facebook": "~1.0"
+	},
+	"suggest": {
+		"league/oauth2-facebook": "Required for facebook login"
 	},
 	"autoload": {
 		"classmap": [
