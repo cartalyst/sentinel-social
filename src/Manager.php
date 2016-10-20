@@ -643,13 +643,12 @@ class Manager
      */
     protected function createOAuth2Provider($driver, $connection, $callbackUri)
     {
-        $options = [
+        $options = array_merge([
             'clientId'     => $connection['identifier'],
             'clientSecret' => $connection['secret'],
             'redirectUri'  => $callbackUri,
             'scopes'       => isset($connection['scopes']) ? $connection['scopes'] : [],
-            'graphApiVersion' => isset($connection['graphApiVersion']) ? $connection['graphApiVersion'] : '',
-        ];
+        ], isset($connection['options']) ? $connection['options'] : []);
 
         return new $driver($options);
     }
