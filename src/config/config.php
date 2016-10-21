@@ -53,7 +53,7 @@ return [
                 'email',
             ],
             'options' => [
-                'graphApiVersion'   => 'v2.8',
+                'graphApiVersion' => 'v2.8',
             ],
         ],
 
