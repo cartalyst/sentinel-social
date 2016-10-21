@@ -220,7 +220,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             'identifier' => 'appid',
             'secret'     => 'appsecret',
             'options' => [
-                'graphApiVersion'   => 'v2.8',
+                'graphApiVersion' => 'v2.8',
             ],
         ]);
 
