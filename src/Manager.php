@@ -155,7 +155,9 @@ class Manager
             return $provider->getAuthorizationUrl($temporaryCredentials);
         }
 
-        return $provider->getAuthorizationUrl();
+        $scope = $this->connections[$slug]['scopes'];
+
+        return $provider->getAuthorizationUrl(compact('scope'));
     }
 
     /**
