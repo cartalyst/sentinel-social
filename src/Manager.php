@@ -272,7 +272,9 @@ class Manager
      */
     protected function linkLoggedIn($slug, $provider, $token, UserInterface $user)
     {
-        $uid  = $provider->getUserUid($token);
+        $oAuthUser = $provider->getResourceOwner($token);
+
+        $uid = $oAuthUser->getId();
         $link = $this->retrieveLink($slug, $uid, $token);
 
         $link->setUser($user);
