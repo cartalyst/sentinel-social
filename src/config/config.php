@@ -52,7 +52,7 @@ return [
             'scopes'     => [
                 'email',
             ],
-            'options' => [
+            'additional_options' => [
                 'graphApiVersion' => 'v2.8',
             ],
         ],
