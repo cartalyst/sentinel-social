@@ -57,21 +57,6 @@ return [
             ],
         ],
 
-        'github' => [
-            'name'       => 'GitHub',
-            'driver'     => 'GenericProvider',
-            'identifier' => '',
-            'secret'     => '',
-            'scopes'     => [
-                'user',
-            ],
-            'additional_options' => [
-                'urlAuthorize'            => 'https://github.com/login/oauth/authorize',
-                'urlAccessToken'          => 'https://github.com/login/oauth/access_token',
-                'urlResourceOwnerDetails' => 'https://api.github.com/user',
-            ],
-        ],
-
         'twitter' => [
             'driver'     => 'Twitter',
             'identifier' => '',
