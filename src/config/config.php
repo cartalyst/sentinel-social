@@ -58,50 +58,17 @@ return [
         ],
 
         'github' => [
-            'driver'     => 'Github',
+            'name'       => 'GitHub',
+            'driver'     => 'GenericProvider',
             'identifier' => '',
             'secret'     => '',
             'scopes'     => [
                 'user',
             ],
-        ],
-
-        'google' => [
-            'driver'     => 'Google',
-            'identifier' => '',
-            'secret'     => '',
-            'scopes'     => [
-                'https://www.googleapis.com/auth/userinfo.profile',
-                'https://www.googleapis.com/auth/userinfo.email',
-            ],
-        ],
-
-        'instagram' => [
-            'driver'     => 'Instagram',
-            'identifier' => '',
-            'secret'     => '',
-            'scopes'     => [
-                'basic',
-            ],
-        ],
-
-        'linkedin' => [
-            'driver'     => 'LinkedIn',
-            'identifier' => '',
-            'secret'     => '',
-            'scopes'     => [
-                'r_fullprofile',
-                'r_emailaddress',
-            ],
-        ],
-
-        'microsoft' => [
-            'driver'     => 'Microsoft',
-            'identifier' => '',
-            'secret'     => '',
-            'scopes'     => [
-                'wl.basic',
-                'wl.emails'
+            'additional_options' => [
+                'urlAuthorize'            => 'https://github.com/login/oauth/authorize',
+                'urlAccessToken'          => 'https://github.com/login/oauth/access_token',
+                'urlResourceOwnerDetails' => 'https://api.github.com/user',
             ],
         ],
 
@@ -109,19 +76,6 @@ return [
             'driver'     => 'Twitter',
             'identifier' => '',
             'secret'     => '',
-        ],
-
-        'tumblr' => [
-            'driver'     => 'Tumblr',
-            'identifier' => '',
-            'secret'     => '',
-        ],
-
-        'vkontakte' => [
-            'driver'     => 'Vkontakte',
-            'identifier' => '',
-            'secret'     => '',
-            'scopes'     => [],
         ],
 
     ],
