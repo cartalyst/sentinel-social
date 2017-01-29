@@ -11,11 +11,11 @@ Open your Laravel config file `config/app.php` and add the following lines.
 
 In the `$providers` array add the following service provider for this package.
 
-	'Cartalyst\Sentinel\Addons\Social\Laravel\SocialServiceProvider',
+	Cartalyst\Sentinel\Addons\Social\Laravel\SocialServiceProvider::class,
 
 In the `$aliases` array add the following facade for this package.
 
-	'Social' => 'Cartalyst\Sentinel\Addons\Social\Laravel\Facades\Social',
+	'Social' => Cartalyst\Sentinel\Addons\Social\Laravel\Facades\Social::class,
 
 ### Assets
 
