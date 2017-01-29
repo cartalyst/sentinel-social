@@ -11,6 +11,16 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.1 - 2017-01-29
+
+`FIXED`
+
+- A bug retrieving the authed users name.
+
+`UPDATED`
+
+- Service provider for Laravel 5.4.
+
 ### v3.0.0 - 2017-01-29
 
 `UPDATED`
