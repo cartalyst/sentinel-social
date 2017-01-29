@@ -25,15 +25,11 @@ use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Events\Dispatcher;
 use Cartalyst\Support\Traits\EventTrait;
 use Cartalyst\Sentinel\Users\UserInterface;
-use Cartalyst\Sentinel\Sessions\NativeSession;
 use Cartalyst\Sentinel\Sessions\SessionInterface;
-use Cartalyst\Sentinel\Users\UserNotFoundException;
 use League\OAuth1\Client\Server\Server as OAuth1Provider;
-use Cartalyst\Sentinel\Addons\Social\Models\LinkInterface;
 use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 use League\OAuth2\Client\Provider\AbstractProvider as OAuth2Provider;
 use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface;
-use Cartalyst\Sentinel\Addons\Social\RequestProviders\NativeRequestProvider;
 use Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface;
 
 class Manager
@@ -258,6 +254,7 @@ class Manager
     {
         $link = $this->links->findLink($slug, $uid);
         $link->storeToken($token);
+
         return $link;
     }
 
@@ -415,7 +412,7 @@ class Manager
         $code = $this->request->getOAuth2Code();
 
         if (! $code) {
-            throw new AccessMissingException("Missing [code] parameter.");
+            throw new AccessMissingException('Missing [code] parameter.');
         }
 
         $accessToken = $provider->getAccessToken('authorization_code', compact('code'));

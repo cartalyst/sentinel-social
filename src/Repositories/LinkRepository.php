@@ -21,9 +21,6 @@
 namespace Cartalyst\Sentinel\Addons\Social\Repositories;
 
 use Cartalyst\Support\Traits\RepositoryTrait;
-use League\OAuth1\Client\Server\Server as OAuth1Server;
-use Cartalyst\Sentinel\Addons\Social\Services\ServiceInterface;
-use League\OAuth2\Client\Provider\AbstractProvider as OAuth2Provider;
 
 class LinkRepository implements LinkRepositoryInterface
 {

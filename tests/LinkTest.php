@@ -18,10 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-namespace Cartalyst\Sentinel\Addons\Social\Tests;
-
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
 use Cartalyst\Sentinel\Addons\Social\Models\Link;
 use League\OAuth2\Client\Token\AccessToken as OAuth2AccessToken;
 use League\OAuth1\Client\Credentials\TokenCredentials as OAuth1TokenCredentials;
@@ -44,9 +41,9 @@ class LinkTest extends PHPUnit_Framework_TestCase
      */
     public function it_throws_an_exception_when_passed_an_invalid_token()
     {
-        $link = new Link;
+        $link = new Link();
 
-        $token = new \stdClass;
+        $token = new \stdClass();
 
         $link->storeToken($token);
     }
@@ -54,7 +51,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_has_a_user_relationship()
     {
-        $link = new Link;
+        $link = new Link();
 
         $this->addMockConnection($link);
 
@@ -107,7 +104,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
     {
         $link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[save]');
 
-        $tokenCredentials = new OAuth1TokenCredentials;
+        $tokenCredentials = new OAuth1TokenCredentials();
         $tokenCredentials->setIdentifier('foo');
         $tokenCredentials->setSecret('bar');
 
@@ -133,8 +130,8 @@ class LinkTest extends PHPUnit_Framework_TestCase
             ->andReturn('Y-m-d H:i:s');
 
         $accessToken = new OAuth2AccessToken([
-            'access_token' => 'foo',
-            'expires_in' => 10,
+            'access_token'  => 'foo',
+            'expires_in'    => 10,
             'refresh_token' => 'bar',
         ]);
 
@@ -172,8 +169,8 @@ class LinkTest extends PHPUnit_Framework_TestCase
             ->andReturn('Y-m-d H:i:s');
 
         $accessToken = new OAuth2AccessToken([
-            'access_token' => 'foo',
-            'expires_in' => 10,
+            'access_token'  => 'foo',
+            'expires_in'    => 10,
             'refresh_token' => null,
         ]);
 

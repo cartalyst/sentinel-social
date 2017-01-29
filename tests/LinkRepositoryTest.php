@@ -18,10 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-namespace Cartalyst\Sentinel\Addons\Social\Tests;
-
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
 use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 
 class LinkRepositoryTest extends PHPUnit_Framework_TestCase
@@ -117,7 +114,7 @@ class LinkRepositoryTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_create_models()
     {
-        $provider = new LinkRepository;
+        $provider = new LinkRepository();
 
         $model = $provider->createModel();
 

@@ -18,10 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-namespace Cartalyst\Sentinel\Addons\Social\Tests;
-
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
 use Cartalyst\Sentinel\Addons\Social\RequestProviders\NativeRequestProvider as Provider;
 
 class NativeRequestProviderTest extends PHPUnit_Framework_TestCase
@@ -39,7 +36,7 @@ class NativeRequestProviderTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_retrieve_oauth1_temporary_credentials_identifier()
     {
-        $provider = new Provider;
+        $provider = new Provider();
 
         $_GET['oauth_token'] = 'oauth_token_value';
 
@@ -49,7 +46,7 @@ class NativeRequestProviderTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_retrieve_oauth1_verifier()
     {
-        $provider = new Provider;
+        $provider = new Provider();
 
         $_GET['oauth_verifier'] = 'verifier_value';
 
@@ -59,7 +56,7 @@ class NativeRequestProviderTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_retrieve_oauth2_code()
     {
-        $provider = new Provider;
+        $provider = new Provider();
 
         $_GET['code'] = 'code_value';
 

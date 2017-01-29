@@ -20,4 +20,6 @@
 
 namespace Cartalyst\Sentinel\Addons\Social;
 
-class AccessMissingException extends \RuntimeException {}
+class AccessMissingException extends \RuntimeException
+{
+}

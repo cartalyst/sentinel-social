@@ -1,6 +1,5 @@
 <?php
 
-use League\OAuth1\Client\Credentials\TokenCredentials;
 
 class ValidOAuth2Provider extends League\OAuth2\Client\Provider\AbstractProvider
 {

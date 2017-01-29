@@ -18,10 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-namespace Cartalyst\Sentinel\Addons\Social\Tests;
-
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
 use Illuminate\Events\Dispatcher;
 use Cartalyst\Sentinel\Addons\Social\Manager;
 
@@ -93,7 +90,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             $this->linkRepository  = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface'),
             $this->requestProvider = m::mock('Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface'),
             $this->session         = m::mock('Cartalyst\Sentinel\Sessions\SessionInterface'),
-            $this->dispatcher      = new Dispatcher
+            $this->dispatcher      = new Dispatcher()
         );
     }
 
@@ -216,9 +213,9 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     public function it_can_make_built_in_oauth2_connection()
     {
         $this->manager->addConnection('facebook', [
-            'driver'     => 'Facebook',
-            'identifier' => 'appid',
-            'secret'     => 'appsecret',
+            'driver'             => 'Facebook',
+            'identifier'         => 'appid',
+            'secret'             => 'appsecret',
             'additional_options' => [
                 'graphApiVersion' => 'v2.8',
             ],
@@ -544,7 +541,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             ->andReturn('foo@bar.com');
 
         $this->sentinel->shouldReceive('findByCredentials')
-            ->with(['login'=>'foo@bar.com'])
+            ->with(['login' => 'foo@bar.com'])
             ->once()
             ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
 
@@ -893,7 +890,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             ->andReturn('foo@bar.com');
 
         $this->sentinel->shouldReceive('findByCredentials')
-            ->with(['login'=>'foo@bar.com'])
+            ->with(['login' => 'foo@bar.com'])
             ->once();
 
         $this->sentinel->shouldReceive('getUserRepository')

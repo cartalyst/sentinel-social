@@ -55,7 +55,7 @@ class Link extends Model implements LinkInterface
     protected static $usersModel = 'Cartalyst\Sentinel\Users\EloquentUser';
 
     /**
-     * User relationship
+     * User relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

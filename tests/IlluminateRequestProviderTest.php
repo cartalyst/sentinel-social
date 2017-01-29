@@ -18,10 +18,7 @@
  * @link       http://cartalyst.com
  */
 
-namespace Cartalyst\Sentinel\Addons\Social\Tests;
-
 use Mockery as m;
-use PHPUnit_Framework_TestCase;
 use Cartalyst\Sentinel\Addons\Social\RequestProviders\IlluminateRequestProvider;
 
 class IlluminateRequestProviderTest extends PHPUnit_Framework_TestCase
