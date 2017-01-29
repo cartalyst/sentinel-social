@@ -219,7 +219,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             'driver'     => 'Facebook',
             'identifier' => 'appid',
             'secret'     => 'appsecret',
-            'options' => [
+            'additional_options' => [
                 'graphApiVersion' => 'v2.8',
             ],
         ]);
@@ -227,8 +227,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $provider = $this->manager->make('facebook', 'http://example.com/callback');
 
         $this->assertInstanceOf('League\OAuth2\Client\Provider\Facebook', $provider);
-        $this->assertEquals('appid', $provider->clientId);
-        $this->assertEquals('appsecret', $provider->clientSecret);
+        $this->assertContains('appid', $provider->getAuthorizationUrl());
     }
 
     /**
@@ -275,8 +274,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $provider = $this->manager->make('foo', 'http://example.com/callback');
 
         $this->assertInstanceOf('ValidOAuth2Provider', $provider);
-        $this->assertEquals('appid', $provider->clientId);
-        $this->assertEquals('appsecret', $provider->clientSecret);
+        $this->assertContains('appid', $provider->getAuthorizationUrl());
     }
 
     /** @test */
@@ -308,6 +306,10 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     public function it_can_get_oauth2_authorization_url()
     {
         $manager = $this->mockManager('make, oauthVersion');
+
+        $manager->addConnection('foo', [
+            'scopes' => [],
+        ]);
 
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
@@ -689,7 +691,12 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             ->andReturn($accessToken = m::mock('League\OAuth2\Client\Token\AccessToken'));
 
         // Unique ID
-        $provider->shouldReceive('getUserUid')
+        $provider->shouldReceive('getResourceOwner')
+            ->once()
+            ->with($accessToken)
+            ->andReturn($resourceOwner = m::mock('League\OAuth2\Client\Provider\ResourceOwnerInterface'));
+
+        $resourceOwner->shouldReceive('getId')
             ->once()
             ->andReturn(789);
 
@@ -764,7 +771,12 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             ->andReturn($accessToken = m::mock('League\OAuth2\Client\Token\AccessToken'));
 
         // Unique ID
-        $provider->shouldReceive('getUserUid')
+        $provider->shouldReceive('getResourceOwner')
+            ->once()
+            ->with($accessToken)
+            ->andReturn($resourceOwner = m::mock('League\OAuth2\Client\Provider\ResourceOwnerInterface'));
+
+        $resourceOwner->shouldReceive('getId')
             ->once()
             ->andReturn(789);
 
