@@ -68,8 +68,8 @@
 	"extra": {
 		"component": "addon",
 		"branch-alias": {
-			"dev-master": "2.1.x-dev"
+			"dev-master": "3.0.x-dev"
 		}
 	},
-	"minimum-stability": "dev"
+	"minimum-stability": "stable"
 }

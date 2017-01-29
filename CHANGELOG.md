@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.0 - 2017-01-29
+
+`UPDATED`
+
+- Use stable releases of the `league/oauth2-client` package.
+
 ### v2.0.5 - 2016-02-22
 
 `FIXED`
