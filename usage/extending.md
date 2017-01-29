@@ -145,128 +145,22 @@ Example:
 
 #### OAuth 2
 
-Creating an OAuth 2 implementation is much the same, however just a little easier (as there's less methods to implement):
+The underlying OAuth 2 package provides a generic provider which can be used for various services. An example connection looks as follows.
 
-```php
-use League\OAuth2\Client\Provider\User;
-
-class MyOAuth2Provider extends \League\OAuth2\Client\Provider\AbstractProvider {
-
-	// Default scopes
-	public $scopes = ['scope1', 'scope2'];
-
-	// Response type
-	public $responseType = 'json';
-
-	public function urlAuthorize()
-	{
-		return 'https://api.myprovider.com/authorize';
-	}
-
-	public function urlAccessToken()
-	{
-		return 'https://api.myprovider.com/access_token';
-	}
-
-	public function urlUserDetails(\League\OAuth2\Client\Token\AccessToken $token)
-	{
-		return 'https://api.myprovider.com/1.0/user.json?access_token='.$token;
-	}
-
-	public function userDetails($response, \League\OAuth2\Client\Token\AccessToken $token)
-	{
-		$user = new User;
-
-		// Take the decoded data (determined by $this->responseType)
-		// and fill out the user object by abstracting out the API
-		// properties (this keeps our user object simple and adds
-		// a layer of protection in-case the API response changes)
-
-		$user->first_name = $response['user']['firstname'];
-		$user->last_name  = $response['user']['lastname'];
-		$user->email      = $response['emails']['primary'];
-		// Etc..
-
-		return $user;
-	}
-
-	public function userUid($response, \League\OAuth2\Client\Token\AccessToken $token)
-	{
-		return $response['unique_id'];
-	}
-
-	public function userEmail($response, \League\OAuth2\Client\Token\AccessToken $token)
-	{
-		// Optional, however OAuth2 usually provides a scope
-		// to receive access to a user's email, you should always
-		// ask for this scope, as having an email is awesome.
-		if (isset($response['email']))
-		{
-			return $response['email'];
-		}
-	}
-
-	public function userScreenName($response, \League\OAuth2\Client\Token\AccessToken $token)
-	{
-		// Optional
-		if (isset($response['screen_name']))
-		{
-			return $response['screen_name'];
-		}
-	}
-}
 ```
+		'my_service' => [
+			'name'       => 'My Service',
+			'driver'     => 'GenericProvider',
+			'identifier' => '',
+			'secret'     => '',
+			'scopes'     => [
+				'user',
+			],
+			'additional_options' => [
+				'urlAuthorize'            => 'https://api.my_service.com/authorize',
+				'urlAccessToken'          => 'https://api.my_service.com/access_token',
+				'urlResourceOwnerDetails' => 'https://api.my_service.com/user',
+			],
+		],
 
-### Adding a Connection
-
-Now that you've made an implementation class for Sentinel Social, you need to add a connection.
-
-#### In Laravel
-
-In Laravel, the easiest way is to add the connection to your config file
-
-```php
-// After publishing your config, this is in app/config/packages/cartalyst/sentinel-social/config.php
-'connections' => [
-
-	// Additional, default connections…
-
-	'myprovider' => [
-
-		// The driver should match your implementation's name (including namespace)
-		'driver'     => 'MyOAuth2Provider',
-
-		'identifier' => 'your-app-identifier',
-		'secret'     => 'your-app-secret',
-
-		// To override OAuth2 scopes (scopes don't exist on OAuth 1), specify
-		// this parameter. Otherwise, the default scopes from your implementation
-		// class will be used.
-		'scopes'     => ['scope1', 'scope2', 'scope3'],
-	],
-),
-```
-
-#### Outside Laravel
-
-Outside of Laravel, you can add a connection by calling a method on your `$social` object
-
-```php
-$social->addConnection('myprovider', [
-
-	// See the comments for "In Laravel" above, these parameters
-	// are the same
-	'driver'     => 'MyOAuth2Provider',
-	'identifier' => 'your-app-identifier',
-	'secret'     => 'your-app-secret',
-	'scopes'     => ['scope1', 'scope2', 'scope3'],
-]);
-```
-
-Now, continue to use Sentinel Social as normal, instead substituting `myprovider` (or whatever you named your connection as) when authorizing and authenticating!
-
-### Tips
-
-Once you've made a provider, if it could potentially be used by anybody, you should endeavour to submit a pull request back to the underlying [OAuth 1](http://github.com/thephpleague/oauth1-client) or [OAuth2](http://github.com/thephpleague/oauth2-client) repository, so everybody can make use of it.
-
-Once that pull request has been merged, you may submit a pull request back to Sentinel Social, to simply update the default config file to ship with your provider built-in!
+ ```
