@@ -1,26 +1,35 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
-  - hhvm
+  - 7.1
+
+env:
+  global:
+    - setup=basic
 
 matrix:
-  allow_failures:
-    - php: hhvm
+  fast_finish: true
+  include:
+    - php: 5.6
+      env: setup=lowest
+    - php: 5.6
+      env: setup=stable
 
 sudo: false
 
 cache:
   directories:
-    - vendor
     - $HOME/.composer/cache
 
-install:
-  - composer install
+before_install:
+  - composer self-update
+  - composer config -g github-oauth.github.com $CI_USER_TOKEN
 
-script:
-  - if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then phpunit; fi
-  - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then phpunit --coverage-text; fi
+install:
+  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist --no-suggest; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-suggest; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
+
+script: vendor/bin/phpunit
