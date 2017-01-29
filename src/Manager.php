@@ -308,7 +308,8 @@ class Manager
             if (method_exists($provider, 'getUserEmail')) {
                 $login = $provider->getUserEmail($token) ?: $uid.'@'.$slug;
             } else {
-                $email = isset($provider->getResourceOwner($token)->toArray()['email']) ? $provider->getResourceOwner($token)->toArray()['email'] : null;
+                $resourceOwner = $provider->getResourceOwner($token)->toArray();
+                $email = isset($resourceOwner['email']) ? $resourceOwner['email'] : null;
                 $login = $email ?: $uid.'@'.$slug;
             }
 
@@ -340,7 +341,8 @@ class Manager
                 if (method_exists($provider, 'getUserScreenName')) {
                     $name = $provider->getUserScreenName($token);
                 } else {
-                    $name = isset($provider->getResourceOwner($token)->toArray()['name']) ? $provider->getResourceOwner($token)->toArray()['name'] : null;
+                    $resourceOwner = $provider->getResourceOwner($token)->toArray();
+                    $name = isset($resourceOwner) ? $resourceOwner : null;
                 }
 
                 if (is_array($name)) {
