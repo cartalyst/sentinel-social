@@ -88,7 +88,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerLinkRepository()
     {
-        $this->app['sentinel.addons.social.repository'] = $this->app->share(function ($app) {
+        $this->app->bind('sentinel.addons.social.repository', function($app) {
             $model = $app['config']->get('cartalyst.sentinel-addons.social.link');
 
             $users = $app['config']->get('cartalyst.sentinel.users.model');
@@ -108,7 +108,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerRequestProvider()
     {
-        $this->app['sentinel.addons.social.request'] = $this->app->share(function ($app) {
+        $this->app->bind('sentinel.addons.social.request', function($app) {
             return new IlluminateRequestProvider($app['request']);
         });
     }
@@ -120,7 +120,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerSession()
     {
-        $this->app['sentinel.addons.social.session'] = $this->app->share(function ($app) {
+        $this->app->bind('sentinel.addons.social.session', function ($app) {
             $key = $app['config']->get('cartalyst.sentinel.cookie.key').'_social';
 
             return new IlluminateSession($app['session.store'], $key);
@@ -134,7 +134,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerSentinelSocial()
     {
-        $this->app['sentinel.addons.social'] = $this->app->share(function ($app) {
+        $this->app->bind('sentinel.addons.social', function ($app) {
             $manager = new Manager(
                 $app['sentinel'],
                 $app['sentinel.addons.social.repository'],

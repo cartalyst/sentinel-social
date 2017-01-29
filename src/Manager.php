@@ -342,7 +342,7 @@ class Manager
                     $name = $provider->getUserScreenName($token);
                 } else {
                     $resourceOwner = $provider->getResourceOwner($token)->toArray();
-                    $name = isset($resourceOwner) ? $resourceOwner : null;
+                    $name = isset($resourceOwner) ? $resourceOwner['name'] : null;
                 }
 
                 if (is_array($name)) {
