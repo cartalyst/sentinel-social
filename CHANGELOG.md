@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.2 - 2017-02-15
+
+`FIXED`
+
+- A bug handling the authed users name from google.
+
 ### v3.0.1 - 2017-01-29
 
 `FIXED`
