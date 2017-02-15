@@ -346,8 +346,13 @@ class Manager
                 }
 
                 if (is_array($name)) {
-                    $credentials['first_name'] = $name[0];
-                    $credentials['last_name']  = $name[1];
+                    if (isset($name['familyName'])) {
+                        $credentials['first_name'] = last($name);
+                        $credentials['last_name']  = head($name);
+                    } else {
+                        $credentials['first_name'] = $name[0];
+                        $credentials['last_name']  = $name[1];
+                    }
                 } elseif (is_string($name)) {
                     $credentials['first_name'] = $name;
                 }
