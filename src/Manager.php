@@ -307,6 +307,8 @@ class Manager
         if (! $user = $link->getUser()) {
             if (method_exists($provider, 'getUserEmail')) {
                 $login = $provider->getUserEmail($token) ?: $uid.'@'.$slug;
+            } elseif (method_exists($provider->getResourceOwner($token), 'getEmail')) {
+                $login = $provider->getResourceOwner($token)->getEmail() ?: $uid.'@'.$slug;
             } else {
                 $resourceOwner = $provider->getResourceOwner($token)->toArray();
                 $email = isset($resourceOwner['email']) ? $resourceOwner['email'] : null;
