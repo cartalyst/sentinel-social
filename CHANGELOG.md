@@ -11,6 +11,12 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v3.0.4 - 2017-03-17
+
+`FIXED`
+
+- Email retrieval when using google.
+
 ### v3.0.3 - 2017-02-23
 
 `REVISED`
