@@ -52,7 +52,7 @@ class Link extends Model implements LinkInterface
      *
      * @var string
      */
-    protected static $usersModel = 'Cartalyst\Sentinel\Users\EloquentUser';
+    protected static $usersModel = 'Cartalyst\Sentinel\Laravel\Users\User';
 
     /**
      * User relationship.

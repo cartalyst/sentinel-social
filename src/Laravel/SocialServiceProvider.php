@@ -64,21 +64,17 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function prepareResources()
     {
-        // Publish config
-        $config = realpath(__DIR__.'/../config/config.php');
+        if ($this->app->runningInConsole()) {
+            // Publish config
+            $this->publishes([
+                $this->getResourcePath('config/config.php') => config_path('cartalyst/sentinel/social/config.php'),
+            ], 'cartalyst:sentinel.social.config');
 
-        $this->mergeConfigFrom($config, 'cartalyst.sentinel-addons.social');
-
-        $this->publishes([
-            $config => config_path('cartalyst.sentinel-addons.social.php'),
-        ], 'config');
-
-        // Publish migrations
-        $migrations = realpath(__DIR__.'/../migrations');
-
-        $this->publishes([
-            $migrations => $this->app->databasePath().'/migrations',
-        ], 'migrations');
+            // Publish migrations
+            $this->publishes([
+                $this->getResourcePath('migrations') => database_path('migrations'),
+            ], 'cartalyst:sentinel.social.migrations');
+        }
     }
 
     /**
@@ -143,7 +139,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
                 $app['events']
             );
 
-            $connections = $app['config']->get('cartalyst.sentinel-addons.social.connections');
+            $connections = $app['config']->get('cartalyst.sentinel.social.config.connections');
 
             $manager->addConnections($connections);
 
@@ -151,5 +147,16 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
         });
 
         $this->app->alias('sentinel.addons.social', 'Cartalyst\Sentinel\Addons\Social\Manager');
+    }
+
+    /**
+     * Returns the full path to the given resource.
+     *
+     * @param  string  $resource
+     * @return string
+     */
+    protected function getResourcePath($resource)
+    {
+        return realpath(__DIR__.'/../../resources/'.$resource);
     }
 }

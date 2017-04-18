@@ -315,7 +315,7 @@ class Manager
                 $login = $email ?: $uid.'@'.$slug;
             }
 
-            $user = $this->sentinel->findByCredentials(compact('login'));
+            $user = $this->sentinel->users()->findByCredentials(compact('login'));
 
             if ($user) {
                 $link->setUser($user);
@@ -324,7 +324,7 @@ class Manager
             } else {
                 $user = $this
                     ->sentinel
-                    ->getUserRepository()
+                    ->users()
                     ->createModel();
 
                 // Create a dummy password for the user
@@ -361,7 +361,14 @@ class Manager
 
                 $this->fireEvent('sentinel.social.registering', [$link, $provider, $token, $slug]);
 
-                $user = $this->sentinel->registerAndActivate($credentials);
+                $user = $this->sentinel->register($credentials);
+
+                if ($activations = $this->sentinel->addons()->get('activations')) {
+                    $activation = $activations->create($user);
+
+                    $activations->complete($user, $activation->code);
+                }
+
                 $link->setUser($user);
 
                 $this->fireEvent('sentinel.social.registered', [$link, $provider, $token, $slug]);
@@ -514,7 +521,7 @@ class Manager
     {
         $model = 'Cartalyst\Sentinel\Addons\Social\Models\Link';
 
-        $users = $this->sentinel->getUserRepository();
+        $users = $this->sentinel->users();
 
         return new LinkRepository($users, $model);
     }
