@@ -120,7 +120,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function it_throws_an_exception_when_retrieving_non_existent_connections()
     {
@@ -129,7 +129,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function it_throws_an_exception_when_making_non_existent_connections()
     {
@@ -138,7 +138,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Class matching driver is required
      */
     public function it_throws_an_exception_if_driver_is_missing()
@@ -150,7 +150,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Failed to determine OAuth type as [Foo] does not exist.
      */
     public function it_throws_an_exception_if_driver_does_not_exist()
@@ -166,7 +166,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage App identifier and secret are required
      */
     public function it_throws_an_exception_if_identifier_is_missing()
@@ -180,7 +180,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage App identifier and secret are required
      */
     public function it_throws_an_exception_if_secret_is_missing()
@@ -229,7 +229,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage does not inherit from a compatible OAuth provider class
      */
     public function it_throws_an_exception_when_making_custom_invalid_connection()
@@ -322,7 +322,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
+     * @expectedException \Cartalyst\Sentinel\Addons\Social\AccessMissingException
      * @expectedExceptionMessage Missing [oauth_token] parameter
      */
     public function it_throws_an_exception_on_authentication_if_temporary_identitifer_is_missing()
@@ -342,7 +342,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
+     * @expectedException \Cartalyst\Sentinel\Addons\Social\AccessMissingException
      * @expectedExceptionMessage Missing [verifier] parameter
      */
     public function it_throws_an_exception_on_authentication_if_verifier_is_missing()
@@ -366,7 +366,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
+     * @expectedException \Cartalyst\Sentinel\Addons\Social\AccessMissingException
      * @expectedExceptionMessage Missing [code] parameter
      */
     public function it_throws_an_exception_on_oauth2_authentication_when_code_is_missing()

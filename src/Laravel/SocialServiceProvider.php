@@ -84,7 +84,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerLinkRepository()
     {
-        $this->app->bind('sentinel.addons.social.repository', function($app) {
+        $this->app->bind('sentinel.addons.social.repository', function ($app) {
             $model = $app['config']->get('cartalyst.sentinel-addons.social.link');
 
             $users = $app['config']->get('cartalyst.sentinel.users.model');
@@ -104,7 +104,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerRequestProvider()
     {
-        $this->app->bind('sentinel.addons.social.request', function($app) {
+        $this->app->bind('sentinel.addons.social.request', function ($app) {
             return new IlluminateRequestProvider($app['request']);
         });
     }

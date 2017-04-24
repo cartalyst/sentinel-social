@@ -311,8 +311,8 @@ class Manager
                 $login = $provider->getResourceOwner($token)->getEmail() ?: $uid.'@'.$slug;
             } else {
                 $resourceOwner = $provider->getResourceOwner($token)->toArray();
-                $email = isset($resourceOwner['email']) ? $resourceOwner['email'] : null;
-                $login = $email ?: $uid.'@'.$slug;
+                $email         = isset($resourceOwner['email']) ? $resourceOwner['email'] : null;
+                $login         = $email ?: $uid.'@'.$slug;
             }
 
             $user = $this->sentinel->users()->findByCredentials(compact('login'));
@@ -344,7 +344,7 @@ class Manager
                     $name = $provider->getUserScreenName($token);
                 } else {
                     $resourceOwner = $provider->getResourceOwner($token)->toArray();
-                    $name = isset($resourceOwner) ? $resourceOwner['name'] : null;
+                    $name          = isset($resourceOwner) ? $resourceOwner['name'] : null;
                 }
 
                 if (is_array($name)) {

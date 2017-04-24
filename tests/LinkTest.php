@@ -37,7 +37,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function it_throws_an_exception_when_passed_an_invalid_token()
     {
