@@ -61,7 +61,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_set_and_retrieve_the_user()
     {
-        $user = m::mock('Cartalyst\Sentinel\Users\EloquentUser');
+        $user = m::mock('Cartalyst\Sentinel\Laravel\Users\User');
 
         $link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link[user]');
 

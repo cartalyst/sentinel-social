@@ -389,7 +389,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
     {
         $manager = new Manager($this->sentinel);
 
-        $this->sentinel->shouldReceive('getUserRepository')
+        $this->sentinel->shouldReceive('users')
             ->once();
 
         $this->assertInstanceOf('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface', $manager->getLinksRepository());
@@ -540,7 +540,11 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('foo@bar.com');
 
-        $this->sentinel->shouldReceive('findByCredentials')
+        $this->sentinel->shouldReceive('users')
+            ->once()
+            ->andReturn($users = m::mock('Cartalyst\Sentinel\Users\UserRepositoryInterface'));
+
+        $users->shouldReceive('findByCredentials')
             ->with(['login' => 'foo@bar.com'])
             ->once()
             ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
@@ -889,11 +893,15 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn('foo@bar.com');
 
-        $this->sentinel->shouldReceive('findByCredentials')
+        $this->sentinel->shouldReceive('users')
+            ->once()
+            ->andReturn($users = m::mock('Cartalyst\Sentinel\Users\UserRepositoryInterface'));
+
+        $users->shouldReceive('findByCredentials')
             ->with(['login' => 'foo@bar.com'])
             ->once();
 
-        $this->sentinel->shouldReceive('getUserRepository')
+        $this->sentinel->shouldReceive('users')
             ->once()
             ->andReturn($users = m::mock('Cartalyst\Sentinel\Users\UserRepositoryInterface'));
 
@@ -905,7 +913,29 @@ class ManagerTest extends PHPUnit_Framework_TestCase
             ->once()
             ->andReturn(['Ben', 'Corlett']);
 
-        $this->sentinel->shouldReceive('registerAndActivate')
+        $this->sentinel->shouldReceive('addons')
+            ->once()
+            ->andReturn($addonManager = m::mock('Cartalyst\Sentinel\Addons\AddonsManagerInterface'));
+
+        $addonManager->shouldReceive('get')
+            ->with('activations')
+            ->once()
+            ->andReturn($activations = m::mock('Cartalyst\Sentinel\Addons\Activations\Repositories\ActivationRepositoryInterface'));
+
+        $activations->shouldReceive('create')
+            ->with($user)
+            ->once()
+            ->andReturn($activation = m::mock('Cartalyst\Sentinel\Addons\Activations\ActivationInterface'));
+
+        $activation->shouldReceive('getCode')
+            ->once()
+            ->andReturn('foobar');
+
+        $activations->shouldReceive('complete')
+            ->with($user, 'foobar')
+            ->once();
+
+        $this->sentinel->shouldReceive('register')
             ->once()
             ->andReturn($user);
 

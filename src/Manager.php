@@ -366,7 +366,7 @@ class Manager
                 if ($activations = $this->sentinel->addons()->get('activations')) {
                     $activation = $activations->create($user);
 
-                    $activations->complete($user, $activation->code);
+                    $activations->complete($user, $activation->getCode());
                 }
 
                 $link->setUser($user);
