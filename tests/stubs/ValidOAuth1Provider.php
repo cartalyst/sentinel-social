@@ -44,8 +44,9 @@ class ValidOAuth1Provider extends League\OAuth1\Client\Server\Server
      * Take the decoded data from the user details URL and convert
      * it to a User object.
      *
-     * @param  mixed  $data
-     * @param  TokenCredentials  $tokenCredentials
+     * @param mixed            $data
+     * @param TokenCredentials $tokenCredentials
+     *
      * @return User
      */
     public function userDetails($data, TokenCredentials $tokenCredentials)
@@ -56,9 +57,10 @@ class ValidOAuth1Provider extends League\OAuth1\Client\Server\Server
      * Take the decoded data from the user details URL and extract
      * the user's UID.
      *
-     * @param  mixed  $data
-     * @param  TokenCredentials  $tokenCredentials
-     * @return string|int
+     * @param mixed            $data
+     * @param TokenCredentials $tokenCredentials
+     *
+     * @return int|string
      */
     public function userUid($data, TokenCredentials $tokenCredentials)
     {
@@ -68,8 +70,9 @@ class ValidOAuth1Provider extends League\OAuth1\Client\Server\Server
      * Take the decoded data from the user details URL and extract
      * the user's email.
      *
-     * @param  mixed  $data
-     * @param  TokenCredentials  $tokenCredentials
+     * @param mixed            $data
+     * @param TokenCredentials $tokenCredentials
+     *
      * @return string
      */
     public function userEmail($data, TokenCredentials $tokenCredentials)
@@ -80,8 +83,9 @@ class ValidOAuth1Provider extends League\OAuth1\Client\Server\Server
      * Take the decoded data from the user details URL and extract
      * the user's screen name.
      *
-     * @param  mixed  $data
-     * @param  TokenCredentials  $tokenCredentials
+     * @param mixed            $data
+     * @param TokenCredentials $tokenCredentials
+     *
      * @return User
      */
     public function userScreenName($data, TokenCredentials $tokenCredentials)

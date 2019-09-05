@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,11 +11,11 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Sentinel\Addons\Social\Models;
@@ -27,7 +27,8 @@ interface LinkInterface
     /**
      * Store a token with the link.
      *
-     * @param  mixed  $token
+     * @param mixed $token
+     *
      * @return void
      */
     public function storeToken($token);
@@ -42,7 +43,8 @@ interface LinkInterface
     /**
      * Set the user associated with the social link.
      *
-     * @param  \Cartalyst\Sentinel\Users\UserInterface  $user
+     * @param \Cartalyst\Sentinel\Users\UserInterface $user
+     *
      * @return void
      */
     public function setUser(UserInterface $user);

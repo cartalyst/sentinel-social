@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,11 +11,11 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Sentinel\Addons\Social\RequestProviders;
@@ -34,7 +34,8 @@ class IlluminateRequestProvider implements RequestProviderInterface
     /**
      * Creates a new Illuminate request provider.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return void
      */
     public function __construct(Request $request)
@@ -43,7 +44,7 @@ class IlluminateRequestProvider implements RequestProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getOAuth1TemporaryCredentialsIdentifier()
     {
@@ -51,7 +52,7 @@ class IlluminateRequestProvider implements RequestProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getOAuth1Verifier()
     {
@@ -59,7 +60,7 @@ class IlluminateRequestProvider implements RequestProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getOAuth2Code()
     {

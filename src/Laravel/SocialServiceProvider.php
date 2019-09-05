@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,11 +11,11 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Sentinel\Addons\Social\Laravel;
@@ -28,12 +28,12 @@ use Cartalyst\Sentinel\Addons\Social\RequestProviders\IlluminateRequestProvider;
 class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $defer = true;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function register()
     {
@@ -45,7 +45,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function provides()
     {
@@ -88,7 +88,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerLinkRepository()
     {
-        $this->app->bind('sentinel.addons.social.repository', function($app) {
+        $this->app->bind('sentinel.addons.social.repository', function ($app) {
             $model = $app['config']->get('cartalyst.sentinel-addons.social.link');
 
             $users = $app['config']->get('cartalyst.sentinel.users.model');
@@ -108,7 +108,7 @@ class SocialServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function registerRequestProvider()
     {
-        $this->app->bind('sentinel.addons.social.request', function($app) {
+        $this->app->bind('sentinel.addons.social.request', function ($app) {
             return new IlluminateRequestProvider($app['request']);
         });
     }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,24 +11,24 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 use Mockery as m;
 use Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepository;
 
-class LinkRepositoryTest extends PHPUnit_Framework_TestCase
+class LinkRepositoryTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Close mockery.
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
@@ -40,32 +40,38 @@ class LinkRepositoryTest extends PHPUnit_Framework_TestCase
 
         $linkRepository->shouldReceive('createModel')
             ->once()
-            ->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'));
+            ->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'))
+        ;
 
         $model->shouldReceive('newQuery')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('with')
             ->with('user')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('where')
             ->with('provider', '=', 'slug')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('where')
             ->with('uid', '=', 789)
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('first')
             ->once()
-            ->andReturn('success');
+            ->andReturn('success')
+        ;
 
-        $this->assertEquals('success', $linkRepository->findLink('slug', 789));
+        $this->assertSame('success', $linkRepository->findLink('slug', 789));
     }
 
     /** @test */
@@ -75,30 +81,36 @@ class LinkRepositoryTest extends PHPUnit_Framework_TestCase
 
         $linkRepository->shouldReceive('createModel')
             ->twice()
-            ->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'));
+            ->andReturn($model = m::mock('Cartalyst\Sentinel\Addons\Social\Models\Link'))
+        ;
 
         $model->shouldReceive('newQuery')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('with')
             ->with('user')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('where')
             ->with('provider', '=', 'slug')
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('where')
             ->with('uid', '=', 789)
             ->once()
-            ->andReturn($model);
+            ->andReturn($model)
+        ;
 
         $model->shouldReceive('first')
             ->once()
-            ->andReturn(null);
+            ->andReturn(null)
+        ;
 
         $model->shouldReceive('fill')->with([
             'provider' => 'slug',
@@ -106,9 +118,10 @@ class LinkRepositoryTest extends PHPUnit_Framework_TestCase
         ])->once();
 
         $model->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
-        $this->assertEquals($model, $linkRepository->findLink('slug', 789));
+        $this->assertSame($model, $linkRepository->findLink('slug', 789));
     }
 
     /** @test */

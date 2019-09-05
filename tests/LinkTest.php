@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,11 +11,11 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 use Mockery as m;
@@ -23,24 +23,25 @@ use Cartalyst\Sentinel\Addons\Social\Models\Link;
 use League\OAuth2\Client\Token\AccessToken as OAuth2AccessToken;
 use League\OAuth1\Client\Credentials\TokenCredentials as OAuth1TokenCredentials;
 
-class LinkTest extends PHPUnit_Framework_TestCase
+class LinkTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Close mockery.
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
      */
     public function it_throws_an_exception_when_passed_an_invalid_token()
     {
+        $this->expectException('InvalidArgumentException');
+
         $link = new Link();
 
         $token = new \stdClass();
@@ -68,31 +69,38 @@ class LinkTest extends PHPUnit_Framework_TestCase
         $link->getConnection()
             ->getQueryGrammar()
             ->shouldReceive('getDateFormat')
-            ->andReturn('Y-m-d H:i:s');
+            ->andReturn('Y-m-d H:i:s')
+        ;
 
         $link->getConnection()
             ->getPostProcessor()
-            ->shouldReceive('processInsertGetId');
+            ->shouldReceive('processInsertGetId')
+        ;
 
         $link->getConnection()
             ->shouldReceive('getQueryGrammar')
-            ->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'));
+            ->andReturn($grammar = m::mock('Illuminate\Database\Query\Grammars\Grammar'))
+        ;
 
         $link->getConnection()
             ->getQueryGrammar()
-            ->shouldReceive('compileInsertGetId');
+            ->shouldReceive('compileInsertGetId')
+        ;
 
         $link->shouldReceive('user')
             ->twice()
-            ->andReturn($relation = m::mock('Illuminate\Database\Eloquent\Relations\BelongsTo'));
+            ->andReturn($relation = m::mock('Illuminate\Database\Eloquent\Relations\BelongsTo'))
+        ;
 
         $relation->shouldReceive('associate')
             ->with($user)
-            ->once();
+            ->once()
+        ;
 
         $relation->shouldReceive('getResults')
             ->once()
-            ->andReturn($user);
+            ->andReturn($user)
+        ;
 
         $link->setUser($user);
 
@@ -109,12 +117,13 @@ class LinkTest extends PHPUnit_Framework_TestCase
         $tokenCredentials->setSecret('bar');
 
         $link->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
         $link->storeToken($tokenCredentials);
 
-        $this->assertEquals('foo', $link->oauth1_token_identifier);
-        $this->assertEquals('bar', $link->oauth1_token_secret);
+        $this->assertSame('foo', $link->oauth1_token_identifier);
+        $this->assertSame('bar', $link->oauth1_token_secret);
     }
 
     /** @test */
@@ -127,7 +136,8 @@ class LinkTest extends PHPUnit_Framework_TestCase
         $link->getConnection()
             ->getQueryGrammar()
             ->shouldReceive('getDateFormat')
-            ->andReturn('Y-m-d H:i:s');
+            ->andReturn('Y-m-d H:i:s')
+        ;
 
         $accessToken = new OAuth2AccessToken([
             'access_token'  => 'foo',
@@ -136,14 +146,15 @@ class LinkTest extends PHPUnit_Framework_TestCase
         ]);
 
         $link->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
         $link->storeToken($accessToken);
 
-        $this->assertEquals('foo', $link->oauth2_access_token);
-        $this->assertEquals('bar', $link->oauth2_refresh_token);
+        $this->assertSame('foo', $link->oauth2_access_token);
+        $this->assertSame('bar', $link->oauth2_refresh_token);
         $this->assertInstanceOf('DateTime', $link->oauth2_expires);
-        $this->assertEquals(time() + 10, $link->oauth2_expires->getTimestamp());
+        $this->assertSame(time() + 10, $link->oauth2_expires->getTimestamp());
     }
 
     /** @test */
@@ -151,7 +162,7 @@ class LinkTest extends PHPUnit_Framework_TestCase
     {
         Link::setUsersModel('foo');
 
-        $this->assertEquals('foo', Link::getUsersModel());
+        $this->assertSame('foo', Link::getUsersModel());
     }
 
     /** @test */
@@ -166,7 +177,8 @@ class LinkTest extends PHPUnit_Framework_TestCase
         $link->getConnection()
             ->getQueryGrammar()
             ->shouldReceive('getDateFormat')
-            ->andReturn('Y-m-d H:i:s');
+            ->andReturn('Y-m-d H:i:s')
+        ;
 
         $accessToken = new OAuth2AccessToken([
             'access_token'  => 'foo',
@@ -175,20 +187,22 @@ class LinkTest extends PHPUnit_Framework_TestCase
         ]);
 
         $link->shouldReceive('save')
-            ->once();
+            ->once()
+        ;
 
         $link->storeToken($accessToken);
 
-        $this->assertEquals('foo', $link->oauth2_access_token);
-        $this->assertEquals('bar', $link->oauth2_refresh_token);
+        $this->assertSame('foo', $link->oauth2_access_token);
+        $this->assertSame('bar', $link->oauth2_refresh_token);
         $this->assertInstanceOf('DateTime', $link->oauth2_expires);
-        $this->assertEquals(time() + 10, $link->oauth2_expires->getTimestamp());
+        $this->assertSame(time() + 10, $link->oauth2_expires->getTimestamp());
     }
 
     /**
      * Adds a mock connection to the object.
      *
-     * @param  mixed  $model
+     * @param mixed $model
+     *
      * @return void
      */
     protected function addMockConnection($model)
@@ -196,14 +210,24 @@ class LinkTest extends PHPUnit_Framework_TestCase
         $model->setConnectionResolver($resolver = m::mock('Illuminate\Database\ConnectionResolverInterface'));
 
         $resolver->shouldReceive('connection')
-            ->andReturn(m::mock('Illuminate\Database\Connection'));
+            ->andReturn(m::mock('Illuminate\Database\Connection'))
+        ;
 
         $model->getConnection()
             ->shouldReceive('getQueryGrammar')
-            ->andReturn(m::mock('Illuminate\Database\Query\Grammars\Grammar'));
+            ->andReturn(m::mock('Illuminate\Database\Query\Grammars\Grammar'))
+        ;
 
         $model->getConnection()
             ->shouldReceive('getPostProcessor')
-            ->andReturn(m::mock('Illuminate\Database\Query\Processors\Processor'));
+            ->andReturn(m::mock('Illuminate\Database\Query\Processors\Processor'))
+        ;
+
+        $model->getConnection()
+            ->shouldReceive('query')
+            ->andReturn($query = m::mock('Illuminate\Database\Query\Builder'));
+        ;
+
+        $query->shouldIgnoreMissing();
     }
 }

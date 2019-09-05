@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,24 +11,24 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 use Mockery as m;
 use Cartalyst\Sentinel\Addons\Social\RequestProviders\NativeRequestProvider as Provider;
 
-class NativeRequestProviderTest extends PHPUnit_Framework_TestCase
+class NativeRequestProviderTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Close mockery.
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
@@ -40,7 +40,7 @@ class NativeRequestProviderTest extends PHPUnit_Framework_TestCase
 
         $_GET['oauth_token'] = 'oauth_token_value';
 
-        $this->assertEquals('oauth_token_value', $provider->getOAuth1TemporaryCredentialsIdentifier());
+        $this->assertSame('oauth_token_value', $provider->getOAuth1TemporaryCredentialsIdentifier());
     }
 
     /** @test */
@@ -50,7 +50,7 @@ class NativeRequestProviderTest extends PHPUnit_Framework_TestCase
 
         $_GET['oauth_verifier'] = 'verifier_value';
 
-        $this->assertEquals('verifier_value', $provider->getOAuth1Verifier());
+        $this->assertSame('verifier_value', $provider->getOAuth1Verifier());
     }
 
     /** @test */
@@ -60,6 +60,6 @@ class NativeRequestProviderTest extends PHPUnit_Framework_TestCase
 
         $_GET['code'] = 'code_value';
 
-        $this->assertEquals('code_value', $provider->getOAuth2Code());
+        $this->assertSame('code_value', $provider->getOAuth2Code());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,11 +11,11 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Sentinel\Addons\Social\Models;
@@ -35,7 +35,7 @@ class Link extends Model implements LinkInterface
     protected $table = 'social';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $fillable = [
         'provider',
@@ -75,7 +75,7 @@ class Link extends Model implements LinkInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function storeToken($token)
     {
@@ -94,7 +94,7 @@ class Link extends Model implements LinkInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUser()
     {
@@ -102,7 +102,7 @@ class Link extends Model implements LinkInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setUser(UserInterface $user)
     {
@@ -124,7 +124,8 @@ class Link extends Model implements LinkInterface
     /**
      * Set the users model.
      *
-     * @param  string  $usersModel
+     * @param string $usersModel
+     *
      * @return void
      */
     public static function setUsersModel($usersModel)

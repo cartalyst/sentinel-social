@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,24 +11,24 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 use Mockery as m;
 use Cartalyst\Sentinel\Addons\Social\RequestProviders\IlluminateRequestProvider;
 
-class IlluminateRequestProviderTest extends PHPUnit_Framework_TestCase
+class IlluminateRequestProviderTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Close mockery.
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
@@ -37,20 +37,20 @@ class IlluminateRequestProviderTest extends PHPUnit_Framework_TestCase
     {
         $provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
         $request->shouldReceive('input')->with('oauth_token')->once()->andReturn('oauth_token_value');
-        $this->assertEquals('oauth_token_value', $provider->getOAuth1TemporaryCredentialsIdentifier());
+        $this->assertSame('oauth_token_value', $provider->getOAuth1TemporaryCredentialsIdentifier());
     }
 
     public function testOAuth1Verifier()
     {
         $provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
         $request->shouldReceive('input')->with('oauth_verifier')->once()->andReturn('verifier_value');
-        $this->assertEquals('verifier_value', $provider->getOAuth1Verifier());
+        $this->assertSame('verifier_value', $provider->getOAuth1Verifier());
     }
 
     public function testOAuth2Code()
     {
         $provider = new IlluminateRequestProvider($request = m::mock('Illuminate\Http\Request'));
         $request->shouldReceive('input')->with('code')->once()->andReturn('code_value');
-        $this->assertEquals('code_value', $provider->getOAuth2Code());
+        $this->assertSame('code_value', $provider->getOAuth2Code());
     }
 }

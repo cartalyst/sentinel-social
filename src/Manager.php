@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,11 +11,11 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 namespace Cartalyst\Sentinel\Addons\Social;
@@ -82,11 +82,12 @@ class Manager
     /**
      * Create a new Sentinel Social Manager instance.
      *
-     * @param  \Cartalyst\Sentinel\Sentinel  $sentinel
-     * @param  \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface  $links
-     * @param  \Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface  $request
-     * @param  \Cartalyst\Sentinel\Sessions\SessionInterface  $session
-     * @param  \Illuminate\Events\Dispatcher  $dispatcher
+     * @param \Cartalyst\Sentinel\Sentinel                                                $sentinel
+     * @param \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface      $links
+     * @param \Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface $request
+     * @param \Cartalyst\Sentinel\Sessions\SessionInterface                               $session
+     * @param \Illuminate\Events\Dispatcher                                               $dispatcher
+     *
      * @return void
      */
     public function __construct(Sentinel $sentinel, LinkRepositoryInterface $links = null, RequestProviderInterface $request = null, SessionInterface $session = null, Dispatcher $dispatcher = null)
@@ -114,8 +115,9 @@ class Manager
      * Create a provider with the given connection slug and with the
      * optional callback URI. Instances of providers are cached.
      *
-     * @param  string  $slug
-     * @param  string  $callbackUri
+     * @param string $slug
+     * @param string $callbackUri
+     *
      * @return mixed
      */
     public function make($slug, $callbackUri)
@@ -132,8 +134,9 @@ class Manager
      * slug. Abstracts away the differences between OAuth1 and
      * OAuth2 for a uniform API.
      *
-     * @param  string  $slug
-     * @param  string  $callbackUri
+     * @param string $slug
+     * @param string $callbackUri
+     *
      * @return string
      */
     public function getAuthorizationUrl($slug, $callbackUri)
@@ -161,10 +164,11 @@ class Manager
      * for a callback upon authentication as a shortcut for subscribing
      * to an event.
      *
-     * @param  string  $slug
-     * @param  string  $callbackUri
-     * @param  Closure  $callback
-     * @param  bool  $remember
+     * @param string  $slug
+     * @param string  $callbackUri
+     * @param Closure $callback
+     * @param bool    $remember
+     *
      * @return \Cartalyst\Sentinel\Users\UserInterface
      */
     public function authenticate($slug, $callbackUri, Closure $callback = null, $remember = false)
@@ -197,7 +201,8 @@ class Manager
      * Register a callback for when a new user is registering
      * through an OAuth provider.
      *
-     * @param  \Closure  $callback
+     * @param \Closure $callback
+     *
      * @return void
      */
     public function registering(Closure $callback)
@@ -209,7 +214,8 @@ class Manager
      * Register a callback for when a new user is registered
      * through an OAuth provider.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
+     *
      * @return void
      */
     public function registered(Closure $callback)
@@ -221,7 +227,8 @@ class Manager
      * Register a callback for when an existing user is
      * linked with an OAuth provider.
      *
-     * @param  \Closure  $callback
+     * @param \Closure $callback
+     *
      * @return void
      */
     public function existing(Closure $callback)
@@ -233,7 +240,8 @@ class Manager
      * Register a callback for when a user of any type is
      * linked with an OAuth provider.
      *
-     * @param  \Closure  $callback
+     * @param \Closure $callback
+     *
      * @return void
      */
     public function linking(Closure $callback)
@@ -245,9 +253,10 @@ class Manager
      * Retrieves a link for the given slug, unique ID
      * and token.
      *
-     * @param  string  $slug
-     * @param  string  $uid
-     * @param  mixed  $token
+     * @param string $slug
+     * @param string $uid
+     * @param mixed  $token
+     *
      * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
      */
     protected function retrieveLink($slug, $uid, $token)
@@ -262,17 +271,18 @@ class Manager
      * Retrieves a link and associates a user (will lazily
      * create one) for the given slug, provider and token.
      *
-     * @param  string  $slug
-     * @param  mixed  $provider
-     * @param  mixed  $token
+     * @param string $slug
+     * @param mixed  $provider
+     * @param mixed  $token
+     *
      * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
      */
     protected function linkLoggedIn($slug, $provider, $token, UserInterface $user)
     {
         if (method_exists($provider, 'getUserUid')) {
-            $uid  = $provider->getUserUid($token);
+            $uid = $provider->getUserUid($token);
         } else {
-            $uid  = $provider->getResourceOwner($token)->getId();
+            $uid = $provider->getResourceOwner($token)->getId();
         }
 
         $link = $this->retrieveLink($slug, $uid, $token);
@@ -289,17 +299,18 @@ class Manager
      * Retrieves a link and associates a user (will lazily
      * create one) for the given slug, provider and token.
      *
-     * @param  string  $slug
-     * @param  mixed  $provider
-     * @param  mixed  $token
+     * @param string $slug
+     * @param mixed  $provider
+     * @param mixed  $token
+     *
      * @return \Cartalyst\Sentinel\Addons\Social\Models\LinkInterface
      */
     protected function linkLoggedOut($slug, $provider, $token)
     {
         if (method_exists($provider, 'getUserUid')) {
-            $uid  = $provider->getUserUid($token);
+            $uid = $provider->getUserUid($token);
         } else {
-            $uid  = $provider->getResourceOwner($token)->getId();
+            $uid = $provider->getResourceOwner($token)->getId();
         }
 
         $link = $this->retrieveLink($slug, $uid, $token);
@@ -311,8 +322,8 @@ class Manager
                 $login = $provider->getResourceOwner($token)->getEmail() ?: $uid.'@'.$slug;
             } else {
                 $resourceOwner = $provider->getResourceOwner($token)->toArray();
-                $email = isset($resourceOwner['email']) ? $resourceOwner['email'] : null;
-                $login = $email ?: $uid.'@'.$slug;
+                $email         = $resourceOwner['email'] ?? null;
+                $login         = $email ?: $uid.'@'.$slug;
             }
 
             $user = $this->sentinel->findByCredentials(compact('login'));
@@ -325,7 +336,8 @@ class Manager
                 $user = $this
                     ->sentinel
                     ->getUserRepository()
-                    ->createModel();
+                    ->createModel()
+                ;
 
                 // Create a dummy password for the user
                 $password = [$slug, $login, time(), mt_rand()];
@@ -344,7 +356,7 @@ class Manager
                     $name = $provider->getUserScreenName($token);
                 } else {
                     $resourceOwner = $provider->getResourceOwner($token)->toArray();
-                    $name = isset($resourceOwner) ? $resourceOwner['name'] : null;
+                    $name          = isset($resourceOwner) ? $resourceOwner['name'] : null;
                 }
 
                 if (is_array($name)) {
@@ -378,8 +390,9 @@ class Manager
     /**
      * Logs the given user into Sentinel.
      *
-     * @param  \Cartalyst\Sentinel\Users\UserInterface  $user
-     * @param  bool  $remember
+     * @param \Cartalyst\Sentinel\Users\UserInterface $user
+     * @param bool                                    $remember
+     *
      * @return void
      */
     protected function login(UserInterface $user, $remember = false)
@@ -392,9 +405,11 @@ class Manager
      * token) for the given provider, abstracting away the
      * differences from the user.
      *
-     * @param  mixed  $provider
-     * @return mixed
+     * @param mixed $provider
+     *
      * @throws \Cartalyst\Sentinel\Addons\Social\AccessMissingException
+     *
+     * @return mixed
      */
     protected function retrieveToken($provider)
     {
@@ -413,9 +428,7 @@ class Manager
 
             $temporaryCredentials = $this->session->get();
 
-            $tokenCredentials = $provider->getTokenCredentials($temporaryCredentials, $temporaryIdentifier, $verifier);
-
-            return $tokenCredentials;
+            return $provider->getTokenCredentials($temporaryCredentials, $temporaryIdentifier, $verifier);
         }
 
         $code = $this->request->getOAuth2Code();
@@ -424,16 +437,15 @@ class Manager
             throw new AccessMissingException('Missing [code] parameter.');
         }
 
-        $accessToken = $provider->getAccessToken('authorization_code', compact('code'));
-
-        return $accessToken;
+        return $provider->getAccessToken('authorization_code', compact('code'));
     }
 
     /**
      * Add a connection to the manager.
      *
-     * @param  string  $slug
-     * @param  array   $connection
+     * @param string $slug
+     * @param array  $connection
+     *
      * @return void
      */
     public function addConnection($slug, array $connection)
@@ -444,7 +456,8 @@ class Manager
     /**
      * Add multple connections to the manager.
      *
-     * @param  array  $connections
+     * @param array $connections
+     *
      * @return void
      */
     public function addConnections(array $connections)
@@ -457,14 +470,16 @@ class Manager
     /**
      * Retrieve a connection with the given slug.
      *
-     * @param  string  $slug
-     * @return array
+     * @param string $slug
+     *
      * @throws \RuntimeException
+     *
+     * @return array
      */
     public function getConnection($slug)
     {
         if (! isset($this->connections[$slug])) {
-            throw new \RuntimeException("Cannot retrieve connection [$slug] as it has not been added.");
+            throw new \RuntimeException("Cannot retrieve connection [${slug}] as it has not been added.");
         }
 
         return $this->connections[$slug];
@@ -497,7 +512,8 @@ class Manager
     /**
      * Set the links repository.
      *
-     * @param  \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface  $links
+     * @param \Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface $links
+     *
      * @return void
      */
     public function setLinksRepository(LinkRepositoryInterface $links)
@@ -522,8 +538,9 @@ class Manager
     /**
      * Creates a provider from a connection with the given slug.
      *
-     * @param  string  $slug
-     * @param  string  $callbackUri
+     * @param string $slug
+     * @param string $callbackUri
+     *
      * @return mixed
      */
     protected function createProvider($slug, $callbackUri)
@@ -544,28 +561,32 @@ class Manager
     /**
      * Validates the given connection is satisfactory to initiate a driver.
      *
-     * @param  string  $slug
-     * @param  array   $connection
-     * @return void
+     * @param string $slug
+     * @param array  $connection
+     *
      * @throws \InvalidArgumentException
+     *
+     * @return void
      */
     protected function validateConnection($slug, array $connection)
     {
         if (! isset($connection['driver'])) {
-            throw new \InvalidArgumentException("Class matching driver is required for [$slug] connection.");
+            throw new \InvalidArgumentException("Class matching driver is required for [${slug}] connection.");
         }
 
         if (! isset($connection['identifier']) or ! isset($connection['secret'])) {
-            throw new \InvalidArgumentException("App identifier and secret are required for [$slug] connection.");
+            throw new \InvalidArgumentException("App identifier and secret are required for [${slug}] connection.");
         }
     }
 
     /**
      * Determines the OAuth version of the given provider.
      *
-     * @param  mixed  $provider
-     * @return int
+     * @param mixed $provider
+     *
      * @throws \RuntimeException
+     *
+     * @return int
      */
     protected function oauthVersion($provider)
     {
@@ -584,9 +605,11 @@ class Manager
      * returned, where the first value is the version and the second
      * is the class name to instantiate.
      *
-     * @param  mixed  $driver
-     * @return array
+     * @param mixed $driver
+     *
      * @throws \RuntimeException
+     *
+     * @return array
      */
     protected function determineOAuth($driver)
     {
@@ -602,7 +625,7 @@ class Manager
 
         // If the driver is a custom class which doesn't exist
         if (! class_exists($driver)) {
-            throw new \RuntimeException("Failed to determine OAuth type as [$driver] does not exist.");
+            throw new \RuntimeException("Failed to determine OAuth type as [${driver}] does not exist.");
         }
 
         $parent = $this->getHighestParent($driver);
@@ -615,13 +638,14 @@ class Manager
             return [2, $driver];
         }
 
-        throw new \RuntimeException("[$driver] does not inherit from a compatible OAuth provider class.");
+        throw new \RuntimeException("[${driver}] does not inherit from a compatible OAuth provider class.");
     }
 
     /**
      * Retrieves the highest parent class name for the given child class name.
      *
-     * @param  string  $childName
+     * @param string $childName
+     *
      * @return string  $parentName
      */
     protected function getHighestParent($childName)
@@ -646,9 +670,10 @@ class Manager
      * Creates an OAuth1 provider from a connection with an optional
      * callback URI.
      *
-     * @param  string $driver
-     * @param  array  $connection
-     * @param  string $callbackUri
+     * @param string $driver
+     * @param array  $connection
+     * @param string $callbackUri
+     *
      * @return \League\OAuth1\Client\Server\Server
      */
     protected function createOAuth1Provider($driver, $connection, $callbackUri)
@@ -672,9 +697,10 @@ class Manager
      * Creates an OAuth2 provider from a connection with an optional
      * callback URI.
      *
-     * @param  string $driver
-     * @param  array  $connection
-     * @param  string $callbackUri
+     * @param string $driver
+     * @param array  $connection
+     * @param string $callbackUri
+     *
      * @return \League\OAuth2\Client\Provider\AbstractProvider
      */
     protected function createOAuth2Provider($driver, $connection, $callbackUri)
@@ -683,7 +709,7 @@ class Manager
             'clientId'     => $connection['identifier'],
             'clientSecret' => $connection['secret'],
             'redirectUri'  => $callbackUri,
-            'scopes'       => isset($connection['scopes']) ? $connection['scopes'] : [],
+            'scopes'       => $connection['scopes'] ?? [],
         ];
 
         if (isset($connection['additional_options'])) {
@@ -698,10 +724,12 @@ class Manager
     /**
      * Register an event with Sentinel Social.
      *
-     * @param  string   $name
-     * @param  \Closure  $callback
-     * @return void
+     * @param string   $name
+     * @param \Closure $callback
+     *
      * @throws \RuntimeException
+     *
+     * @return void
      */
     protected function registerEvent($name, Closure $callback)
     {

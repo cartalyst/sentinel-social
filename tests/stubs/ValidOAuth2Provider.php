@@ -1,6 +1,5 @@
 <?php
 
-
 class ValidOAuth2Provider extends League\OAuth2\Client\Provider\AbstractProvider
 {
     public function urlAuthorize()
@@ -11,11 +10,11 @@ class ValidOAuth2Provider extends League\OAuth2\Client\Provider\AbstractProvider
     {
     }
 
-    public function urlUserDetails(\League\OAuth2\Client\Token\AccessToken $token)
+    public function urlUserDetails(League\OAuth2\Client\Token\AccessToken $token)
     {
     }
 
-    public function userDetails($response, \League\OAuth2\Client\Token\AccessToken $token)
+    public function userDetails($response, League\OAuth2\Client\Token\AccessToken $token)
     {
     }
 
@@ -36,6 +35,7 @@ class ValidOAuth2Provider extends League\OAuth2\Client\Provider\AbstractProvider
      * Eg. https://oauth.service.com/token
      *
      * @param array $params
+     *
      * @return string
      */
     public function getBaseAccessTokenUrl(array $params)
@@ -46,9 +46,10 @@ class ValidOAuth2Provider extends League\OAuth2\Client\Provider\AbstractProvider
      * Returns the URL for requesting the resource owner's details.
      *
      * @param \League\OAuth2\Client\Token\AccessToken $token
+     *
      * @return string
      */
-    public function getResourceOwnerDetailsUrl(\League\OAuth2\Client\Token\AccessToken $token)
+    public function getResourceOwnerDetailsUrl(League\OAuth2\Client\Token\AccessToken $token)
     {
     }
 
@@ -67,12 +68,14 @@ class ValidOAuth2Provider extends League\OAuth2\Client\Provider\AbstractProvider
     /**
      * Checks a provider response for errors.
      *
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @param array|string                        $data     Parsed response data
+     *
      * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
-     * @param  \Psr\Http\Message\ResponseInterface $response
-     * @param  array|string $data Parsed response data
+     *
      * @return void
      */
-    protected function checkResponse(\Psr\Http\Message\ResponseInterface $response, $data)
+    protected function checkResponse(Psr\Http\Message\ResponseInterface $response, $data)
     {
     }
 
@@ -80,11 +83,12 @@ class ValidOAuth2Provider extends League\OAuth2\Client\Provider\AbstractProvider
      * Generates a resource owner object from a successful resource owner
      * details request.
      *
-     * @param  array $response
-     * @param  \League\OAuth2\Client\Token\AccessToken $token
+     * @param array                                   $response
+     * @param \League\OAuth2\Client\Token\AccessToken $token
+     *
      * @return \League\OAuth2\Client\Provider\ResourceOwnerInterface
      */
-    protected function createResourceOwner(array $response, \League\OAuth2\Client\Token\AccessToken $token)
+    protected function createResourceOwner(array $response, League\OAuth2\Client\Token\AccessToken $token)
     {
     }
 }

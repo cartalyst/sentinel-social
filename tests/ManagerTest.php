@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * Part of the Sentinel Social package.
  *
  * NOTICE OF LICENSE
@@ -11,18 +11,18 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel Social
- * @version    3.0.4
+ * @version    4.0.0
  * @author     Cartalyst LLC
  * @license    Cartalyst PSL
- * @copyright  (c) 2011-2017, Cartalyst LLC
- * @link       http://cartalyst.com
+ * @copyright  (c) 2011-2019, Cartalyst LLC
+ * @link       https://cartalyst.com
  */
 
 use Mockery as m;
 use Illuminate\Events\Dispatcher;
 use Cartalyst\Sentinel\Addons\Social\Manager;
 
-class ManagerTest extends PHPUnit_Framework_TestCase
+class ManagerTest extends PHPUnit\Framework\TestCase
 {
     /**
      * Sentinel social manager instance.
@@ -71,10 +71,12 @@ class ManagerTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         require_once __DIR__.'/stubs/InvalidProvider.php';
+
         require_once __DIR__.'/stubs/ValidOAuth1Provider.php';
+
         require_once __DIR__.'/stubs/ValidOAuth2Provider.php';
     }
 
@@ -83,14 +85,14 @@ class ManagerTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->manager = new Manager(
-            $this->sentinel        = m::mock('Cartalyst\Sentinel\Sentinel'),
-            $this->linkRepository  = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface'),
+            $this->sentinel = m::mock('Cartalyst\Sentinel\Sentinel'),
+            $this->linkRepository = m::mock('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface'),
             $this->requestProvider = m::mock('Cartalyst\Sentinel\Addons\Social\RequestProviders\RequestProviderInterface'),
-            $this->session         = m::mock('Cartalyst\Sentinel\Sessions\SessionInterface'),
-            $this->dispatcher      = new Dispatcher()
+            $this->session = m::mock('Cartalyst\Sentinel\Sessions\SessionInterface'),
+            $this->dispatcher = new Dispatcher()
         );
     }
 
@@ -99,7 +101,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         m::close();
     }
@@ -115,34 +117,37 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $this->manager->addConnections($connections);
 
         $this->assertCount(2, $this->manager->getConnections());
-        $this->assertEquals(['bar' => 'baz'], $this->manager->getConnection('foo'));
+        $this->assertSame(['bar' => 'baz'], $this->manager->getConnection('foo'));
     }
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_throws_an_exception_when_retrieving_non_existent_connections()
     {
+        $this->expectException('RuntimeException');
+
         $this->manager->getConnection('foo');
     }
 
     /**
      * @test
-     * @expectedException RuntimeException
      */
     public function it_throws_an_exception_when_making_non_existent_connections()
     {
+        $this->expectException('RuntimeException');
+
         $this->manager->make('foo', 'http://example.com/callback');
     }
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Class matching driver is required
      */
     public function it_throws_an_exception_if_driver_is_missing()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('matching driver is required');
+
         $this->manager->addConnection('foo', []);
 
         $this->manager->make('foo', 'http://example.com/callback');
@@ -150,11 +155,12 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Failed to determine OAuth type as [Foo] does not exist.
      */
     public function it_throws_an_exception_if_driver_does_not_exist()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Failed to determine OAuth type as [Foo] does not exist.');
+
         $this->manager->addConnection('foo', [
             'driver'     => 'Foo',
             'identifier' => 'appid',
@@ -166,11 +172,12 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage App identifier and secret are required
      */
     public function it_throws_an_exception_if_identifier_is_missing()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('App identifier and secret are required');
+
         $this->manager->addConnection('foo', [
             'driver' => 'Foo',
         ]);
@@ -180,11 +187,12 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage App identifier and secret are required
      */
     public function it_throws_an_exception_if_secret_is_missing()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('App identifier and secret are required');
+
         $this->manager->addConnection('foo', [
             'driver'     => 'Foo',
             'identifier' => 'bar',
@@ -205,8 +213,8 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $provider = $this->manager->make('twitter', 'http://example.com/callback');
 
         $this->assertInstanceOf('League\OAuth1\Client\Server\Twitter', $provider);
-        $this->assertEquals('appid', $provider->getClientCredentials()->getIdentifier());
-        $this->assertEquals('appsecret', $provider->getClientCredentials()->getSecret());
+        $this->assertSame('appid', $provider->getClientCredentials()->getIdentifier());
+        $this->assertSame('appsecret', $provider->getClientCredentials()->getSecret());
     }
 
     /** @test */
@@ -224,16 +232,17 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $provider = $this->manager->make('facebook', 'http://example.com/callback');
 
         $this->assertInstanceOf('League\OAuth2\Client\Provider\Facebook', $provider);
-        $this->assertContains('appid', $provider->getAuthorizationUrl());
+        $this->assertStringContainsString('appid', $provider->getAuthorizationUrl());
     }
 
     /**
      * @test
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage does not inherit from a compatible OAuth provider class
      */
     public function it_throws_an_exception_when_making_custom_invalid_connection()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('does not inherit from a compatible OAuth provider clas');
+
         $this->manager->addConnection('foo', [
             'driver'     => 'InvalidProvider',
             'identifier' => 'appid',
@@ -255,8 +264,8 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $provider = $this->manager->make('foo', 'http://example.com/callback');
 
         $this->assertInstanceOf('ValidOAuth1Provider', $provider);
-        $this->assertEquals('appid', $provider->getClientCredentials()->getIdentifier());
-        $this->assertEquals('appsecret', $provider->getClientCredentials()->getSecret());
+        $this->assertSame('appid', $provider->getClientCredentials()->getIdentifier());
+        $this->assertSame('appsecret', $provider->getClientCredentials()->getSecret());
     }
 
     /** @test */
@@ -271,7 +280,7 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $provider = $this->manager->make('foo', 'http://example.com/callback');
 
         $this->assertInstanceOf('ValidOAuth2Provider', $provider);
-        $this->assertContains('appid', $provider->getAuthorizationUrl());
+        $this->assertStringContainsString('appid', $provider->getAuthorizationUrl());
     }
 
     /** @test */
@@ -282,21 +291,25 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'));
+            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'))
+        ;
 
         $provider->shouldReceive('getTemporaryCredentials')
             ->once()
-            ->andReturn('credentials');
+            ->andReturn('credentials')
+        ;
 
         $this->session->shouldReceive('put')
             ->with('credentials')
-            ->once();
+            ->once()
+        ;
 
         $provider->shouldReceive('getAuthorizationUrl')
             ->once()
-            ->andReturn('uri');
+            ->andReturn('uri')
+        ;
 
-        $this->assertEquals('uri', $manager->getAuthorizationUrl('foo', 'http://example.com/callback'));
+        $this->assertSame('uri', $manager->getAuthorizationUrl('foo', 'http://example.com/callback'));
     }
 
     /** @test */
@@ -311,75 +324,87 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'));
+            ->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'))
+        ;
 
         $provider->shouldReceive('getAuthorizationUrl')
             ->once()
-            ->andReturn('uri');
+            ->andReturn('uri')
+        ;
 
-        $this->assertEquals('uri', $manager->getAuthorizationUrl('foo', 'http://example.com/callback'));
+        $this->assertSame('uri', $manager->getAuthorizationUrl('foo', 'http://example.com/callback'));
     }
 
     /**
      * @test
-     * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
-     * @expectedExceptionMessage Missing [oauth_token] parameter
      */
     public function it_throws_an_exception_on_authentication_if_temporary_identitifer_is_missing()
     {
+        $this->expectException('Cartalyst\Sentinel\Addons\Social\AccessMissingException');
+        $this->expectExceptionMessage('Missing [oauth_token] parameter');
+
         $manager = $this->mockManager('make');
 
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'));
+            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'))
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth1TemporaryCredentialsIdentifier')
-            ->once();
+            ->once()
+        ;
 
         $user = $manager->authenticate('foo', 'http://example.com/callback');
     }
 
     /**
      * @test
-     * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
-     * @expectedExceptionMessage Missing [verifier] parameter
      */
     public function it_throws_an_exception_on_authentication_if_verifier_is_missing()
     {
+        $this->expectException('Cartalyst\Sentinel\Addons\Social\AccessMissingException');
+        $this->expectExceptionMessage('Missing [verifier] parameter');
+
         $manager = $this->mockManager('make');
 
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'));
+            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'))
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth1TemporaryCredentialsIdentifier')
             ->once()
-            ->andReturn('1az');
+            ->andReturn('1az')
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth1Verifier')
-            ->once();
+            ->once()
+        ;
 
         $manager->authenticate('foo', 'http://example.com/callback');
     }
 
     /**
      * @test
-     * @expectedException Cartalyst\Sentinel\Addons\Social\AccessMissingException
-     * @expectedExceptionMessage Missing [code] parameter
      */
     public function it_throws_an_exception_on_oauth2_authentication_when_code_is_missing()
     {
+        $this->expectException('Cartalyst\Sentinel\Addons\Social\AccessMissingException');
+        $this->expectExceptionMessage('Missing [code] parameter');
+
         $manager = $this->mockManager('make');
 
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'));
+            ->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'))
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth2Code')
-            ->once();
+            ->once()
+        ;
 
         $user = $manager->authenticate('foo', 'http://example.com/callback');
     }
@@ -390,7 +415,8 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager = new Manager($this->sentinel);
 
         $this->sentinel->shouldReceive('getUserRepository')
-            ->once();
+            ->once()
+        ;
 
         $this->assertInstanceOf('Cartalyst\Sentinel\Addons\Social\Repositories\LinkRepositoryInterface', $manager->getLinksRepository());
     }
@@ -413,50 +439,61 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'));
+            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'))
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth1TemporaryCredentialsIdentifier')
             ->once()
-            ->andReturn('identifier');
+            ->andReturn('identifier')
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth1Verifier')
             ->once()
-            ->andReturn('verifier');
+            ->andReturn('verifier')
+        ;
 
         // Mock retrieving credentials from the underlying package
         $this->session->shouldReceive('get')
-            ->andReturn($temporaryCredentials = m::mock('League\OAuth1\Client\Credentials\TemporaryCredentials'));
+            ->andReturn($temporaryCredentials = m::mock('League\OAuth1\Client\Credentials\TemporaryCredentials'))
+        ;
 
         $provider->shouldReceive('getTokenCredentials')
             ->with($temporaryCredentials, 'identifier', 'verifier')
             ->once()
-            ->andReturn($tokenCredentials = m::mock('League\OAuth1\Client\Credentials\TokenCredentials'));
+            ->andReturn($tokenCredentials = m::mock('League\OAuth1\Client\Credentials\TokenCredentials'))
+        ;
 
         $provider->shouldReceive('getUserUid')
             ->once()
-            ->andReturn(789);
+            ->andReturn(789)
+        ;
 
         // Finding an appropriate link
         $this->linkRepository->shouldReceive('findLink')
             ->with('foo', 789)
             ->once()
-            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
+            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'))
+        ;
 
         $link->shouldReceive('storeToken')
             ->with($tokenCredentials)
-            ->once();
+            ->once()
+        ;
 
         // Logged in user
         $this->sentinel->shouldReceive('getUser')
-            ->once();
+            ->once()
+        ;
 
         // Retrieving a user from the link
         $link->shouldReceive('getUser')
-            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
+            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'))
+        ;
 
         $this->sentinel->shouldReceive('authenticate')
             ->with($user, true)
-            ->once();
+            ->once()
+        ;
 
         $manager->existing(function ($link, $provider, $token, $slug) {
             $_SERVER['__sentinel_social_existing'] = true;
@@ -471,17 +508,16 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
         $eventArgs = $_SERVER['__sentinel_social_linking'];
 
-        unset($_SERVER['__sentinel_social_existing']);
-        unset($_SERVER['__sentinel_social_linking']);
+        unset($_SERVER['__sentinel_social_existing'], $_SERVER['__sentinel_social_linking']);
 
         $this->assertCount(4, $eventArgs);
 
         list($_link, $_provider, $_tokenCredentials, $_slug) = $eventArgs;
 
-        $this->assertEquals($link, $_link);
-        $this->assertEquals($provider, $_provider);
-        $this->assertEquals($tokenCredentials, $_tokenCredentials);
-        $this->assertEquals('foo', $_slug);
+        $this->assertSame($link, $_link);
+        $this->assertSame($provider, $_provider);
+        $this->assertSame($tokenCredentials, $_tokenCredentials);
+        $this->assertSame('foo', $_slug);
     }
 
     /** @test */
@@ -492,71 +528,86 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'));
+            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'))
+        ;
 
         // Request proxy
         $this->requestProvider->shouldReceive('getOAuth1TemporaryCredentialsIdentifier')
             ->once()
-            ->andReturn('identifier');
+            ->andReturn('identifier')
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth1Verifier')
             ->once()
-            ->andReturn('verifier');
+            ->andReturn('verifier')
+        ;
 
         // Mock retrieving credentials from the underlying package
         $this->session->shouldReceive('get')
-            ->andReturn($temporaryCredentials = m::mock('League\OAuth1\Client\Credentials\TemporaryCredentials'));
+            ->andReturn($temporaryCredentials = m::mock('League\OAuth1\Client\Credentials\TemporaryCredentials'))
+        ;
 
         $provider->shouldReceive('getTokenCredentials')
             ->with($temporaryCredentials, 'identifier', 'verifier')
             ->once()
-            ->andReturn($tokenCredentials = m::mock('League\OAuth1\Client\Credentials\TokenCredentials'));
+            ->andReturn($tokenCredentials = m::mock('League\OAuth1\Client\Credentials\TokenCredentials'))
+        ;
 
         // Unique ID
         $provider->shouldReceive('getUserUid')
             ->once()
-            ->andReturn(789);
+            ->andReturn(789)
+        ;
 
         // Finding an appropriate link
         $this->linkRepository->shouldReceive('findLink')
             ->with('foo', 789)
             ->once()
-            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
+            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'))
+        ;
 
         $link->shouldReceive('storeToken')
             ->with($tokenCredentials)
-            ->once();
+            ->once()
+        ;
 
         // Logged in user
         $this->sentinel->shouldReceive('getUser')
-            ->once();
+            ->once()
+        ;
 
         // Retrieving a user from the link
         $link->shouldReceive('getUser')
-            ->once();
+            ->once()
+        ;
 
         // Retrieving an existing user
         $provider->shouldReceive('getUserEmail')
             ->once()
-            ->andReturn('foo@bar.com');
+            ->andReturn('foo@bar.com')
+        ;
 
         $this->sentinel->shouldReceive('findByCredentials')
             ->with(['login' => 'foo@bar.com'])
             ->once()
-            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
+            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'))
+        ;
 
         $link->shouldReceive('setUser')
             ->with($user)
-            ->once();
+            ->once()
+        ;
 
         $link->shouldReceive('getUser')
             ->once()
-            ->andReturn($user);
+            ->andReturn($user)
+        ;
 
         // And finally, logging a user in
         $this->sentinel->shouldReceive('authenticate')
             ->with($user, true)
-            ->once();
+            ->once()
+        ;
 
         $manager->existing(function ($link, $provider, $token, $slug) {
             $_SERVER['__sentinel_social_existing'] = true;
@@ -571,17 +622,16 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
         $eventArgs = $_SERVER['__sentinel_social_linking'];
 
-        unset($_SERVER['__sentinel_social_existing']);
-        unset($_SERVER['__sentinel_social_linking']);
+        unset($_SERVER['__sentinel_social_existing'], $_SERVER['__sentinel_social_linking']);
 
         $this->assertCount(4, $eventArgs);
 
         list($_link, $_provider, $_tokenCredentials, $_slug) = $eventArgs;
 
-        $this->assertEquals($link, $_link);
-        $this->assertEquals($provider, $_provider);
-        $this->assertEquals($tokenCredentials, $_tokenCredentials);
-        $this->assertEquals('foo', $_slug);
+        $this->assertSame($link, $_link);
+        $this->assertSame($provider, $_provider);
+        $this->assertSame($tokenCredentials, $_tokenCredentials);
+        $this->assertSame('foo', $_slug);
     }
 
     /** @test */
@@ -592,53 +642,64 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'));
+            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'))
+        ;
 
         // Request proxy
         $this->requestProvider->shouldReceive('getOAuth1TemporaryCredentialsIdentifier')
             ->once()
-            ->andReturn('identifier');
+            ->andReturn('identifier')
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth1Verifier')
             ->once()
-            ->andReturn('verifier');
+            ->andReturn('verifier')
+        ;
 
         // Mock retrieving credentials from the underlying package
         $this->session->shouldReceive('get')
-            ->andReturn($temporaryCredentials = m::mock('League\OAuth1\Client\Credentials\TemporaryCredentials'));
+            ->andReturn($temporaryCredentials = m::mock('League\OAuth1\Client\Credentials\TemporaryCredentials'))
+        ;
 
         $provider->shouldReceive('getTokenCredentials')
             ->with($temporaryCredentials, 'identifier', 'verifier')
             ->once()
-            ->andReturn($tokenCredentials = m::mock('League\OAuth1\Client\Credentials\TokenCredentials'));
+            ->andReturn($tokenCredentials = m::mock('League\OAuth1\Client\Credentials\TokenCredentials'))
+        ;
 
         // Unique ID
         $provider->shouldReceive('getUserUid')
             ->once()
-            ->andReturn(789);
+            ->andReturn(789)
+        ;
 
         // Finding an appropriate link
         $this->linkRepository->shouldReceive('findLink')
             ->with('foo', 789)
             ->once()
-            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
+            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'))
+        ;
 
         $link->shouldReceive('storeToken')
             ->with($tokenCredentials)
-            ->once();
+            ->once()
+        ;
 
         // Logged in user
         $this->sentinel->shouldReceive('getUser')
             ->once()
-            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
+            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'))
+        ;
 
         $link->shouldReceive('setUser')
             ->with($user)
-            ->once();
+            ->once()
+        ;
 
         // Retrieving a user from the link
         $link->shouldReceive('getUser')
-            ->andReturn($user);
+            ->andReturn($user)
+        ;
 
         $manager->existing(function ($link, $provider, $token, $slug) {
             $_SERVER['__sentinel_social_existing'] = true;
@@ -653,17 +714,16 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
         $eventArgs = $_SERVER['__sentinel_social_linking'];
 
-        unset($_SERVER['__sentinel_social_existing']);
-        unset($_SERVER['__sentinel_social_linking']);
+        unset($_SERVER['__sentinel_social_existing'], $_SERVER['__sentinel_social_linking']);
 
         $this->assertCount(4, $eventArgs);
 
         list($_link, $_provider, $_tokenCredentials, $_slug) = $eventArgs;
 
-        $this->assertEquals($link, $_link);
-        $this->assertEquals($provider, $_provider);
-        $this->assertEquals($tokenCredentials, $_tokenCredentials);
-        $this->assertEquals('foo', $_slug);
+        $this->assertSame($link, $_link);
+        $this->assertSame($provider, $_provider);
+        $this->assertSame($tokenCredentials, $_tokenCredentials);
+        $this->assertSame('foo', $_slug);
     }
 
     /** @test */
@@ -674,51 +734,61 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'));
+            ->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'))
+        ;
 
         // Request proxy
         $this->requestProvider->shouldReceive('getOAuth2Code')
             ->once()
-            ->andReturn('code');
+            ->andReturn('code')
+        ;
 
         // Mock retrieving credentials from the underlying package
         $provider->shouldReceive('getAccessToken')
             ->with('authorization_code', ['code' => 'code'])
             ->once()
-            ->andReturn($accessToken = m::mock('League\OAuth2\Client\Token\AccessToken'));
+            ->andReturn($accessToken = m::mock('League\OAuth2\Client\Token\AccessToken'))
+        ;
 
         // Unique ID
         $provider->shouldReceive('getResourceOwner')
             ->once()
             ->with($accessToken)
-            ->andReturn($resourceOwner = m::mock('League\OAuth2\Client\Provider\ResourceOwnerInterface'));
+            ->andReturn($resourceOwner = m::mock('League\OAuth2\Client\Provider\ResourceOwnerInterface'))
+        ;
 
         $resourceOwner->shouldReceive('getId')
             ->once()
-            ->andReturn(789);
+            ->andReturn(789)
+        ;
 
         // Finding an appropriate link
         $this->linkRepository->shouldReceive('findLink')
             ->with('foo', 789)
             ->once()
-            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
+            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'))
+        ;
 
         $link->shouldReceive('storeToken')
             ->with($accessToken)
-            ->once();
+            ->once()
+        ;
 
         // Logged in user
         $this->sentinel->shouldReceive('getUser')
-            ->once();
+            ->once()
+        ;
 
         // Retrieving a user from the link
         $link->shouldReceive('getUser')
-            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
+            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'))
+        ;
 
         // And finally, logging a user in
         $this->sentinel->shouldReceive('authenticate')
             ->with($user, true)
-            ->once();
+            ->once()
+        ;
 
         $manager->existing(function ($link, $provider, $token, $slug) {
             $_SERVER['__sentinel_social_existing'] = true;
@@ -733,17 +803,16 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
         $eventArgs = $_SERVER['__sentinel_social_linking'];
 
-        unset($_SERVER['__sentinel_social_existing']);
-        unset($_SERVER['__sentinel_social_linking']);
+        unset($_SERVER['__sentinel_social_existing'], $_SERVER['__sentinel_social_linking']);
 
         $this->assertCount(4, $eventArgs);
 
         list($_link, $_provider, $_accessToken, $_slug) = $eventArgs;
 
-        $this->assertEquals($link, $_link);
-        $this->assertEquals($provider, $_provider);
-        $this->assertEquals($accessToken, $_accessToken);
-        $this->assertEquals('foo', $_slug);
+        $this->assertSame($link, $_link);
+        $this->assertSame($provider, $_provider);
+        $this->assertSame($accessToken, $_accessToken);
+        $this->assertSame('foo', $_slug);
     }
 
     /** @test */
@@ -754,51 +823,61 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'));
+            ->andReturn($provider = m::mock('League\OAuth2\Client\Provider\AbstractProvider'))
+        ;
 
         // Request proxy
         $this->requestProvider->shouldReceive('getOAuth2Code')
             ->once()
-            ->andReturn('code');
+            ->andReturn('code')
+        ;
 
         // Mock retrieving credentials from the underlying package
         $provider->shouldReceive('getAccessToken')
             ->with('authorization_code', ['code' => 'code'])
             ->once()
-            ->andReturn($accessToken = m::mock('League\OAuth2\Client\Token\AccessToken'));
+            ->andReturn($accessToken = m::mock('League\OAuth2\Client\Token\AccessToken'))
+        ;
 
         // Unique ID
         $provider->shouldReceive('getResourceOwner')
             ->once()
             ->with($accessToken)
-            ->andReturn($resourceOwner = m::mock('League\OAuth2\Client\Provider\ResourceOwnerInterface'));
+            ->andReturn($resourceOwner = m::mock('League\OAuth2\Client\Provider\ResourceOwnerInterface'))
+        ;
 
         $resourceOwner->shouldReceive('getId')
             ->once()
-            ->andReturn(789);
+            ->andReturn(789)
+        ;
 
         // Finding an appropriate link
         $this->linkRepository->shouldReceive('findLink')
             ->with('foo', 789)
             ->once()
-            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
+            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'))
+        ;
 
         $link->shouldReceive('storeToken')
             ->with($accessToken)
-            ->once();
+            ->once()
+        ;
 
         // Logged in user
         $this->sentinel->shouldReceive('getUser')
             ->once()
-            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'));
+            ->andReturn($user = m::mock('Cartalyst\Sentinel\Users\UserInterface'))
+        ;
 
         $link->shouldReceive('setUser')
             ->with($user)
-            ->once();
+            ->once()
+        ;
 
         // Retrieving a user from the link
         $link->shouldReceive('getUser')
-            ->andReturn($user);
+            ->andReturn($user)
+        ;
 
         $manager->existing(function ($link, $provider, $token, $slug) {
             $_SERVER['__sentinel_social_existing'] = true;
@@ -813,17 +892,16 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
         $eventArgs = $_SERVER['__sentinel_social_linking'];
 
-        unset($_SERVER['__sentinel_social_existing']);
-        unset($_SERVER['__sentinel_social_linking']);
+        unset($_SERVER['__sentinel_social_existing'], $_SERVER['__sentinel_social_linking']);
 
         $this->assertCount(4, $eventArgs);
 
         list($_link, $_provider, $_accessToken, $_slug) = $eventArgs;
 
-        $this->assertEquals($link, $_link);
-        $this->assertEquals($provider, $_provider);
-        $this->assertEquals($accessToken, $_accessToken);
-        $this->assertEquals('foo', $_slug);
+        $this->assertSame($link, $_link);
+        $this->assertSame($provider, $_provider);
+        $this->assertSame($accessToken, $_accessToken);
+        $this->assertSame('foo', $_slug);
     }
 
     /** @test */
@@ -836,83 +914,102 @@ class ManagerTest extends PHPUnit_Framework_TestCase
         $manager->shouldReceive('make')
             ->with('foo', 'http://example.com/callback')
             ->once()
-            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'));
+            ->andReturn($provider = m::mock('League\OAuth1\Client\Server\Server'))
+        ;
 
         // Request proxy
         $this->requestProvider->shouldReceive('getOAuth1TemporaryCredentialsIdentifier')
             ->once()
-            ->andReturn('identifier');
+            ->andReturn('identifier')
+        ;
 
         $this->requestProvider->shouldReceive('getOAuth1Verifier')
             ->once()
-            ->andReturn('verifier');
+            ->andReturn('verifier')
+        ;
 
         // Mock retrieving credentials from the underlying package
         $this->session->shouldReceive('get')
-            ->andReturn($temporaryCredentials = m::mock('League\OAuth1\Client\Credentials\TemporaryCredentials'));
+            ->andReturn($temporaryCredentials = m::mock('League\OAuth1\Client\Credentials\TemporaryCredentials'))
+        ;
 
         $provider->shouldReceive('getTokenCredentials')
             ->with($temporaryCredentials, 'identifier', 'verifier')
             ->once()
-            ->andReturn($tokenCredentials = m::mock('League\OAuth1\Client\Credentials\TokenCredentials'));
+            ->andReturn($tokenCredentials = m::mock('League\OAuth1\Client\Credentials\TokenCredentials'))
+        ;
 
         // Unique ID
         $provider->shouldReceive('getUserUid')
             ->once()
-            ->andReturn(789);
+            ->andReturn(789)
+        ;
 
         // Finding an appropriate link
         $this->linkRepository->shouldReceive('findLink')
             ->with('foo', 789)
             ->once()
-            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'));
+            ->andReturn($link = m::mock('Cartalyst\Sentinel\Addons\Social\Models\LinkInterface'))
+        ;
 
         $link->shouldReceive('storeToken')
             ->with($tokenCredentials)
-            ->once();
+            ->once()
+        ;
 
         $this->sentinel->shouldReceive('getUser')
-            ->once();
-
-        $link->shouldReceive('getUser')
-            ->once();
+            ->once()
+        ;
 
         $link->shouldReceive('getUser')
             ->once()
-            ->andReturn($user);
+        ;
+
+        $link->shouldReceive('getUser')
+            ->once()
+            ->andReturn($user)
+        ;
 
         $link->shouldReceive('setUser')
             ->with($user)
-            ->once();
+            ->once()
+        ;
 
         $provider->shouldReceive('getUserEmail')
             ->once()
-            ->andReturn('foo@bar.com');
+            ->andReturn('foo@bar.com')
+        ;
 
         $this->sentinel->shouldReceive('findByCredentials')
             ->with(['login' => 'foo@bar.com'])
-            ->once();
+            ->once()
+        ;
 
         $this->sentinel->shouldReceive('getUserRepository')
             ->once()
-            ->andReturn($users = m::mock('Cartalyst\Sentinel\Users\UserRepositoryInterface'));
+            ->andReturn($users = m::mock('Cartalyst\Sentinel\Users\UserRepositoryInterface'))
+        ;
 
         $users->shouldReceive('createModel')
             ->once()
-            ->andReturn($user);
+            ->andReturn($user)
+        ;
 
         $provider->shouldReceive('getUserScreenName')
             ->once()
-            ->andReturn(['Ben', 'Corlett']);
+            ->andReturn(['Ben', 'Corlett'])
+        ;
 
         $this->sentinel->shouldReceive('registerAndActivate')
             ->once()
-            ->andReturn($user);
+            ->andReturn($user)
+        ;
 
         $this->sentinel->shouldReceive('authenticate')
             ->with($user, true)
             ->once()
-            ->andReturn($user);
+            ->andReturn($user)
+        ;
 
         $manager->registering(function ($link, $provider, $token, $slug) {
             $_SERVER['__sentinel_social_registering'] = true;
@@ -932,36 +1029,33 @@ class ManagerTest extends PHPUnit_Framework_TestCase
 
         $eventArgs = $_SERVER['__sentinel_social_linking'];
 
-        unset($_SERVER['__sentinel_social_registering']);
-        unset($_SERVER['__sentinel_social_registered']);
-        unset($_SERVER['__sentinel_social_linking']);
+        unset($_SERVER['__sentinel_social_registering'], $_SERVER['__sentinel_social_registered'], $_SERVER['__sentinel_social_linking']);
 
         $this->assertCount(4, $eventArgs);
 
         list($_link, $_provider, $_tokenCredentials, $_slug) = $eventArgs;
 
-        $this->assertEquals($link, $_link);
-        $this->assertEquals($provider, $_provider);
-        $this->assertEquals($tokenCredentials, $_tokenCredentials);
-        $this->assertEquals('foo', $_slug);
+        $this->assertSame($link, $_link);
+        $this->assertSame($provider, $_provider);
+        $this->assertSame($tokenCredentials, $_tokenCredentials);
+        $this->assertSame('foo', $_slug);
     }
 
     /**
      * Creates a manager mock.
      *
-     * @param  string  $methods
+     * @param string $methods
+     *
      * @return \Mockery\MockInterface
      */
     protected function mockManager($methods)
     {
-        $manager = m::mock("Cartalyst\Sentinel\Addons\Social\Manager[{$methods}]", [
+        return m::mock("Cartalyst\Sentinel\Addons\Social\Manager[{$methods}]", [
             $this->sentinel,
             $this->linkRepository,
             $this->requestProvider,
             $this->session,
             $this->dispatcher,
         ]);
-
-        return $manager;
     }
 }
