@@ -1,35 +1,19 @@
 language: php
 
 php:
-  - 5.6
-  - 7.0
-  - 7.1
-
-env:
-  global:
-    - setup=basic
-
-matrix:
-  fast_finish: true
-  include:
-    - php: 5.6
-      env: setup=lowest
-    - php: 5.6
-      env: setup=stable
-
-sudo: false
+  - 7.2
+  - 7.3
 
 cache:
   directories:
     - $HOME/.composer/cache
 
 before_install:
-  - composer self-update
   - composer config -g github-oauth.github.com $CI_USER_TOKEN
+  - travis_retry composer self-update
 
 install:
-  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist --no-suggest; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable --no-suggest; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable --no-suggest; fi
+  - travis_retry composer install --no-interaction --prefer-dist
 
-script: vendor/bin/phpunit
+script:
+  - vendor/bin/phpunit --verbose
