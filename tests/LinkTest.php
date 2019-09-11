@@ -225,7 +225,8 @@ class LinkTest extends PHPUnit\Framework\TestCase
 
         $model->getConnection()
             ->shouldReceive('query')
-            ->andReturn($query = m::mock('Illuminate\Database\Query\Builder'));
+            ->andReturn($query = m::mock('Illuminate\Database\Query\Builder'))
+        ;
         ;
 
         $query->shouldIgnoreMissing();

@@ -8,7 +8,7 @@ labels: bug
 
 - OS and Version: #.#.#
 - PHP Version: #.#.#
-- Platform Operations Version: #.#.#
+- Sentinel Social Version: #.#.#
 
 ### Expected behaviour
 

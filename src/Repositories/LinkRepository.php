@@ -36,7 +36,6 @@ class LinkRepository implements LinkRepositoryInterface
     /**
      * Constructor.
      *
-     *
      * @param string|null $model
      *
      * @return void
