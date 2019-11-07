@@ -1,11 +1,11 @@
 {
-	"introduction" : [
-		"introduction",
-		"installation",
-		"integration"
-	],
-	"usage": [
-		"index",
-		"extending"
-	]
+    "introduction": [
+        "introduction",
+        "installation",
+        "integration"
+    ],
+    "usage": [
+        "index",
+        "extending"
+    ]
 }

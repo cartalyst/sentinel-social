@@ -12,7 +12,7 @@ Sentinel Social abstracts all the differences between OAuth 1 and OAuth 2, so th
 
 ## Manager
 
-	$manager = new Cartalyst\Sentinel\Addons\Social\Manager($instanceOfSentinel);
+    $manager = new Cartalyst\Sentinel\Addons\Social\Manager($instanceOfSentinel);
 
 > `Social` is the Laravel alias for the manager and can be directly used without instantiation.
 
@@ -22,34 +22,31 @@ Single connection
 
 ```php
 Social::addConnection('facebook', [
-		'driver'     => 'Facebook',
-		'identifier' => '',
-		'secret'     => '',
-		'scopes'     => ['email'],
-	],
-);
+    'driver'     => 'Facebook',
+    'identifier' => '',
+    'secret'     => '',
+    'scopes'     => ['email'],
+]);
 ```
 
 Multiple connections
 
 ```php
 $connections = [
+    'facebook' => [
+        'driver'     => 'Facebook',
+        'identifier' => '',
+        'secret'     => '',
+        'scopes'     => ['email'],
+    ],
 
-	'facebook' => [
-		'driver'     => 'Facebook',
-		'identifier' => '',
-		'secret'     => '',
-		'scopes'     => ['email'],
-	],
-
-	'github' => [
-		'driver'     => 'GitHub',
-		'identifier' => '',
-		'secret'     => '',
-		'scopes'     => ['user'],
-	],
-
-);
+    'github' => [
+        'driver'     => 'GitHub',
+        'identifier' => '',
+        'secret'     => '',
+        'scopes'     => ['user'],
+    ],
+];
 
 Social::addConnections($connections);
 ```
@@ -63,11 +60,12 @@ Authorizing a user (redirecting them to the provider's login/approval screen) is
 Once you've configured a provider with Sentinel Social, you simply need to redirect the user to the authorization URL.
 
 ```php
-Route::get('oauth/authorize', function()
-{
-	$callback = URL::to('oauth/callback');
-	$url = Social::getAuthorizationUrl('facebook', $callback);
-	return Redirect::to($url);
+Route::get('oauth/authorize', function() {
+    $callback = URL::to('oauth/callback');
+
+    $url = Social::getAuthorizationUrl('facebook', $callback);
+
+    return Redirect::to($url);
 });
 ```
 
@@ -78,38 +76,32 @@ Once a user has finished authorizing (or rejecting) your application, they're re
 To handle the authentication process, you will need to respond to the response from the provider on that callback URL.
 
 ```php
-Route::get('oauth/callback', function()
-{
-	// Callback is required for providers such as Facebook and a few others (it's required
-	// by the spec, but some providers omit this).
-	$callback = URL::current();
+Route::get('oauth/callback', function() {
+    // Callback is required for providers such as Facebook and a few others (it's required
+    // by the spec, but some providers omit this).
+    $callback = URL::current();
 
-	try
-	{
-		$user = Social::authenticate('facebook', URL::current(), function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
-		{
-			// Retrieve the user in question for modificiation
-			$user = $link->getUser();
+    try {
+        $user = Social::authenticate('facebook', URL::current(), function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug) {
+            // Retrieve the user in question for modificiation
+            $user = $link->getUser();
 
-			// You could add your custom data
-			$data = $provider->getUserDetails($token);
+            // You could add your custom data
+            $data = $provider->getUserDetails($token);
 
-			$user->foo = $data->foo;
-			$user->save();
-		});
-	}
-	catch (Cartalyst\Sentinel\Addons\Social\AccessMissingException $e)
-	{
-		// Missing OAuth parameters were missing from the query string.
-		// Either the person rejected the app, or the URL has been manually
-		// accesed.
-		if ($error = Input::get('error'))
-		{
-			return Redirect::to('oauth')->withErrors($error);
-		}
+            $user->foo = $data->foo;
+            $user->save();
+        });
+    } catch (Cartalyst\Sentinel\Addons\Social\AccessMissingException $e) {
+        // Missing OAuth parameters were missing from the query string.
+        // Either the person rejected the app, or the URL has been manually
+        // accesed.
+        if ($error = Input::get('error')) {
+            return Redirect::to('oauth')->withErrors($error);
+        }
 
-		App::abort(404);
-	}
+        App::abort(404);
+    }
 });
 ```
 
@@ -122,16 +114,14 @@ In addition to providing a hook (callback) for when a user is being linked (the 
 For example, this may be useful to send welcome emails when new users are being registered:
 
 ```php
-Social::registered(function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
-{
-	$user = $link->getUser();
+Social::registered(function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug) {
+    $user = $link->getUser();
 
-	Mail::later($user->email, 'welcome', compact('user', 'slug'));
+    Mail::later($user->email, 'welcome', compact('user', 'slug'));
 });
 
-Social::existing(function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
-{
-	// Callback for existing users
+Social::existing(function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug) {
+    // Callback for existing users
 });
 
 // Finally, after hooks are registered, you may authenticate away

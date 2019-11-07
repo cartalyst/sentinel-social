@@ -1,7 +1,7 @@
 {
-	"github" : "cartalyst/sentinel-social",
-	"demo" : {
-		"source" : false,
-		"online" : false
-	}
+    "github": "cartalyst/sentinel-social",
+    "demo": {
+        "source": false,
+        "online": false
+    }
 }

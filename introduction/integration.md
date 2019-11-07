@@ -11,11 +11,11 @@ Open your Laravel config file `config/app.php` and add the following lines.
 
 In the `$providers` array add the following service provider for this package.
 
-	Cartalyst\Sentinel\Addons\Social\Laravel\SocialServiceProvider::class,
+    Cartalyst\Sentinel\Addons\Social\Laravel\SocialServiceProvider::class,
 
 In the `$aliases` array add the following facade for this package.
 
-	'Social' => Cartalyst\Sentinel\Addons\Social\Laravel\Facades\Social::class,
+    'Social' => Cartalyst\Sentinel\Addons\Social\Laravel\Facades\Social::class,
 
 ### Assets
 
@@ -47,11 +47,11 @@ After you have installed the package, just follow the instructions.
 
 #### Sentinel schema
 
-	`vendor/cartalyst/sentinel/schema/mysql.sql`
+    `vendor/cartalyst/sentinel/schema/mysql.sql`
 
 #### Sentinel Social schema
 
-	`vendor/cartalyst/sentinel-social/schema/mysql.sql`
+    `vendor/cartalyst/sentinel-social/schema/mysql.sql`
 
 ### Configuration
 
@@ -67,19 +67,19 @@ use Cartalyst\Sentinel\Addons\Social\Manager;
 $manager = new Manager($instanceOfSentinel);
 
 $manager->addConnection('facebook' => [
-		'driver'     => 'Facebook',
-		'identifier' => '',
-		'secret'     => '',
-		'scopes'     => ['email'],
-	],
-);
+    'driver'     => 'Facebook',
+    'identifier' => '',
+    'secret'     => '',
+    'scopes'     => ['email'],
+]);
 ```
 
 #### Authorize
 
 ```php
 $callback = 'http://app.dev/callback.php';
-$url      = $manager->getAuthorizationUrl('facebook', $callback);
+
+$url = $manager->getAuthorizationUrl('facebook', $callback);
 
 header('Location: ' . $url);
 exit;
@@ -90,25 +90,21 @@ exit;
 ```php
 $callback = 'http://app.dev/callback.php';
 
-try
-{
-	$user = $manager->authenticate('facebook', $callback, function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug)
-	{
-		// Retrieve the user in question for modificiation
-		$user = $link->getUser();
+try {
+    $user = $manager->authenticate('facebook', $callback, function(Cartalyst\Sentinel\Addons\Social\Models\LinkInterface $link, $provider, $token, $slug) {
+        // Retrieve the user in question for modificiation
+        $user = $link->getUser();
 
-		// You could add your custom data
-		$data = $provider->getUserDetails($token);
+        // You could add your custom data
+        $data = $provider->getUserDetails($token);
 
-		$user->foo = $data->foo;
-		$user->save();
-	});
-}
-catch (Cartalyst\Sentinel\Addons\Social\AccessMissingException $e)
-{
-	var_dump($e); // You may save this to the session, redirect somewhere
-	die();
+        $user->foo = $data->foo;
+        $user->save();
+    });
+} catch (Cartalyst\Sentinel\Addons\Social\AccessMissingException $e) {
+    var_dump($e); // You may save this to the session, redirect somewhere
+    die();
 
-	header('HTTP/1.0 404 Not Found');
+    header('HTTP/1.0 404 Not Found');
 }
 ```
