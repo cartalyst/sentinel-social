@@ -1,15 +1,15 @@
 {
-	"name": "cartalyst/sentinel-social",
-	"description": "Social network logins for Sentinel using Oauth and Oauth2, including custom services",
-	"keywords": [
-		"php",
-		"cartalyst",
-		"laravel",
-		"auth",
-		"security",
-		"oauth"
-	],
-	"license": "proprietary",
+    "name": "cartalyst/sentinel-social",
+    "description": "Social network logins for Sentinel using Oauth and Oauth2, including custom services",
+    "keywords": [
+        "php",
+        "cartalyst",
+        "laravel",
+        "auth",
+        "security",
+        "oauth"
+    ],
+    "license": "proprietary",
     "authors": [
         {
             "name": "Cartalyst LLC",
@@ -17,46 +17,46 @@
             "homepage": "https://cartalyst.com"
         }
     ],
-	"require": {
-		"php": "^7.2",
-		"cartalyst/sentinel": "^3.0",
-		"cartalyst/support": "^3.0",
-		"league/oauth1-client": "^1.2",
-		"league/oauth2-client": "^2.0"
-	},
-	"require-dev": {
+    "require": {
+        "php": "^7.2.5",
+        "cartalyst/sentinel": "^4.0",
+        "cartalyst/support": "^4.0",
+        "league/oauth1-client": "^1.2",
+        "league/oauth2-client": "^2.0"
+    },
+    "require-dev": {
         "cartalyst/php-cs-fixer-config": "^1.0",
-		"illuminate/database": "^6.0",
-		"illuminate/events": "^6.0",
-		"mockery/mockery": "^1.0",
-		"phpunit/phpunit": "^8.0",
-		"league/oauth2-facebook": "^2.0"
-	},
-	"suggest": {
-		"league/oauth2-facebook": "Required for facebook login",
-		"league/oauth2-github": "Required for github login",
-		"league/oauth2-google": "Required for google login",
-		"league/oauth2-linkedin": "Required for linkedin login",
-		"league/oauth2-instagram": "Required for instagram login"
-	},
-	"autoload": {
-		"classmap": [
-			"src/Exceptions.php"
-		],
-		"psr-4": {
-			"Cartalyst\\Sentinel\\Addons\\Social\\": "src/"
-		}
-	},
+        "illuminate/database": "^7.0",
+        "illuminate/events": "^7.0",
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^8.0",
+        "league/oauth2-facebook": "^2.0"
+    },
+    "suggest": {
+        "league/oauth2-facebook": "Required for facebook login",
+        "league/oauth2-github": "Required for github login",
+        "league/oauth2-google": "Required for google login",
+        "league/oauth2-linkedin": "Required for linkedin login",
+        "league/oauth2-instagram": "Required for instagram login"
+    },
+    "autoload": {
+        "classmap": [
+            "src/Exceptions.php"
+        ],
+        "psr-4": {
+            "Cartalyst\\Sentinel\\Addons\\Social\\": "src/"
+        }
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
     },
-	"extra": {
-		"component": "addon",
-		"branch-alias": {
-			"dev-master": "4.0.x-dev"
-		},
+    "extra": {
+        "component": "addon",
+        "branch-alias": {
+            "dev-master": "5.0.x-dev"
+        },
         "laravel": {
             "providers": [
                 "Cartalyst\\Sentinel\\Addons\\Social\\Laravel\\SocialServiceProvider"
@@ -65,7 +65,7 @@
                 "Social": "Cartalyst\\Sentinel\\Addons\\Social\\Laravel\\Facades\\Social"
             }
         }
-	},
+    },
     "scripts": {
         "cs:check": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=estimating --diff --dry-run --config .php_cs.php",
         "cs:fix": "./vendor/bin/php-cs-fixer fix --verbose --ansi --show-progress=estimating --config .php_cs.php",
