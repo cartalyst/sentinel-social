@@ -18,18 +18,18 @@
         }
     ],
     "require": {
-        "php": "^7.2.5",
-        "cartalyst/sentinel": "^4.0",
-        "cartalyst/support": "^4.0",
+        "php": "^7.3",
+        "cartalyst/sentinel": "^5.0",
+        "cartalyst/support": "^5.0",
         "league/oauth1-client": "^1.2",
         "league/oauth2-client": "^2.0"
     },
     "require-dev": {
         "cartalyst/php-cs-fixer-config": "^1.0",
-        "illuminate/database": "^7.0",
-        "illuminate/events": "^7.0",
+        "illuminate/database": "^8.0",
+        "illuminate/events": "^8.0",
         "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^8.0",
+        "phpunit/phpunit": "^9.0",
         "league/oauth2-facebook": "^2.0"
     },
     "suggest": {
