@@ -4,7 +4,7 @@ Sentinel Social makes authenticating your users through social networks & third-
 
 The package follows the FIG standard PSR-4 to ensure a high level of interoperability between shared PHP code and is fully unit-tested.
 
-The package requires PHP 7.2.5+.
+The package requires PHP 7.3+.
 
 Have a [read through the Installation Guide](#installation).
 
