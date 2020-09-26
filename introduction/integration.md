@@ -1,8 +1,8 @@
 # Integration
 
-## Laravel 5
+## Laravel 6
 
-The Sentinel Social package has optional support for Laravel 5 and it comes bundled with a
+The Sentinel Social package has optional support for Laravel 6 and it comes bundled with a
 Service Provider and a Facade for easier integration.
 
 After you have installed the package, just follow the instructions.
