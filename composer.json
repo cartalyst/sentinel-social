@@ -17,6 +17,12 @@
             "homepage": "https://cartalyst.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/cartalyst/oauth2-facebook"
+        }
+    ],
     "require": {
         "php": "^7.3 || ^8.0",
         "cartalyst/sentinel": "^5.0",
@@ -30,7 +36,7 @@
         "illuminate/events": "^8.0",
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^9.0",
-        "league/oauth2-facebook": "^2.0"
+        "league/oauth2-facebook": "dev-feature/php8-support"
     },
     "suggest": {
         "league/oauth2-facebook": "Required for facebook login",
