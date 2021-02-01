@@ -1,5 +1,9 @@
 # Changelog
 
+### v6.1.1 - TBA
+
+- Remove forked `league/oauth2-facebook` on dev dependencies in favor of the original one
+
 ### v6.1.0 - 2020-12-30
 
 - Add PHP 8 support
