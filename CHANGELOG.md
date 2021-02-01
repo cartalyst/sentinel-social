@@ -1,6 +1,6 @@
 # Changelog
 
-### v6.1.1 - TBA
+### v6.1.1 - 2021-02-01
 
 - Remove forked `league/oauth2-facebook` on dev dependencies in favor of the original one
 
