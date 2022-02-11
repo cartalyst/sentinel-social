@@ -10,6 +10,7 @@ Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](LICENSE). Code well, ro
 
 Version | Sentinel | PHP Version
 ------- | -------- | ------------
+7.x     | 6.x      | >= 8.0
 6.x     | 5.x      | >= 7.3
 5.x     | 4.x      | >= 7.2.5
 4.x     | 3.x      | >= 7.2
