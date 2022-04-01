@@ -20,7 +20,7 @@
     "require": {
         "php": "^8.0",
         "cartalyst/sentinel": "^6.0",
-        "cartalyst/support": "^5.0",
+        "cartalyst/support": "^6.0",
         "league/oauth1-client": "^1.2",
         "league/oauth2-client": "^2.0"
     },
