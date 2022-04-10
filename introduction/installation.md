@@ -6,7 +6,7 @@ The best and easiest way to install the Sentinel Social package is with [Compose
 
 Open your `composer.json` and add the following to the `require` array:
 
-    "cartalyst/sentinel-social": "^6.0"
+    "cartalyst/sentinel-social": "^7.0"
 
 Add the following lines after the `require` array on your `composer.json` file:
 
