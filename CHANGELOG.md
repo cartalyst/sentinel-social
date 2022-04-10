@@ -1,5 +1,9 @@
 # Changelog
 
+### v7.0.0 - 2022-04-10
+
+- Add Laravel 9 support
+
 ### v6.1.1 - 2021-02-01
 
 - Remove forked `league/oauth2-facebook` on dev dependencies in favor of the original one
