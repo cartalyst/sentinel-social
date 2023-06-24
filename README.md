@@ -10,6 +10,7 @@ Part of the Cartalyst Arsenal & licensed [Cartalyst PSL](LICENSE). Code well, ro
 
 Version | Sentinel | PHP Version
 ------- | -------- | ------------
+8.x     | 7.x      | >= 8.1
 7.x     | 6.x      | >= 8.0
 6.x     | 5.x      | >= 7.3
 5.x     | 4.x      | >= 7.2.5
@@ -42,4 +43,4 @@ This software is released under the [Cartalyst PSL](LICENSE) License.
 [link-docs]:   https://cartalyst.com/manual/sentinel-social
 [link-travis]: https://travis-ci.com/cartalyst/sentinel-social
 
-[icon-travis]: https://travis-ci.com/cartalyst/sentinel-social.svg?token=LAut3LMbmBFi3T9j45FH&branch=6.x
+[icon-travis]: https://travis-ci.com/cartalyst/sentinel-social.svg?token=LAut3LMbmBFi3T9j45FH&branch=8.x

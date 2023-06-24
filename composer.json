@@ -18,16 +18,16 @@
         }
     ],
     "require": {
-        "php": "^8.0",
-        "cartalyst/sentinel": "^6.0",
-        "cartalyst/support": "^6.0",
+        "php": "^8.1",
+        "cartalyst/sentinel": "^7.0",
+        "cartalyst/support": "^7.0",
         "league/oauth1-client": "^1.2",
         "league/oauth2-client": "^2.0"
     },
     "require-dev": {
         "cartalyst/php-cs-fixer-config": "^2.0",
-        "illuminate/database": "^9.0",
-        "illuminate/events": "^9.0",
+        "illuminate/database": "^10.0",
+        "illuminate/events": "^10.0",
         "mockery/mockery": "^1.4.2",
         "phpunit/phpunit": "^9.3.3",
         "league/oauth2-facebook": "^2.0"
@@ -55,7 +55,7 @@
     "extra": {
         "component": "addon",
         "branch-alias": {
-            "dev-master": "7.0.x-dev"
+            "dev-master": "8.0.x-dev"
         },
         "laravel": {
             "providers": [

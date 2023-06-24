@@ -1,18 +1,14 @@
 language: php
 
-dist: bionic
-
 php:
-  - 8.0
-  - 8.1.0
+  - 8.1
 
 cache:
   directories:
     - $HOME/.composer/cache
 
 before_install:
-  - composer config -g github-oauth.github.com $CI_USER_TOKEN
-  - phpenv config-rm xdebug.ini || true
+  - travis_retry composer self-update
 
 install:
   - travis_retry composer install
